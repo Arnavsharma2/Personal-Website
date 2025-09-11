@@ -11,12 +11,24 @@ export default function AdminLayout({
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [adminPassword, setAdminPassword] = useState('admin123')
   const router = useRouter()
 
-  // Simple password protection (in production, use proper authentication)
-  const ADMIN_PASSWORD = process.env.NODE_ENV === 'production' 
-    ? process.env.ADMIN_PASSWORD || 'admin123' 
-    : 'admin123'
+  // Fetch the admin password from the server
+  useEffect(() => {
+    const fetchAdminPassword = async () => {
+      try {
+        const response = await fetch('/api/admin-password')
+        if (response.ok) {
+          const data = await response.json()
+          setAdminPassword(data.password)
+        }
+      } catch (error) {
+        console.error('Error fetching admin password:', error)
+      }
+    }
+    fetchAdminPassword()
+  }, [])
 
   useEffect(() => {
     // Check if already authenticated
@@ -29,7 +41,7 @@ export default function AdminLayout({
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
+    if (password === adminPassword) {
       setIsAuthenticated(true)
       sessionStorage.setItem('adminAuthenticated', 'true')
     } else {
@@ -80,8 +92,8 @@ export default function AdminLayout({
             </button>
           </form>
           <div className="mt-4 text-xs text-gray-400 text-center">
-            <p>Default password: admin123</p>
-            <p className="mt-1">Set ADMIN_PASSWORD environment variable for production</p>
+            <p>Current password: {adminPassword}</p>
+            <p className="mt-1">Set ADMIN_PASSWORD environment variable to change</p>
           </div>
         </div>
       </div>
