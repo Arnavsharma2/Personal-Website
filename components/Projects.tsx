@@ -8,11 +8,29 @@ import Image from 'next/image'
 
 const projects = [
   {
-    title: 'Predictive Modeling Implementations',
-    description: 'A comprehensive collection of machine learning projects including house price prediction, customer churn analysis, and stock return forecasting. Features multiple Jupyter notebooks with end-to-end implementations using various ML algorithms and techniques.',
-    technologies: ['Python', 'Jupyter Notebook', 'Scikit-learn', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn'],
-    image: '/Predictive-Modeling-Implementations.png',
-    github: 'https://github.com/Arnavsharma2/Predictive-Modeling-Implementations',
+    title: 'Stock Return Forecaster with Deep Learning',
+    description: 'Architected and trained a Long Short-Term Memory (LSTM) neural network to forecast future stock returns based on historical time-series price data. Implemented a data processing workflow to structure sequential stock data, normalizing features and creating sliding windows suitable for training a recurrent neural network. Developed the deep learning model using Keras, stacking multiple LSTM and Dropout layers to effectively capture temporal dependencies and prevent overfitting, saving the final trained model as an H5 file.',
+    technologies: ['Python', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas'],
+    image: '/stockprediction.png',
+    github: 'https://github.com/Arnavsharma2/StockReturnPrediction',
+    live: '#',
+    showLive: false
+  },
+  {
+    title: 'Customer Churn Predictor',
+    description: 'Built a classification model to predict customer churn for a telecommunications company, enabling proactive retention strategies by identifying at-risk customers with optimal accuracy for the dataset provided. Leveraged the PyCaret AutoML library to accelerate the end-to-end machine learning workflow, from data preparation and feature engineering to model training and performance evaluation. Analyzed and visualized key features influencing churn using Plotly, delivering actionable insights into customer behavior and demographics.',
+    technologies: ['Python', 'Scikit-learn', 'Pandas', 'Plotly', 'PyCaret'],
+    image: '/Churn.png',
+    github: 'https://github.com/Arnavsharma2/CustomerChurnPredictor',
+    live: '#',
+    showLive: false
+  },
+  {
+    title: 'House Price Prediction Model',
+    description: 'Developed a predictive model to forecast house sale prices by analyzing a dataset of over 1,400 properties and 80 distinct features, delivering results with 80% accuracy. Engineered a data preprocessing pipeline to handle missing values, encode categorical data, and scale numerical features, preparing the dataset for optimal model performance. Trained and evaluated multiple regression algorithms, including Linear Regression, Ridge, Lasso, and XGBoost, identifying the most accurate model and serializing it for future deployment using Pickle.',
+    technologies: ['Python', 'Scikit-learn', 'Pandas', 'XGBoost', 'Matplotlib'],
+    image: '/housingpriceprediction.png',
+    github: 'https://github.com/Arnavsharma2/HousingPricePrediction',
     live: '#',
     showLive: false
   },

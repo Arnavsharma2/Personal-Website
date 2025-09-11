@@ -72,16 +72,32 @@ export default function About() {
           >
             <div className="relative">
               {/* Outer ring with gradient border */}
-              <div className="w-80 h-80 bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-full p-1">
-                {/* Inner circle with main background */}
-                <div className="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center relative overflow-hidden">
-                  {/* Decorative elements */}
-                  <div className="absolute top-4 right-4 w-16 h-16 bg-white/10 rounded-full blur-sm"></div>
-                  <div className="absolute bottom-6 left-6 w-12 h-12 bg-white/5 rounded-full blur-sm"></div>
-                  <div className="absolute top-1/2 left-2 w-8 h-8 bg-white/10 rounded-full blur-sm"></div>
-                  
-                  {/* Main initials */}
-                  <span className="text-7xl font-bold text-white relative z-10">AS</span>
+              <div className="w-[28rem] h-[36rem] bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-2xl p-1">
+                {/* Inner rounded rectangle with main background */}
+                <div className="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                  {/* Profile Image */}
+                  <img 
+                    src="/PERSONALWEBSITE.jpg" 
+                    alt="Arnav Sharma"
+                    className="w-full h-full object-cover object-bottom rounded-2xl"
+                    onError={(e) => {
+                      // Fallback to initials if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                  {/* Fallback initials */}
+                  <div className="hidden w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center relative">
+                    {/* Decorative elements */}
+                    <div className="absolute top-4 right-4 w-16 h-16 bg-white/10 rounded-full blur-sm"></div>
+                    <div className="absolute bottom-6 left-6 w-12 h-12 bg-white/5 rounded-full blur-sm"></div>
+                    <div className="absolute top-1/2 left-2 w-8 h-8 bg-white/10 rounded-full blur-sm"></div>
+                    
+                    {/* Main initials */}
+                    <span className="text-7xl font-bold text-white relative z-10">AS</span>
+                  </div>
                 </div>
               </div>
               

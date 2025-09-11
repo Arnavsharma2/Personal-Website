@@ -50,50 +50,72 @@ export default function Experience() {
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto"></div>
         </motion.div>
 
-        <div className="space-y-8">
+        <div className="space-y-12">
           {experiences.map((exp, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-800 hover:bg-gray-800/50 transition-all duration-300"
+              className="relative"
             >
-              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                {/* Company Info */}
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center flex-shrink-0 relative overflow-hidden">
-                    {/* WeFIRE Logo using CSS */}
-                    <div className="text-white font-bold text-xs leading-tight text-center">
-                      <div className="font-normal">We</div>
-                      <div className="font-black">FIRE</div>
-                    </div>
-                    {/* Subtle flame effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-orange-600/30 to-transparent"></div>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xl font-semibold text-white mb-1">
-                      {exp.position}
-                    </h4>
-                    <p className="text-lg font-medium text-gray-300 mb-2">
-                      {exp.company}
-                    </p>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm text-gray-400">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        <span>{exp.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        <span>{exp.location}</span>
+              <div className="flex items-start gap-8">
+                {/* Logo and Timeline */}
+                <div className="flex flex-col items-center flex-shrink-0">
+                  {/* Company Logo */}
+                  <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center border-4 border-gray-800 shadow-xl">
+                    <img 
+                      src="/wefirelogo.jpeg" 
+                      alt="WeFIRE Logo"
+                      className="w-16 h-16 rounded-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    {/* Fallback CSS Logo */}
+                    <div className="hidden w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                      <div className="text-white font-bold text-sm leading-tight text-center">
+                        <div className="font-normal">We</div>
+                        <div className="font-black">FIRE</div>
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Timeline Line */}
+                  {index < experiences.length - 1 && (
+                    <div className="w-1 h-24 bg-gradient-to-b from-purple-500 to-blue-500 mt-4"></div>
+                  )}
                 </div>
 
-                {/* Description */}
-                <div className="lg:w-2/3">
-                  <p className="text-gray-300 leading-relaxed mb-6">
+                {/* Content */}
+                <div className="flex-1 pb-8">
+                  {/* Header */}
+                  <div className="mb-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                      <div>
+                        <h4 className="text-2xl font-bold text-white mb-1">
+                          {exp.position}
+                        </h4>
+                        <p className="text-xl font-semibold text-purple-400 mb-2">
+                          {exp.company}
+                        </p>
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {exp.duration}
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1 text-gray-400 mb-4">
+                      <MapPin className="w-4 h-4" />
+                      <span>{exp.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-gray-300 leading-relaxed mb-6 text-lg">
                     {exp.description}
                   </p>
                   
@@ -101,21 +123,21 @@ export default function Experience() {
                   {exp.projects && (
                     <div className="space-y-4 mb-6">
                       {exp.projects.map((project, projectIndex) => (
-                        <div key={projectIndex} className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
-                          <div className="flex items-start justify-between mb-2">
-                            <h5 className="text-lg font-semibold text-white mb-2">
+                        <div key={projectIndex} className="bg-gray-800/30 rounded-xl p-5 border border-gray-700/50 hover:bg-gray-800/50 transition-all duration-300">
+                          <div className="flex items-start justify-between mb-3">
+                            <h5 className="text-lg font-semibold text-white">
                               {project.title}
                             </h5>
                             <a
                               href={project.github}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm"
+                              className="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm font-medium"
                             >
                               View on GitHub →
                             </a>
                           </div>
-                          <p className="text-gray-300 text-sm leading-relaxed">
+                          <p className="text-gray-300 leading-relaxed">
                             {project.description}
                           </p>
                         </div>
@@ -128,7 +150,7 @@ export default function Experience() {
                     {exp.technologies.map((tech, techIndex) => (
                       <span
                         key={techIndex}
-                        className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium hover:bg-gray-700 transition-colors duration-200"
+                        className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-sm font-medium hover:bg-gray-700/50 transition-colors duration-200 border border-gray-700/50"
                       >
                         {tech}
                       </span>
