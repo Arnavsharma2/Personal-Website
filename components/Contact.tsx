@@ -91,7 +91,7 @@ export default function Contact() {
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className={`group flex items-center space-x-2 px-4 py-2 bg-gray-900/50 backdrop-blur-sm rounded-full border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 ${social.color} whitespace-nowrap hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25 hover:border-blue-500/50`}
+                className={`group flex items-center space-x-2 px-4 py-2 bg-gray-900/50 backdrop-blur-sm rounded-full border border-gray-800 hover:bg-gray-800/50 transition-all duration-200 ${social.color} whitespace-nowrap hover:scale-105 hover:shadow-md hover:shadow-blue-500/20`}
               >
                 {social.name === 'Discord' ? (
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">

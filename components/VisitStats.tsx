@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion'
 import { useVisitTracker } from '@/hooks/useVisitTracker'
 import { Users, Eye, MapPin } from 'lucide-react'
+import { memo } from 'react'
 
-export default function VisitStats() {
+function VisitStats() {
   const { stats, isLoading } = useVisitTracker()
 
   if (isLoading || !stats) {
@@ -43,3 +44,5 @@ export default function VisitStats() {
     </motion.div>
   )
 }
+
+export default memo(VisitStats)

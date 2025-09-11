@@ -41,15 +41,15 @@ export default function Hero() {
     }))
   })
 
-  // Function to update node position
-  const updateNodePosition = (layer: keyof typeof nodePositions, index: number, x: number, y: number) => {
+  // Function to update node position - memoized to prevent unnecessary re-renders
+  const updateNodePosition = useMemo(() => (layer: keyof typeof nodePositions, index: number, x: number, y: number) => {
     setNodePositions(prev => ({
       ...prev,
       [layer]: prev[layer].map((pos, i) => 
         i === index ? { x, y } : pos
       )
     }))
-  }
+  }, [])
 
   // State for data flow animation
   const [activeNodes, setActiveNodes] = useState<{[key: string]: boolean}>({})
@@ -90,7 +90,7 @@ export default function Hero() {
     { label: 'GitHub Repositories', value: 7, icon: Globe }
   ]
 
-  // Typing animation effect
+  // Typing animation effect - optimized with slower updates
   useEffect(() => {
     const currentRoleText = roles[currentRole]
     const timeout = setTimeout(() => {
@@ -108,7 +108,7 @@ export default function Hero() {
           setCurrentRole((prev) => (prev + 1) % roles.length)
         }
       }
-    }, isDeleting ? 50 : 100)
+    }, isDeleting ? 75 : 150) // Slower updates for better performance
 
     return () => clearTimeout(timeout)
   }, [displayedText, isDeleting, currentRole, roles])

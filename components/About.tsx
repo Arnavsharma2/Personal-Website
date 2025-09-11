@@ -82,6 +82,8 @@ export default function About() {
                     alt="Arnav Sharma"
                     fill
                     className="object-cover object-bottom rounded-2xl"
+                    priority
+                    sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
                   />
                   {/* Fallback initials */}
                   <div className="hidden w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center relative">
@@ -123,14 +125,16 @@ export default function About() {
                 transition={{ duration: 0.3, delay: 0.8 + index * 0.05 }}
                 className="relative group"
               >
-                <div className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-all duration-300 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25 hover:border-blue-500/50 border border-transparent">
+                <div className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-all duration-200 flex items-center justify-center hover:scale-105 hover:shadow-md hover:shadow-blue-500/20 border border-transparent">
                   <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center relative">
-                    <Image 
-                      src={tech.logo} 
-                      alt={tech.name}
-                      fill
-                      className="object-contain"
-                    />
+                  <Image 
+                    src={tech.logo} 
+                    alt={tech.name}
+                    fill
+                    className="object-contain"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 64px, 64px"
+                  />
                   </div>
                 </div>
                 
