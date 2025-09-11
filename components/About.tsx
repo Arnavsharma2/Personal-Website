@@ -30,13 +30,13 @@ export default function About() {
   return (
     <section id="about" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-black">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-6"
+            className="space-y-6 order-2 lg:order-1"
           >
             <div className="mb-8">
               <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
@@ -73,7 +73,7 @@ export default function About() {
           >
             <div className="relative">
               {/* Outer ring with gradient border */}
-              <div className="w-[28rem] h-[36rem] bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-2xl p-1">
+              <div className="w-64 h-80 sm:w-80 sm:h-96 lg:w-[28rem] lg:h-[36rem] bg-gradient-to-br from-purple-500 via-blue-500 to-purple-600 rounded-2xl p-1">
                 {/* Inner rounded rectangle with main background */}
                 <div className="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
                   {/* Profile Image */}
@@ -91,15 +91,15 @@ export default function About() {
                     <div className="absolute top-1/2 left-2 w-8 h-8 bg-white/10 rounded-full blur-sm"></div>
                     
                     {/* Main initials */}
-                    <span className="text-7xl font-bold text-white relative z-10">AS</span>
+                    <span className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white relative z-10">AS</span>
                   </div>
                 </div>
               </div>
               
               {/* Floating accent dots */}
-              <div className="absolute -top-2 -right-2 w-4 h-4 bg-purple-400 rounded-full animate-pulse"></div>
-              <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-              <div className="absolute top-1/2 -right-3 w-2 h-2 bg-purple-300 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+              <div className="absolute -top-2 -right-2 w-3 h-3 sm:w-4 sm:h-4 bg-purple-400 rounded-full animate-pulse"></div>
+              <div className="absolute -bottom-1 -left-1 w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+              <div className="absolute top-1/2 -right-3 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-purple-300 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
             </div>
           </motion.div>
         </div>

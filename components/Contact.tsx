@@ -10,31 +10,31 @@ const socialLinks = [
     name: 'Email',
     icon: Mail,
     href: 'mailto:aqs7726@psu.edu',
-    color: 'hover:text-red-400'
+    color: 'text-red-400 hover:text-red-300'
   },
   {
     name: 'GitHub',
     icon: Github,
     href: 'https://github.com/Arnavsharma2',
-    color: 'hover:text-gray-300'
+    color: 'text-gray-300 hover:text-white'
   },
   {
     name: 'LinkedIn',
     icon: Linkedin,
     href: 'https://linkedin.com/in/arnav-sharma2',
-    color: 'hover:text-blue-400'
+    color: 'text-blue-400 hover:text-blue-300'
   },
   {
     name: 'Discord',
     icon: 'discord',
     href: 'https://discord.com/users/1408270730801451115',
-    color: 'hover:text-purple-400'
+    color: 'text-purple-400 hover:text-purple-300'
   },
   {
     name: 'Instagram',
     icon: Instagram,
     href: 'https://instagram.com/arnav.s.7',
-    color: 'hover:text-pink-400'
+    color: 'text-pink-400 hover:text-pink-300'
   }
 ]
 

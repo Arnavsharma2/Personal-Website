@@ -116,7 +116,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => scrollToSection(item.href, item.external)}
                   className={`block px-4 py-3 rounded-md text-lg font-medium w-full text-left transition-colors duration-200 ${
                     activeSection === item.href.slice(1)
                       ? 'text-primary-400 bg-primary-400/20'
