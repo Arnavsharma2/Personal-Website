@@ -102,12 +102,12 @@ export default function Hero() {
       setActiveNodes(prev => ({ ...prev, 'output-0': true, 'output-1': true }))
     }, 3000)
 
-    // Reset after animation
+    // Reset after animation (keep final state for 3 seconds after completion)
     setTimeout(() => {
       setIsAnimating(false)
       setActiveNodes({})
       setVisibleConnections({})
-    }, 5000)
+    }, 6000) // 3 seconds (output activation) + 3 seconds (display time) = 6 seconds total
   }
 
   const scrollToAbout = () => {
@@ -217,16 +217,16 @@ export default function Hero() {
                     key={`input-${i}`}
                     className={`absolute w-6 h-6 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
                       activeNodes[`input-${i}`] 
-                        ? 'bg-gradient-to-br from-green-300 to-emerald-400' 
-                        : 'bg-gradient-to-br from-green-400 to-emerald-500'
+                        ? 'bg-gradient-to-br from-green-200 to-emerald-300' 
+                        : 'bg-gradient-to-br from-green-500 to-emerald-600'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
                       boxShadow: activeNodes[`input-${i}`] 
-                        ? '0 0 25px rgba(34, 197, 94, 1), 0 0 50px rgba(34, 197, 94, 0.6)'
-                        : '0 4px 8px rgba(0, 0, 0, 0.3)'
+                        ? '0 0 30px rgba(34, 197, 94, 1), 0 0 60px rgba(34, 197, 94, 0.8), 0 0 90px rgba(34, 197, 94, 0.4)'
+                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
                     }}
                     drag
                     dragMomentum={false}
@@ -247,8 +247,8 @@ export default function Hero() {
                         ? [1, 1.4, 1]
                         : [1, 1.2, 1],
                       opacity: activeNodes[`input-${i}`] 
-                        ? [0.9, 1, 0.9]
-                        : [0.7, 1, 0.7]
+                        ? [0.95, 1, 0.95]
+                        : [0.4, 0.6, 0.4]
                     }}
                     transition={{
                       duration: activeNodes[`input-${i}`] ? 0.8 : 2 + i * 0.5,
@@ -266,16 +266,16 @@ export default function Hero() {
                     key={`hidden1-${i}`}
                     className={`absolute w-8 h-8 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
                       activeNodes[`hidden1-${i}`] 
-                        ? 'bg-gradient-to-br from-purple-300 to-blue-400' 
-                        : 'bg-gradient-to-br from-purple-400 to-blue-500'
+                        ? 'bg-gradient-to-br from-purple-200 to-blue-300' 
+                        : 'bg-gradient-to-br from-purple-500 to-blue-600'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
                       boxShadow: activeNodes[`hidden1-${i}`] 
-                        ? '0 0 30px rgba(147, 51, 234, 1), 0 0 60px rgba(147, 51, 234, 0.6)'
-                        : '0 4px 8px rgba(0, 0, 0, 0.3)'
+                        ? '0 0 35px rgba(147, 51, 234, 1), 0 0 70px rgba(147, 51, 234, 0.8), 0 0 100px rgba(147, 51, 234, 0.4)'
+                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
                     }}
                     drag
                     dragMomentum={false}
@@ -296,8 +296,8 @@ export default function Hero() {
                         ? [1, 1.5, 1]
                         : [1, 1.3, 1],
                       opacity: activeNodes[`hidden1-${i}`] 
-                        ? [0.8, 1, 0.8]
-                        : [0.6, 1, 0.6]
+                        ? [0.95, 1, 0.95]
+                        : [0.3, 0.5, 0.3]
                     }}
                     transition={{
                       duration: activeNodes[`hidden1-${i}`] ? 0.8 : 1.8 + i * 0.4,
@@ -315,16 +315,16 @@ export default function Hero() {
                     key={`hidden2-${i}`}
                     className={`absolute w-8 h-8 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
                       activeNodes[`hidden2-${i}`] 
-                        ? 'bg-gradient-to-br from-blue-300 to-cyan-400' 
-                        : 'bg-gradient-to-br from-blue-400 to-cyan-500'
+                        ? 'bg-gradient-to-br from-blue-200 to-cyan-300' 
+                        : 'bg-gradient-to-br from-blue-500 to-cyan-600'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
                       boxShadow: activeNodes[`hidden2-${i}`] 
-                        ? '0 0 30px rgba(59, 130, 246, 1), 0 0 60px rgba(59, 130, 246, 0.6)'
-                        : '0 4px 8px rgba(0, 0, 0, 0.3)'
+                        ? '0 0 35px rgba(59, 130, 246, 1), 0 0 70px rgba(59, 130, 246, 0.8), 0 0 100px rgba(59, 130, 246, 0.4)'
+                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
                     }}
                     drag
                     dragMomentum={false}
@@ -345,8 +345,8 @@ export default function Hero() {
                         ? [1, 1.5, 1]
                         : [1, 1.3, 1],
                       opacity: activeNodes[`hidden2-${i}`] 
-                        ? [0.8, 1, 0.8]
-                        : [0.6, 1, 0.6]
+                        ? [0.95, 1, 0.95]
+                        : [0.3, 0.5, 0.3]
                     }}
                     transition={{
                       duration: activeNodes[`hidden2-${i}`] ? 0.8 : 2.2 + i * 0.3,
@@ -364,16 +364,16 @@ export default function Hero() {
                     key={`output-${i}`}
                     className={`absolute w-10 h-10 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
                       activeNodes[`output-${i}`] 
-                        ? 'bg-gradient-to-br from-pink-300 to-rose-400' 
-                        : 'bg-gradient-to-br from-pink-400 to-rose-500'
+                        ? 'bg-gradient-to-br from-pink-200 to-rose-300' 
+                        : 'bg-gradient-to-br from-pink-500 to-rose-600'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
                       boxShadow: activeNodes[`output-${i}`] 
-                        ? '0 0 35px rgba(244, 114, 182, 1), 0 0 70px rgba(244, 114, 182, 0.6)'
-                        : '0 4px 8px rgba(0, 0, 0, 0.3)'
+                        ? '0 0 40px rgba(244, 114, 182, 1), 0 0 80px rgba(244, 114, 182, 0.8), 0 0 120px rgba(244, 114, 182, 0.4)'
+                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
                     }}
                     drag
                     dragMomentum={false}
@@ -394,8 +394,8 @@ export default function Hero() {
                         ? [1, 1.6, 1]
                         : [1, 1.4, 1],
                       opacity: activeNodes[`output-${i}`] 
-                        ? [0.9, 1, 0.9]
-                        : [0.8, 1, 0.8]
+                        ? [0.95, 1, 0.95]
+                        : [0.3, 0.5, 0.3]
                     }}
                     transition={{
                       duration: activeNodes[`output-${i}`] ? 0.8 : 1.5 + i * 0.5,
