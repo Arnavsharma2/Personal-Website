@@ -68,7 +68,7 @@ export default function Hero() {
   const [showStats, setShowStats] = useState(false)
   const [statsShownOnce, setStatsShownOnce] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(false)
-  const [themeMode, setThemeMode] = useState<'default' | 'cyber' | 'neon'>('default')
+  const [themeMode, setThemeMode] = useState<'default' | 'cyber' | 'neon'>('neon')
 
   // Roles for typing animation - based on actual work
   const roles = useMemo(() => [
