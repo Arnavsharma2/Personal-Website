@@ -113,7 +113,7 @@ export default function Hero() {
                   <motion.div 
                     className="absolute top-8 left-8 w-16 h-16 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full opacity-60 cursor-pointer"
                     whileHover={{ 
-                      scale: 1.3,
+                      scale: 3,
                       rotate: 360,
                       opacity: 1
                     }}
@@ -124,14 +124,15 @@ export default function Hero() {
                     transition={{
                       duration: 3,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: "easeInOut",
+                      scale: { duration: 0.3, ease: "easeOut" }
                     }}
                   ></motion.div>
                   
                   <motion.div 
                     className="absolute bottom-12 right-12 w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full opacity-50 cursor-pointer"
                     whileHover={{ 
-                      scale: 1.4,
+                      scale: 3,
                       rotate: -360,
                       opacity: 1
                     }}
@@ -143,14 +144,15 @@ export default function Hero() {
                       duration: 2.5,
                       repeat: Infinity,
                       ease: "easeInOut",
-                      delay: 0.5
+                      delay: 0.5,
+                      scale: { duration: 0.3, ease: "easeOut" }
                     }}
                   ></motion.div>
                   
                   <motion.div 
                     className="absolute top-1/2 right-8 w-8 h-8 bg-gradient-to-br from-purple-300 to-blue-300 rounded-full opacity-40 cursor-pointer"
                     whileHover={{ 
-                      scale: 1.5,
+                      scale: 3,
                       rotate: 180
                     }}
                     animate={{
@@ -161,7 +163,8 @@ export default function Hero() {
                       duration: 2,
                       repeat: Infinity,
                       ease: "easeInOut",
-                      delay: 1
+                      delay: 1,
+                      scale: { duration: 0.3, ease: "easeOut" }
                     }}
                   ></motion.div>
                 </div>
@@ -171,7 +174,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-purple-500/40 to-blue-500/40 rounded-lg transform rotate-45 cursor-pointer"
                 whileHover={{ 
-                  scale: 1.2,
+                  scale: 3,
                   rotate: 90,
                   backgroundColor: "rgba(147, 51, 234, 0.6)"
                 }}
@@ -182,14 +185,15 @@ export default function Hero() {
                 transition={{
                   duration: 3,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
               
               <motion.div 
                 className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-blue-500/40 to-purple-500/40 rounded-full cursor-pointer"
                 whileHover={{ 
-                  scale: 1.3,
+                  scale: 3,
                   backgroundColor: "rgba(59, 130, 246, 0.6)"
                 }}
                 animate={{
@@ -200,14 +204,15 @@ export default function Hero() {
                   duration: 4,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 1
+                  delay: 1,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
               
               <motion.div 
                 className="absolute top-1/3 -left-8 w-12 h-12 bg-gradient-to-br from-purple-400/50 to-blue-400/50 rounded-lg transform rotate-12 cursor-pointer"
                 whileHover={{ 
-                  scale: 1.4,
+                  scale: 3,
                   rotate: 45
                 }}
                 animate={{
@@ -218,7 +223,8 @@ export default function Hero() {
                   duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.5
+                  delay: 0.5,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -226,7 +232,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute top-16 left-16 text-white/20 font-mono text-xs cursor-pointer"
                 whileHover={{ 
-                  scale: 1.5,
+                  scale: 3,
                   color: "rgba(255, 255, 255, 0.8)"
                 }}
                 animate={{
@@ -234,7 +240,8 @@ export default function Hero() {
                 }}
                 transition={{
                   duration: 2,
-                  repeat: Infinity
+                  repeat: Infinity,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               >
                 <div>&lt;/&gt;</div>
@@ -243,7 +250,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute bottom-20 right-16 text-white/20 font-mono text-xs cursor-pointer"
                 whileHover={{ 
-                  scale: 1.5,
+                  scale: 3,
                   color: "rgba(147, 51, 234, 0.8)"
                 }}
                 animate={{
@@ -253,7 +260,8 @@ export default function Hero() {
                 transition={{
                   duration: 2.5,
                   repeat: Infinity,
-                  delay: 1
+                  delay: 1,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               >
                 <div>AI</div>
@@ -262,7 +270,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute top-1/2 left-8 text-white/20 font-mono text-xs cursor-pointer"
                 whileHover={{ 
-                  scale: 1.5,
+                  scale: 3,
                   color: "rgba(59, 130, 246, 0.8)"
                 }}
                 animate={{
@@ -272,7 +280,8 @@ export default function Hero() {
                 transition={{
                   duration: 3,
                   repeat: Infinity,
-                  delay: 2
+                  delay: 2,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               >
                 <div>ML</div>
@@ -282,7 +291,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute top-4 right-4 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full cursor-pointer"
                 whileHover={{ 
-                  scale: 2.5,
+                  scale: 3,
                   rotate: 360,
                   backgroundColor: "rgba(251, 191, 36, 0.9)"
                 }}
@@ -294,7 +303,8 @@ export default function Hero() {
                 transition={{
                   duration: 1.5,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -314,7 +324,8 @@ export default function Hero() {
                   duration: 2,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.8
+                  delay: 0.8,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -322,7 +333,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute top-1/4 left-4 w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-400 rounded-lg cursor-pointer"
                 whileHover={{ 
-                  scale: 1.8,
+                  scale: 3,
                   rotate: 45,
                   backgroundColor: "rgba(244, 114, 182, 0.9)"
                 }}
@@ -334,14 +345,15 @@ export default function Hero() {
                   duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.3
+                  delay: 0.3,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
               <motion.div 
                 className="absolute bottom-1/4 right-4 w-7 h-7 bg-gradient-to-br from-cyan-400 to-sky-400 rounded-full cursor-pointer"
                 whileHover={{ 
-                  scale: 2.2,
+                  scale: 3,
                   rotate: -90,
                   backgroundColor: "rgba(34, 211, 238, 0.9)"
                 }}
@@ -354,14 +366,15 @@ export default function Hero() {
                   duration: 1.8,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 1.2
+                  delay: 1.2,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
               <motion.div 
                 className="absolute top-1/2 right-8 w-5 h-5 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full cursor-pointer"
                 whileHover={{ 
-                  scale: 2.8,
+                  scale: 3,
                   rotate: 180,
                   backgroundColor: "rgba(16, 185, 129, 0.9)"
                 }}
@@ -374,7 +387,8 @@ export default function Hero() {
                   duration: 3,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.6
+                  delay: 0.6,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -382,7 +396,7 @@ export default function Hero() {
               <motion.div 
                 className="absolute top-1/3 left-1/3 w-1 h-20 bg-gradient-to-b from-purple-400 to-blue-400 cursor-pointer"
                 whileHover={{ 
-                  scaleY: 1.5,
+                  scaleY: 3,
                   opacity: 1
                 }}
                 animate={{
@@ -393,14 +407,15 @@ export default function Hero() {
                   duration: 2,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.4
+                  delay: 0.4,
+                  scaleY: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
               <motion.div 
                 className="absolute bottom-1/3 right-1/3 w-20 h-1 bg-gradient-to-r from-blue-400 to-purple-400 cursor-pointer"
                 whileHover={{ 
-                  scaleX: 1.5,
+                  scaleX: 3,
                   opacity: 1
                 }}
                 animate={{
@@ -411,7 +426,8 @@ export default function Hero() {
                   duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 1.5
+                  delay: 1.5,
+                  scaleX: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -431,7 +447,8 @@ export default function Hero() {
                   duration: 2.2,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.1
+                  delay: 0.1,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -450,7 +467,8 @@ export default function Hero() {
                   duration: 2.8,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 0.7
+                  delay: 0.7,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
 
@@ -469,7 +487,8 @@ export default function Hero() {
                   duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: 1.4
+                  delay: 1.4,
+                  scale: { duration: 0.3, ease: "easeOut" }
                 }}
               ></motion.div>
             </div>
