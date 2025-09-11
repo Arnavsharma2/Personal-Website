@@ -123,7 +123,7 @@ export default function About() {
                 transition={{ duration: 0.3, delay: 0.8 + index * 0.05 }}
                 className="relative group"
               >
-                <div className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center">
+                <div className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-all duration-300 flex items-center justify-center hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25 hover:border-blue-500/50 border border-transparent">
                   <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center relative">
                     <Image 
                       src={tech.logo} 

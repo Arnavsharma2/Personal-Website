@@ -81,16 +81,16 @@ export default function Projects() {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="group bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105"
+              className="group bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 hover:border-purple-500/50"
             >
               {/* Project Image */}
-              <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden">
+              <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden group-hover:from-purple-500/30 group-hover:to-blue-500/30 transition-all duration-300">
                 {project.image && project.image !== '/api/placeholder/400/300' ? (
                   <Image 
                     src={project.image} 
                     alt={project.title}
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       // Fallback to letter if image fails to load
                       const target = e.target as HTMLImageElement;
