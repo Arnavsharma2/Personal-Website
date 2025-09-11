@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Code, Cpu, Database, Globe, Zap, Sparkles } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 export default function Hero() {
   // Configurable layer coordinates
@@ -70,7 +70,7 @@ export default function Hero() {
   const [themeMode, setThemeMode] = useState<'default' | 'cyber' | 'neon'>('default')
 
   // Roles for typing animation - based on actual work
-  const roles = [
+  const roles = useMemo(() => [
     'Machine Learning Engineer',
     'Python Developer', 
     'AI/ML Specialist',
@@ -79,7 +79,7 @@ export default function Hero() {
     'Reddit Data Analyst',
     'NLP Engineer',
     'Predictive Modeler'
-  ]
+  ], [])
 
   // Stats data - based on actual projects and experience
   const stats = [
@@ -379,7 +379,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-300 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center lg:justify-start whitespace-nowrap"
             >
-              <span className="mr-2 flex-shrink-0">I'm a</span>
+              <span className="mr-2 flex-shrink-0">I&apos;m a</span>
               <motion.span
                 key={currentRole}
                 initial={{ opacity: 0, y: 20 }}

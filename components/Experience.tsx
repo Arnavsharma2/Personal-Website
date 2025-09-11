@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { Building2, Calendar, MapPin } from 'lucide-react'
+import Image from 'next/image'
 
 const experiences = [
   {
@@ -63,17 +64,12 @@ export default function Experience() {
                 {/* Logo and Timeline */}
                 <div className="flex flex-col items-center flex-shrink-0">
                   {/* Company Logo */}
-                  <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center border-4 border-gray-800 shadow-xl">
-                    <img 
+                  <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center border-4 border-gray-800 shadow-xl relative">
+                    <Image 
                       src="/wefirelogo.jpeg" 
                       alt="WeFIRE Logo"
-                      className="w-16 h-16 rounded-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        const fallback = target.nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = 'flex';
-                      }}
+                      fill
+                      className="rounded-full object-cover"
                     />
                     {/* Fallback CSS Logo */}
                     <div className="hidden w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">

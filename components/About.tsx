@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
+import Image from 'next/image'
 
 const technologies = [
   { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
@@ -76,17 +77,11 @@ export default function About() {
                 {/* Inner rounded rectangle with main background */}
                 <div className="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center relative overflow-hidden">
                   {/* Profile Image */}
-                  <img 
+                  <Image 
                     src="/PERSONALWEBSITE.jpg" 
                     alt="Arnav Sharma"
-                    className="w-full h-full object-cover object-bottom rounded-2xl"
-                    onError={(e) => {
-                      // Fallback to initials if image fails to load
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
+                    fill
+                    className="object-cover object-bottom rounded-2xl"
                   />
                   {/* Fallback initials */}
                   <div className="hidden w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center relative">
@@ -129,18 +124,12 @@ export default function About() {
                 className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-colors duration-200 group flex items-center justify-center"
                 title={tech.name}
               >
-                <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center">
-                  <img 
+                <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center relative">
+                  <Image 
                     src={tech.logo} 
                     alt={tech.name}
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (nextElement) {
-                        nextElement.style.display = 'block';
-                      }
-                    }}
+                    fill
+                    className="object-contain"
                   />
                   <div className="hidden text-gray-400 text-lg font-medium">
                     {tech.name.charAt(0)}
