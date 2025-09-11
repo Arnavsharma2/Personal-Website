@@ -66,6 +66,7 @@ export default function Hero() {
   // State for interactive features
   const [hoveredElement, setHoveredElement] = useState<string | null>(null)
   const [showStats, setShowStats] = useState(false)
+  const [statsShownOnce, setStatsShownOnce] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [themeMode, setThemeMode] = useState<'default' | 'cyber' | 'neon'>('default')
 
@@ -112,16 +113,17 @@ export default function Hero() {
     return () => clearTimeout(timeout)
   }, [displayedText, isDeleting, currentRole, roles])
 
-  // Show stats on scroll
+  // Show stats on scroll only once
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 100 && !statsShownOnce) {
         setShowStats(true)
+        setStatsShownOnce(true)
       }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [statsShownOnce])
 
   // Function to start data flow animation
   const startDataFlow = () => {
@@ -356,7 +358,7 @@ export default function Hero() {
                   onClick={scrollToAbout}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                  className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-700 to-blue-700 sm:from-purple-600 sm:to-blue-600 sm:hover:from-purple-700 sm:hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                 >
                   <Sparkles className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   See my experience
@@ -367,7 +369,7 @@ export default function Hero() {
                   onClick={() => setShowStats(!showStats)}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-700 to-emerald-700 sm:from-green-600 sm:to-emerald-600 sm:hover:from-green-700 sm:hover:to-emerald-700 text-white font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                 >
                   <Zap className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   {showStats ? 'Hide Stats' : 'Show Stats'}
