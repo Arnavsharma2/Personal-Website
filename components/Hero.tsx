@@ -274,7 +274,7 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="min-h-[120vh] flex items-center justify-center relative overflow-hidden">
+    <section id="home" className="min-h-[140vh] flex items-center justify-center relative overflow-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-indigo-900/20" />
       <div className="absolute inset-0">
@@ -310,11 +310,11 @@ export default function Hero() {
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
         />
         
-        {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
+        {/* Floating particles - reduced for mobile */}
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={`particle-${i}`}
-            className="absolute w-1 h-1 bg-white/60 rounded-full"
+            className="absolute w-1 h-1 bg-white/60 rounded-full hidden sm:block"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`
@@ -347,13 +347,13 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Content - Left Side */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 lg:space-y-8 text-center lg:text-left"
           >
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -368,7 +368,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-purple-500 bg-clip-text text-transparent leading-tight mb-2"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-purple-500 bg-clip-text text-transparent leading-tight mb-2"
             >
               Arnav Sharma
             </motion.h1>
@@ -377,7 +377,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-2xl sm:text-3xl lg:text-4xl text-gray-300 font-medium min-h-[3rem] flex items-center whitespace-nowrap"
+              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-300 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center lg:justify-start whitespace-nowrap"
             >
               <span className="mr-2 flex-shrink-0">I'm a</span>
               <motion.span
@@ -403,7 +403,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-lg text-gray-400 mt-4 max-w-lg"
+              className="text-base sm:text-lg text-gray-400 mt-4 max-w-lg mx-auto lg:mx-0"
             >
               Building ML models, analyzing data, and creating AI-powered applications.
             </motion.p>
@@ -414,25 +414,25 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="pt-8 space-y-6"
             >
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
                 <motion.button
-                onClick={scrollToAbout}
+                  onClick={scrollToAbout}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                  <Sparkles className="mr-2 h-5 w-5" />
-                See my experience
-                <ChevronDown className="ml-2 h-5 w-5" />
+                  className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                >
+                  <Sparkles className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  See my experience
+                  <ChevronDown className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </motion.button>
                 
                 <motion.button
                   onClick={() => setShowStats(!showStats)}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
                 >
-                  <Zap className="mr-2 h-4 w-4" />
+                  <Zap className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
                   {showStats ? 'Hide Stats' : 'Show Stats'}
                 </motion.button>
               </div>
@@ -448,26 +448,26 @@ export default function Hero() {
                     className="space-y-6 mt-6"
                   >
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       {stats.map((stat, index) => (
                         <motion.div
                           key={stat.label}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-400/20 text-center"
+                          className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-purple-400/20 text-center"
                           whileHover={{ scale: 1.05, y: -5 }}
                         >
-                          <stat.icon className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                          <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-purple-400 mx-auto mb-2" />
                           <motion.div
-                            className="text-2xl font-bold text-white"
+                            className="text-xl sm:text-2xl font-bold text-white"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.5 + index * 0.1 }}
                           >
                             {stat.value}+
                           </motion.div>
-                          <div className="text-sm text-gray-300">{stat.label}</div>
+                          <div className="text-xs sm:text-sm text-gray-300">{stat.label}</div>
                         </motion.div>
                       ))}
                     </div>
@@ -477,17 +477,17 @@ export default function Hero() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
-                      className="bg-gradient-to-br from-gray-900/50 to-purple-900/30 backdrop-blur-sm rounded-xl p-6 border border-purple-400/20"
+                      className="bg-gradient-to-br from-gray-900/50 to-purple-900/30 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-purple-400/20"
                     >
-                      <h4 className="text-lg font-semibold text-white mb-4 text-center">Tech Stack</h4>
-                      <div className="flex flex-wrap gap-2 justify-center">
+                      <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 text-center">Tech Stack</h4>
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
                         {['Python', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas', 'LangChain', 'OpenAI API', 'Flask', 'PRAW', 'NLP', 'LSTM', 'XGBoost'].map((tech, index) => (
                           <motion.span
                             key={tech}
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.8 + index * 0.05 }}
-                            className="px-3 py-1 bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-purple-300 rounded-full text-sm font-medium border border-purple-400/30 hover:from-purple-600/30 hover:to-blue-600/30 transition-all duration-300"
+                            className="px-2 sm:px-3 py-1 bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-purple-300 rounded-full text-xs sm:text-sm font-medium border border-purple-400/30 hover:from-purple-600/30 hover:to-blue-600/30 transition-all duration-300"
                             whileHover={{ scale: 1.1, y: -2 }}
                           >
                             {tech}
@@ -506,9 +506,9 @@ export default function Hero() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="relative flex justify-center lg:justify-end group"
+            className="relative flex justify-center lg:justify-end group mt-8 lg:mt-0"
           >
-            <div className="relative w-[600px] h-[500px] cursor-pointer">
+            <div className="relative w-[300px] h-[250px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[400px] xl:w-[600px] xl:h-[500px] cursor-pointer">
               {/* Neural Network Container */}
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-3xl border border-purple-400/20 shadow-2xl backdrop-blur-sm group-hover:shadow-purple-500/25 group-hover:shadow-3xl transition-all duration-500"
