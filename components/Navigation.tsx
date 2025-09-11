@@ -13,7 +13,7 @@ const navItems = [
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
   { name: 'Contact', href: '#contact' },
-  { name: 'Resume', href: '#resume' },
+  { name: 'Resume', href: 'https://drive.google.com/file/d/1XiJR1VTN2eIqcWkX67BRq2F9JTi9invK/view?usp=sharing', external: true },
 ]
 
 const socialLinks = [
@@ -27,10 +27,14 @@ const socialLinks = [
 export default function Navigation({ activeSection }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  const scrollToSection = (href: string, isExternal: boolean = false) => {
+    if (isExternal) {
+      window.open(href, '_blank', 'noopener,noreferrer')
+    } else {
+      const element = document.querySelector(href)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
     }
     setIsOpen(false)
   }
@@ -52,7 +56,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
                 {navItems.map((item) => (
                   <button
                     key={item.name}
-                    onClick={() => scrollToSection(item.href)}
+                    onClick={() => scrollToSection(item.href, item.external)}
                     className={`px-4 py-3 rounded-md text-lg font-medium transition-colors duration-200 ${
                       activeSection === item.href.slice(1)
                         ? 'text-primary-400 bg-primary-400/20'

@@ -47,19 +47,19 @@ export default function About() {
               <div className="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
             </div>
             <p className="text-lg text-gray-300 leading-relaxed">
-              Hey! I'm Arnav Sharma, and I'm currently pursuing a Bachelor's Degree of Science in Computer Science at Penn State University, 
-              with a minor in Artificial Intelligence. I'm passionate about creating AI-powered solutions and love the entire process 
+              Hey! I&apos;m Arnav Sharma, and I&apos;m currently pursuing a Bachelor&apos;s Degree of Science in Computer Science at Penn State University, 
+              with a minor in Artificial Intelligence. I&apos;m passionate about creating AI-powered solutions and love the entire process 
               of taking an idea from ideation to design to production.
             </p>
             
             <p className="text-lg text-gray-300 leading-relaxed">
               My favorite part of programming is building full-stack applications and AI models that solve real-world problems. I love working 
-              with machine learning, data science, and creating web applications that make a difference. I'm particularly interested in 
+              with machine learning, data science, and creating web applications that make a difference. I&apos;m particularly interested in 
               natural language processing and building conversational AI systems.
             </p>
             
             <p className="text-lg text-gray-300 leading-relaxed">
-              When I'm not coding, you can usually find me trying new recipes, unwinding with a good TV show, or getting competitive over board games. I'm also a big fan of staying active and have been hitting the gym regularly for almost two years now.
+              When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or getting competitive over board games. I&apos;m also a big fan of staying active and have been hitting the gym regularly for almost two years now.
             </p>
           </motion.div>
 

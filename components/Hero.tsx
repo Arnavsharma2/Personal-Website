@@ -36,7 +36,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-xl sm:text-2xl text-gray-300 font-medium mb-2"
             >
-              Hey there! I'm
+              Hey there! I&apos;m
             </motion.h2>
 
             <motion.h1

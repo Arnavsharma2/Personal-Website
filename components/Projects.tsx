@@ -4,13 +4,14 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { ExternalLink, Github } from 'lucide-react'
+import Image from 'next/image'
 
 const projects = [
   {
     title: 'Predictive Modeling Implementations',
     description: 'A comprehensive collection of machine learning projects including house price prediction, customer churn analysis, and stock return forecasting. Features multiple Jupyter notebooks with end-to-end implementations using various ML algorithms and techniques.',
     technologies: ['Python', 'Jupyter Notebook', 'Scikit-learn', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn'],
-    image: '/api/placeholder/400/300',
+    image: '/Predictive-Modeling-Implementations.png',
     github: 'https://github.com/Arnavsharma2/Predictive-Modeling-Implementations',
     live: '#',
     showLive: false
@@ -19,7 +20,7 @@ const projects = [
     title: 'PSU Menu Analyzer Website',
     description: 'A full-stack web application that scrapes and analyzes Penn State University dining menus. Features AI-powered nutritional analysis using Google Gemini API, real-time menu scraping, dietary preference filtering, and CSV export functionality for comprehensive nutritional data.',
     technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'Web Scraping'],
-    image: '/api/placeholder/400/300',
+    image: '/psu-menu-analyzer.png',
     github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
     live: 'https://psumenuanalyzerwebsite-production-e586.up.railway.app/'
   },
@@ -66,7 +67,26 @@ export default function Projects() {
             >
               {/* Project Image */}
               <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/30 to-blue-600/30 flex items-center justify-center">
+                {project.image && project.image !== '/api/placeholder/400/300' ? (
+                  <Image 
+                    src={project.image} 
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                    onError={(e) => {
+                      // Fallback to letter if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className={`absolute inset-0 bg-gradient-to-br from-purple-600/30 to-blue-600/30 flex items-center justify-center ${
+                    project.image && project.image !== '/api/placeholder/400/300' ? 'hidden' : ''
+                  }`}
+                >
                   <span className="text-4xl font-bold text-white/80">
                     {project.title.charAt(0)}
                   </span>
