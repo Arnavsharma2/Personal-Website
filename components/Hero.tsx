@@ -1,8 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronDown, Code, Cpu, Database, Globe, Zap, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export default function Hero() {
   // Configurable layer coordinates
@@ -57,6 +57,71 @@ export default function Hero() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [concentratedNode, setConcentratedNode] = useState<number | null>(null)
   const [nodeBrightness, setNodeBrightness] = useState<{[key: string]: number}>({})
+
+  // State for typing animation
+  const [currentRole, setCurrentRole] = useState(0)
+  const [displayedText, setDisplayedText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  
+  // State for interactive features
+  const [hoveredElement, setHoveredElement] = useState<string | null>(null)
+  const [showStats, setShowStats] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(false)
+  const [themeMode, setThemeMode] = useState<'default' | 'cyber' | 'neon'>('default')
+
+  // Roles for typing animation - based on actual work
+  const roles = [
+    'Machine Learning Engineer',
+    'Python Developer', 
+    'AI/ML Specialist',
+    'Data Scientist',
+    'Software Engineer',
+    'Reddit Data Analyst',
+    'NLP Engineer',
+    'Predictive Modeler'
+  ]
+
+  // Stats data - based on actual projects and experience
+  const stats = [
+    { label: 'ML Projects', value: 5, icon: Code },
+    { label: 'Years Experience', value: 1, icon: Cpu },
+    { label: 'Technologies', value: 20, icon: Database },
+    { label: 'GitHub Repositories', value: 7, icon: Globe }
+  ]
+
+  // Typing animation effect
+  useEffect(() => {
+    const currentRoleText = roles[currentRole]
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (displayedText.length < currentRoleText.length) {
+          setDisplayedText(currentRoleText.slice(0, displayedText.length + 1))
+        } else {
+          setTimeout(() => setIsDeleting(true), 2000)
+        }
+      } else {
+        if (displayedText.length > 0) {
+          setDisplayedText(displayedText.slice(0, -1))
+        } else {
+          setIsDeleting(false)
+          setCurrentRole((prev) => (prev + 1) % roles.length)
+        }
+      }
+    }, isDeleting ? 50 : 100)
+
+    return () => clearTimeout(timeout)
+  }, [displayedText, isDeleting, currentRole, roles])
+
+  // Show stats on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setShowStats(true)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Function to start data flow animation
   const startDataFlow = () => {
@@ -209,13 +274,76 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background Effects */}
+    <section id="home" className="min-h-[120vh] flex items-center justify-center relative overflow-hidden">
+      {/* Enhanced Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-indigo-900/20" />
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-        <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-        <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
+        {/* Animated gradient orbs */}
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.7, 1, 0.7],
+            x: [0, 50, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute top-3/4 right-1/4 w-72 h-72 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.7, 1, 0.7],
+            x: [0, -40, 0],
+            y: [0, 20, 0]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.7, 1, 0.7],
+            x: [0, 30, 0],
+            y: [0, -40, 0]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        />
+        
+        {/* Floating particles */}
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 bg-white/60 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`
+            }}
+            animate={{
+              y: [0, -100, 0],
+              x: [0, Math.sin(i) * 50, 0],
+              opacity: [0, 1, 0],
+              scale: [0, 1, 0]
+            }}
+            transition={{
+              duration: 8 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
       </div>
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -245,35 +373,131 @@ export default function Hero() {
               Arnav Sharma
             </motion.h1>
 
-            <motion.h3
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-2xl sm:text-3xl lg:text-4xl text-gray-300 font-medium"
+              className="text-2xl sm:text-3xl lg:text-4xl text-gray-300 font-medium min-h-[3rem] flex items-center whitespace-nowrap"
             >
-              I like building AI-powered applications and full-stack solutions
-            </motion.h3>
+              <span className="mr-2 flex-shrink-0">I'm a</span>
+              <motion.span
+                key={currentRole}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent font-bold flex-shrink-0"
+              >
+                {displayedText}
+                <motion.span
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="ml-1"
+                >
+                  |
+                </motion.span>
+              </motion.span>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-lg text-gray-400 mt-4 max-w-lg"
+            >
+              Building ML models, analyzing data, and creating AI-powered applications.
+            </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="pt-8 space-y-4"
+              className="pt-8 space-y-6"
             >
-              <button
+              <div className="flex flex-wrap gap-4">
+                <motion.button
                 onClick={scrollToAbout}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
               >
+                  <Sparkles className="mr-2 h-5 w-5" />
                 See my experience
                 <ChevronDown className="ml-2 h-5 w-5" />
-              </button>
-              <button
-                onClick={startDataFlow}
-                disabled={isAnimating}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:scale-100 disabled:cursor-not-allowed"
-              >
-                {isAnimating ? 'Processing...' : 'Animate Neural Network'}
-              </button>
+                </motion.button>
+                
+                <motion.button
+                  onClick={() => setShowStats(!showStats)}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  <Zap className="mr-2 h-4 w-4" />
+                  {showStats ? 'Hide Stats' : 'Show Stats'}
+                </motion.button>
+              </div>
+
+              {/* Animated Stats */}
+              <AnimatePresence>
+                {showStats && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="space-y-6 mt-6"
+                  >
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {stats.map((stat, index) => (
+                        <motion.div
+                          key={stat.label}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-xl p-4 border border-purple-400/20 text-center"
+                          whileHover={{ scale: 1.05, y: -5 }}
+                        >
+                          <stat.icon className="h-6 w-6 text-purple-400 mx-auto mb-2" />
+                          <motion.div
+                            className="text-2xl font-bold text-white"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 + index * 0.1 }}
+                          >
+                            {stat.value}+
+                          </motion.div>
+                          <div className="text-sm text-gray-300">{stat.label}</div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {/* Tech Stack */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
+                      className="bg-gradient-to-br from-gray-900/50 to-purple-900/30 backdrop-blur-sm rounded-xl p-6 border border-purple-400/20"
+                    >
+                      <h4 className="text-lg font-semibold text-white mb-4 text-center">Tech Stack</h4>
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {['Python', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas', 'LangChain', 'OpenAI API', 'Flask', 'PRAW', 'NLP', 'LSTM', 'XGBoost'].map((tech, index) => (
+                          <motion.span
+                            key={tech}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.8 + index * 0.05 }}
+                            className="px-3 py-1 bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-purple-300 rounded-full text-sm font-medium border border-purple-400/30 hover:from-purple-600/30 hover:to-blue-600/30 transition-all duration-300"
+                            whileHover={{ scale: 1.1, y: -2 }}
+                          >
+                            {tech}
+                          </motion.span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </motion.div>
 
@@ -635,13 +859,62 @@ export default function Hero() {
                   <div>Deep Learning</div>
                   <div>AI/ML</div>
                 </motion.div>
+
+                {/* Interactive Controls */}
+                <motion.div 
+                  className="absolute bottom-4 right-1/2 transform translate-x-1/2 flex gap-2"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <button
+                    onClick={startDataFlow}
+                    disabled={isAnimating}
+                    className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 text-white text-xs font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:scale-100 disabled:cursor-not-allowed"
+                  >
+                    {isAnimating ? 'Processing...' : 'Animate Network'}
+                  </button>
+                  
+                  <button
+                    onClick={() => setThemeMode(themeMode === 'default' ? 'cyber' : themeMode === 'cyber' ? 'neon' : 'default')}
+                    className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-xs font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    {themeMode === 'default' ? '🌙' : themeMode === 'cyber' ? '⚡' : '🎨'}
+                  </button>
+                </motion.div>
+
+                {/* Interactive Hover Effects */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const x = ((e.clientX - rect.left) / rect.width) * 100
+                    const y = ((e.clientY - rect.top) / rect.height) * 100
+                    setHoveredElement(`${x},${y}`)
+                  }}
+                  onMouseLeave={() => setHoveredElement(null)}
+                >
+                  {hoveredElement && (
+                    <motion.div
+                      className="absolute w-32 h-32 bg-purple-500/20 rounded-full blur-xl"
+                      style={{
+                        left: hoveredElement.split(',')[0] + '%',
+                        top: hoveredElement.split(',')[1] + '%',
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                    />
+                  )}
+                </motion.div>
               </motion.div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
+
+      {/* Enhanced Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -651,11 +924,41 @@ export default function Hero() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="text-white/60"
+          className="text-white/60 cursor-pointer"
+          onClick={scrollToAbout}
+        >
+          <motion.div
+            whileHover={{ scale: 1.2, y: -5 }}
+            className="p-2 rounded-full bg-white/10 backdrop-blur-sm"
         >
           <ChevronDown size={24} />
+          </motion.div>
         </motion.div>
       </motion.div>
+
+      {/* Theme-based visual enhancements */}
+      {themeMode === 'cyber' && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-green-500 animate-pulse" />
+          <div className="absolute bottom-0 right-0 w-full h-1 bg-gradient-to-l from-purple-500 via-blue-500 to-green-500 animate-pulse" />
+        </motion.div>
+      )}
+
+      {themeMode === 'neon' && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-cyan-500/10 animate-pulse" />
+        </motion.div>
+      )}
     </section>
   )
 }
