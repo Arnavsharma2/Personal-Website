@@ -92,8 +92,7 @@ export default function AdminLayout({
             </button>
           </form>
           <div className="mt-4 text-xs text-gray-400 text-center">
-            <p>Current password: {adminPassword}</p>
-            <p className="mt-1">Set ADMIN_PASSWORD environment variable to change</p>
+            <p>Enter admin password to access the dashboard</p>
           </div>
         </div>
       </div>
