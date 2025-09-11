@@ -73,7 +73,7 @@ export default function Contact() {
           </p>
 
           {/* Social Links */}
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex justify-center gap-4 overflow-x-auto pb-2">
             {socialLinks.map((social, index) => (
               <motion.a
                 key={social.name}
@@ -85,7 +85,7 @@ export default function Contact() {
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className={`group flex items-center space-x-2 px-6 py-3 bg-gray-900/50 backdrop-blur-sm rounded-full border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 ${social.color}`}
+                className={`group flex items-center space-x-2 px-4 py-2 bg-gray-900/50 backdrop-blur-sm rounded-full border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 ${social.color} whitespace-nowrap`}
               >
                 {social.name === 'Discord' ? (
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">

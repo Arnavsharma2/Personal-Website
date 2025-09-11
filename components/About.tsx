@@ -121,19 +121,24 @@ export default function About() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.3, delay: 0.8 + index * 0.05 }}
-                className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-colors duration-200 group flex items-center justify-center"
-                title={tech.name}
+                className="relative group"
               >
-                <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center relative">
-                  <Image 
-                    src={tech.logo} 
-                    alt={tech.name}
-                    fill
-                    className="object-contain"
-                  />
-                  <div className="hidden text-gray-400 text-lg font-medium">
-                    {tech.name.charAt(0)}
+                <div className="w-16 h-16 bg-gray-800 backdrop-blur-sm rounded-full hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center">
+                  <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center relative">
+                    <Image 
+                      src={tech.logo} 
+                      alt={tech.name}
+                      fill
+                      className="object-contain"
+                    />
                   </div>
+                </div>
+                
+                {/* Custom Tooltip */}
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                  {tech.name}
+                  {/* Tooltip arrow */}
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                 </div>
               </motion.div>
             ))}
