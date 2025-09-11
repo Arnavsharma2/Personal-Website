@@ -275,85 +275,22 @@ export default function Hero() {
 
   return (
     <section id="home" className="min-h-[140vh] flex items-center justify-center relative overflow-hidden">
-      {/* Enhanced Background Effects */}
+      {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-indigo-900/20" />
       <div className="absolute inset-0">
-        {/* Animated gradient orbs */}
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.7, 1, 0.7],
-            x: [0, 50, 0],
-            y: [0, -30, 0]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div 
-          className="absolute top-3/4 right-1/4 w-72 h-72 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.7, 1, 0.7],
-            x: [0, -40, 0],
-            y: [0, 20, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70"
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.7, 1, 0.7],
-            x: [0, 30, 0],
-            y: [0, -40, 0]
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        />
-        
-        {/* Floating particles - reduced for mobile */}
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={`particle-${i}`}
-            className="absolute w-1 h-1 bg-white/60 rounded-full hidden sm:block"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
-            }}
-            animate={{
-              y: [0, -100, 0],
-              x: [0, Math.sin(i) * 50, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0]
-            }}
-            transition={{
-              duration: 8 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-        
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }} />
-        </div>
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
+        <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
+        <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
       </div>
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Content - Left Side */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-6 lg:space-y-8 text-center lg:text-left"
+            className="space-y-6 lg:space-y-8 text-center"
           >
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -377,7 +314,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-300 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center lg:justify-start whitespace-nowrap"
+              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-300 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center whitespace-nowrap"
             >
               <span className="mr-2 flex-shrink-0">I&apos;m a</span>
               <motion.span
@@ -403,7 +340,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-base sm:text-lg text-gray-400 mt-4 max-w-lg mx-auto lg:mx-0"
+              className="text-base sm:text-lg text-gray-400 mt-4 max-w-lg mx-auto"
             >
               Building ML models, analyzing data, and creating AI-powered applications.
             </motion.p>
@@ -501,12 +438,12 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Neural Network Design - Right Side */}
+          {/* Neural Network Design - Right Side - Hidden on Mobile */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="relative flex justify-center lg:justify-end group mt-8 lg:mt-0"
+            className="relative flex justify-center lg:justify-end group mt-8 lg:mt-0 hidden lg:flex"
           >
             <div className="relative w-[300px] h-[250px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[400px] xl:w-[600px] xl:h-[500px] cursor-pointer">
               {/* Neural Network Container */}
