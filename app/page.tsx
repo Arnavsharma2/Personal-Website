@@ -8,6 +8,7 @@ import About from '@/components/About'
 import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
+import VisitStats from '@/components/VisitStats'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home')
@@ -48,6 +49,9 @@ export default function Home() {
         <Projects />
         <Contact />
       </motion.div>
+      
+      {/* Visit Statistics */}
+      <VisitStats />
     </main>
   )
 }

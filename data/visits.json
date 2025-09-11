@@ -1,0 +1,30 @@
+{
+  "visits": [
+    {
+      "ip": "::1",
+      "timestamp": "2025-09-11T20:51:58.618Z",
+      "userAgent": "curl/8.12.1",
+      "location": {
+        "country": "Local",
+        "region": "Development",
+        "city": "Localhost"
+      }
+    },
+    {
+      "ip": "::1",
+      "timestamp": "2025-09-11T20:54:32.703Z",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+      "location": {
+        "country": "Local",
+        "region": "Development",
+        "city": "Localhost"
+      },
+      "referer": "http://localhost:3000/"
+    }
+  ],
+  "uniqueIPs": [
+    "::1"
+  ],
+  "totalVisits": 2,
+  "uniqueVisits": 1
+}
