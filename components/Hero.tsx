@@ -21,29 +21,24 @@ export default function Hero() {
     output: 50, // Vertical spacing between output nodes
   }
 
-  // State for individual node positions (moved 15px left and 20px up total)
+  // State for individual node positions (moved 15px left, centered vertically, and shifted down 50px)
   const [nodePositions, setNodePositions] = useState({
-    input: [
-      { x: layerCoordinates.input.x - 15, y: layerCoordinates.input.y - 20 },
-      { x: layerCoordinates.input.x - 15, y: layerCoordinates.input.y + nodeSpacing.input - 20 },
-      { x: layerCoordinates.input.x - 15, y: layerCoordinates.input.y + nodeSpacing.input * 2 - 20 }
-    ],
-    hidden1: [
-      { x: layerCoordinates.hidden1.x - 15, y: layerCoordinates.hidden1.y - 20 },
-      { x: layerCoordinates.hidden1.x - 15, y: layerCoordinates.hidden1.y + nodeSpacing.hidden1 - 20 },
-      { x: layerCoordinates.hidden1.x - 15, y: layerCoordinates.hidden1.y + nodeSpacing.hidden1 * 2 - 20 },
-      { x: layerCoordinates.hidden1.x - 15, y: layerCoordinates.hidden1.y + nodeSpacing.hidden1 * 3 - 20 }
-    ],
-    hidden2: [
-      { x: layerCoordinates.hidden2.x - 15, y: layerCoordinates.hidden2.y - 20 },
-      { x: layerCoordinates.hidden2.x - 15, y: layerCoordinates.hidden2.y + nodeSpacing.hidden2 - 20 },
-      { x: layerCoordinates.hidden2.x - 15, y: layerCoordinates.hidden2.y + nodeSpacing.hidden2 * 2 - 20 },
-      { x: layerCoordinates.hidden2.x - 15, y: layerCoordinates.hidden2.y + nodeSpacing.hidden2 * 3 - 20 }
-    ],
-    output: [
-      { x: layerCoordinates.output.x - 15, y: layerCoordinates.output.y - 20 },
-      { x: layerCoordinates.output.x - 15, y: layerCoordinates.output.y + nodeSpacing.output - 20 }
-    ]
+    input: Array.from({ length: 6 }, (_, i) => ({
+      x: layerCoordinates.input.x - 15,
+      y: layerCoordinates.input.y - 20 + 50 + (i - 2.5) * (nodeSpacing.input * 0.8)
+    })),
+    hidden1: Array.from({ length: 8 }, (_, i) => ({
+      x: layerCoordinates.hidden1.x - 15,
+      y: layerCoordinates.hidden1.y - 20 + 50 + 20 + (i - 3.5) * (nodeSpacing.hidden1 * 1.2)
+    })),
+    hidden2: Array.from({ length: 8 }, (_, i) => ({
+      x: layerCoordinates.hidden2.x - 15,
+      y: layerCoordinates.hidden2.y - 20 + 50 + 20 + (i - 3.5) * (nodeSpacing.hidden2 * 1.2)
+    })),
+    output: Array.from({ length: 4 }, (_, i) => ({
+      x: layerCoordinates.output.x - 15,
+      y: layerCoordinates.output.y - 20 + 50 + (i - 1.5) * (nodeSpacing.output * 1.3)
+    }))
   })
 
   // Function to update node position
@@ -60,54 +55,150 @@ export default function Hero() {
   const [activeNodes, setActiveNodes] = useState<{[key: string]: boolean}>({})
   const [visibleConnections, setVisibleConnections] = useState<{[key: string]: boolean}>({})
   const [isAnimating, setIsAnimating] = useState(false)
+  const [concentratedNode, setConcentratedNode] = useState<number | null>(null)
+  const [nodeBrightness, setNodeBrightness] = useState<{[key: string]: number}>({})
 
   // Function to start data flow animation
   const startDataFlow = () => {
     setIsAnimating(true)
     setActiveNodes({})
     setVisibleConnections({})
+    setConcentratedNode(null)
     
-    // Animate input layer first
-    setTimeout(() => {
-      setActiveNodes(prev => ({ ...prev, 'input-0': true, 'input-1': true, 'input-2': true }))
-    }, 100)
-
-    // Show input to hidden1 connections
+    // Generate neural network-like brightness patterns
+    const generateBrightness = () => {
+      const brightness: {[key: string]: number} = {}
+      
+      // Simulate input data with varying signal strength
+      // Input layer: Most nodes active (real data), some very low (noise/irrelevant features)
+      for (let i = 0; i < 6; i++) {
+        const signalStrength = Math.random()
+        if (signalStrength > 0.3) {
+          // Strong input signals (70% chance)
+          brightness[`input-${i}`] = 0.4 + Math.random() * 0.6 // 0.4 to 1.0
+        } else {
+          // Weak/noise signals (30% chance)
+          brightness[`input-${i}`] = 0.2 + Math.random() * 0.3 // 0.2 to 0.5
+        }
+      }
+      
+      // First hidden layer: Feature extraction - many neurons active for pattern recognition
+      // This layer learns to detect various features from input
+      for (let i = 0; i < 8; i++) {
+        const featureActivation = Math.random()
+        if (featureActivation > 0.25) {
+          // Most neurons active for feature detection (75% chance)
+          brightness[`hidden1-${i}`] = 0.3 + Math.random() * 0.7 // 0.3 to 1.0
+        } else {
+          // Some neurons less active (25% chance)
+          brightness[`hidden1-${i}`] = 0.2 + Math.random() * 0.4 // 0.2 to 0.6
+        }
+      }
+      
+      // Second hidden layer: Higher-level feature combination and abstraction
+      // Fewer neurons active as we move to more abstract representations
+      for (let i = 0; i < 8; i++) {
+        const abstractionLevel = Math.random()
+        if (abstractionLevel > 0.4) {
+          // Some neurons active for complex patterns (60% chance)
+          brightness[`hidden2-${i}`] = 0.4 + Math.random() * 0.6 // 0.4 to 1.0
+        } else {
+          // Many neurons less active (40% chance)
+          brightness[`hidden2-${i}`] = 0.2 + Math.random() * 0.5 // 0.2 to 0.7
+        }
+      }
+      
+      // Output layer: Decision making - typically sparse activation
+      // Only a few neurons should be highly active for final decision
+      const outputIndices = Array.from({ length: 4 }, (_, i) => i)
+      const shuffledOutput = outputIndices.sort(() => Math.random() - 0.5)
+      
+      for (let i = 0; i < 4; i++) {
+        if (i === 0) {
+          // Primary decision neuron - highest activation
+          brightness[`output-${shuffledOutput[i]}`] = 0.8 + Math.random() * 0.2 // 0.8 to 1.0
+        } else if (i === 1) {
+          // Secondary decision neuron - moderate activation
+          brightness[`output-${shuffledOutput[i]}`] = 0.5 + Math.random() * 0.3 // 0.5 to 0.8
+        } else {
+          // Other neurons - low activation (inhibited)
+          brightness[`output-${shuffledOutput[i]}`] = 0.2 + Math.random() * 0.4 // 0.2 to 0.6
+        }
+      }
+      
+      setNodeBrightness(brightness)
+    }
+    
+    generateBrightness()
+    
+    // Randomly select which output node will be the final concentrated one
+    const finalNode = Math.floor(Math.random() * 4)
+    setConcentratedNode(finalNode)
+    
+    // Helper function to randomly activate nodes in a layer
+    const activateLayerRandomly = (layer: string, count: number, delay: number) => {
+      setTimeout(() => {
+        const indices = Array.from({ length: count }, (_, i) => i)
+        const shuffled = indices.sort(() => Math.random() - 0.5)
+        const numToActivate = Math.floor(Math.random() * (count - 1)) + 1 // At least 1, at most all
+        
+        const nodes: {[key: string]: boolean} = {}
+        for (let i = 0; i < numToActivate; i++) {
+          nodes[`${layer}-${shuffled[i]}`] = true
+        }
+        setActiveNodes(prev => ({ ...prev, ...nodes }))
+      }, delay)
+    }
+    
+    // Show input to hidden1 connections first
     setTimeout(() => {
       setVisibleConnections(prev => ({ ...prev, 'input-hidden1': true }))
-    }, 500)
+    }, 100)
 
-    // Animate hidden1 layer
-    setTimeout(() => {
-      setActiveNodes(prev => ({ ...prev, 'hidden1-0': true, 'hidden1-1': true, 'hidden1-2': true, 'hidden1-3': true }))
-    }, 1000)
-
-    // Show hidden1 to hidden2 connections
+    // Animate input layer after lines start (lines take max 3.7s to complete)
+    activateLayerRandomly('input', 6, 100)
+    
+    // Show hidden1 to hidden2 connections after input lines complete + processing time
     setTimeout(() => {
       setVisibleConnections(prev => ({ ...prev, 'hidden1-hidden2': true }))
-    }, 1500)
+    }, 6000) // 100ms start + 3700ms max line duration + 2200ms processing time
 
-    // Animate hidden2 layer
-    setTimeout(() => {
-      setActiveNodes(prev => ({ ...prev, 'hidden2-0': true, 'hidden2-1': true, 'hidden2-2': true, 'hidden2-3': true }))
-    }, 2000)
+    // Animate hidden1 layer after its lines complete (lines take max 4.25s to complete)
+    activateLayerRandomly('hidden1', 8, 3500) // 6000ms + 4250ms + 250ms buffer
 
-    // Show hidden2 to output connections
+    // Show hidden2 to output connections after hidden1 lines complete + processing time
     setTimeout(() => {
       setVisibleConnections(prev => ({ ...prev, 'hidden2-output': true }))
-    }, 2500)
+    }, 12500) // 10500ms + 4250ms + 3250ms processing time
 
-    // Animate output layer
+    // Animate hidden2 layer after its lines complete (lines take max 5.3s to complete)
+    activateLayerRandomly('hidden2', 8, 10000) // 18000ms + 5300ms + 1200ms buffer
+
+    // Animate output layer with concentration effect after hidden2 lines complete + processing time
     setTimeout(() => {
-      setActiveNodes(prev => ({ ...prev, 'output-0': true, 'output-1': true }))
-    }, 3000)
+      // First activate all output nodes
+      const outputNodes: {[key: string]: boolean} = {}
+      for (let i = 0; i < 4; i++) {
+        outputNodes[`output-${i}`] = true
+      }
+      setActiveNodes(prev => ({ ...prev, ...outputNodes }))
+      
+      // Then gradually deactivate others, leaving only the concentrated one
+      setTimeout(() => {
+        const finalNodes: {[key: string]: boolean} = {}
+        finalNodes[`output-${finalNode}`] = true
+        setActiveNodes(prev => ({ ...prev, ...finalNodes }))
+      }, 1000) // 1 second delay for concentration effect
+    }, 17500) // 24500ms + 5300ms + 2200ms processing time
 
-    // Reset after animation (keep final state for 3 seconds after completion)
+    // Reset after animation
     setTimeout(() => {
       setIsAnimating(false)
       setActiveNodes({})
       setVisibleConnections({})
-    }, 6000) // 3 seconds (output activation) + 3 seconds (display time) = 6 seconds total
+      setConcentratedNode(null)
+      setNodeBrightness({})
+    }, 20000) // 32000ms + 1000ms concentration + 5000ms display time
   }
 
   const scrollToAbout = () => {
@@ -215,40 +306,31 @@ export default function Hero() {
                 {nodePositions.input.map((position, i) => (
                   <motion.div
                     key={`input-${i}`}
-                    className={`absolute w-6 h-6 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
+                    className={`absolute w-6 h-6 rounded-full shadow-lg border-4 ${
                       activeNodes[`input-${i}`] 
-                        ? 'bg-gradient-to-br from-green-200 to-emerald-300' 
-                        : 'bg-gradient-to-br from-green-500 to-emerald-600'
+                        ? 'bg-gradient-to-br from-green-200 to-emerald-300 border-green-200' 
+                        : 'bg-gradient-to-br from-green-500 to-emerald-600 border-green-300'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
+                      opacity: nodeBrightness[`input-${i}`] || 0.3,
                       boxShadow: activeNodes[`input-${i}`] 
-                        ? '0 0 30px rgba(34, 197, 94, 1), 0 0 60px rgba(34, 197, 94, 0.8), 0 0 90px rgba(34, 197, 94, 0.4)'
+                        ? `0 0 ${30 * (nodeBrightness[`input-${i}`] || 0.5)}px rgba(34, 197, 94, ${nodeBrightness[`input-${i}`] || 0.5}), 0 0 ${60 * (nodeBrightness[`input-${i}`] || 0.5)}px rgba(34, 197, 94, ${(nodeBrightness[`input-${i}`] || 0.5) * 0.8}), 0 0 ${90 * (nodeBrightness[`input-${i}`] || 0.5)}px rgba(34, 197, 94, ${(nodeBrightness[`input-${i}`] || 0.5) * 0.4})`
                         : '0 2px 4px rgba(0, 0, 0, 0.2)'
-                    }}
-                    drag
-                    dragMomentum={false}
-                    dragElastic={0.1}
-                    onDrag={(event, info) => {
-                      updateNodePosition('input', i, position.x + info.delta.x, position.y + info.delta.y)
                     }}
                     whileHover={{ 
                       scale: 2,
                       boxShadow: "0 0 20px rgba(34, 197, 94, 0.8)"
-                    }}
-                    whileDrag={{
-                      scale: 1.5,
-                      boxShadow: "0 0 30px rgba(34, 197, 94, 1)"
                     }}
                     animate={{
                       scale: activeNodes[`input-${i}`] 
                         ? [1, 1.4, 1]
                         : [1, 1.2, 1],
                       opacity: activeNodes[`input-${i}`] 
-                        ? [0.95, 1, 0.95]
-                        : [0.4, 0.6, 0.4]
+                        ? [(nodeBrightness[`input-${i}`] || 0.5) * 0.95, nodeBrightness[`input-${i}`] || 0.5, (nodeBrightness[`input-${i}`] || 0.5) * 0.95]
+                        : [(nodeBrightness[`input-${i}`] || 0.3) * 0.4, (nodeBrightness[`input-${i}`] || 0.3) * 0.6, (nodeBrightness[`input-${i}`] || 0.3) * 0.4]
                     }}
                     transition={{
                       duration: activeNodes[`input-${i}`] ? 0.8 : 2 + i * 0.5,
@@ -264,40 +346,31 @@ export default function Hero() {
                 {nodePositions.hidden1.map((position, i) => (
                   <motion.div
                     key={`hidden1-${i}`}
-                    className={`absolute w-8 h-8 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
+                    className={`absolute w-8 h-8 rounded-full shadow-lg border-4 ${
                       activeNodes[`hidden1-${i}`] 
-                        ? 'bg-gradient-to-br from-purple-200 to-blue-300' 
-                        : 'bg-gradient-to-br from-purple-500 to-blue-600'
+                        ? 'bg-gradient-to-br from-purple-200 to-blue-300 border-purple-200' 
+                        : 'bg-gradient-to-br from-purple-500 to-blue-600 border-purple-300'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
+                      opacity: nodeBrightness[`hidden1-${i}`] || 0.3,
                       boxShadow: activeNodes[`hidden1-${i}`] 
-                        ? '0 0 35px rgba(147, 51, 234, 1), 0 0 70px rgba(147, 51, 234, 0.8), 0 0 100px rgba(147, 51, 234, 0.4)'
+                        ? `0 0 ${35 * (nodeBrightness[`hidden1-${i}`] || 0.5)}px rgba(147, 51, 234, ${nodeBrightness[`hidden1-${i}`] || 0.5}), 0 0 ${70 * (nodeBrightness[`hidden1-${i}`] || 0.5)}px rgba(147, 51, 234, ${(nodeBrightness[`hidden1-${i}`] || 0.5) * 0.8}), 0 0 ${100 * (nodeBrightness[`hidden1-${i}`] || 0.5)}px rgba(147, 51, 234, ${(nodeBrightness[`hidden1-${i}`] || 0.5) * 0.4})`
                         : '0 2px 4px rgba(0, 0, 0, 0.2)'
-                    }}
-                    drag
-                    dragMomentum={false}
-                    dragElastic={0.1}
-                    onDrag={(event, info) => {
-                      updateNodePosition('hidden1', i, position.x + info.delta.x, position.y + info.delta.y)
                     }}
                     whileHover={{ 
                       scale: 2.5,
                       boxShadow: "0 0 25px rgba(147, 51, 234, 0.8)"
-                    }}
-                    whileDrag={{
-                      scale: 1.8,
-                      boxShadow: "0 0 35px rgba(147, 51, 234, 1)"
                     }}
                     animate={{
                       scale: activeNodes[`hidden1-${i}`] 
                         ? [1, 1.5, 1]
                         : [1, 1.3, 1],
                       opacity: activeNodes[`hidden1-${i}`] 
-                        ? [0.95, 1, 0.95]
-                        : [0.3, 0.5, 0.3]
+                        ? [(nodeBrightness[`hidden1-${i}`] || 0.5) * 0.95, nodeBrightness[`hidden1-${i}`] || 0.5, (nodeBrightness[`hidden1-${i}`] || 0.5) * 0.95]
+                        : [(nodeBrightness[`hidden1-${i}`] || 0.3) * 0.3, (nodeBrightness[`hidden1-${i}`] || 0.3) * 0.5, (nodeBrightness[`hidden1-${i}`] || 0.3) * 0.3]
                     }}
                     transition={{
                       duration: activeNodes[`hidden1-${i}`] ? 0.8 : 1.8 + i * 0.4,
@@ -313,40 +386,31 @@ export default function Hero() {
                 {nodePositions.hidden2.map((position, i) => (
                   <motion.div
                     key={`hidden2-${i}`}
-                    className={`absolute w-8 h-8 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
+                    className={`absolute w-8 h-8 rounded-full shadow-lg border-4 ${
                       activeNodes[`hidden2-${i}`] 
-                        ? 'bg-gradient-to-br from-blue-200 to-cyan-300' 
-                        : 'bg-gradient-to-br from-blue-500 to-cyan-600'
+                        ? 'bg-gradient-to-br from-blue-200 to-cyan-300 border-blue-200' 
+                        : 'bg-gradient-to-br from-blue-500 to-cyan-600 border-blue-300'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
+                      opacity: nodeBrightness[`hidden2-${i}`] || 0.3,
                       boxShadow: activeNodes[`hidden2-${i}`] 
-                        ? '0 0 35px rgba(59, 130, 246, 1), 0 0 70px rgba(59, 130, 246, 0.8), 0 0 100px rgba(59, 130, 246, 0.4)'
+                        ? `0 0 ${35 * (nodeBrightness[`hidden2-${i}`] || 0.5)}px rgba(59, 130, 246, ${nodeBrightness[`hidden2-${i}`] || 0.5}), 0 0 ${70 * (nodeBrightness[`hidden2-${i}`] || 0.5)}px rgba(59, 130, 246, ${(nodeBrightness[`hidden2-${i}`] || 0.5) * 0.8}), 0 0 ${100 * (nodeBrightness[`hidden2-${i}`] || 0.5)}px rgba(59, 130, 246, ${(nodeBrightness[`hidden2-${i}`] || 0.5) * 0.4})`
                         : '0 2px 4px rgba(0, 0, 0, 0.2)'
-                    }}
-                    drag
-                    dragMomentum={false}
-                    dragElastic={0.1}
-                    onDrag={(event, info) => {
-                      updateNodePosition('hidden2', i, position.x + info.delta.x, position.y + info.delta.y)
                     }}
                     whileHover={{ 
                       scale: 2.5,
                       boxShadow: "0 0 25px rgba(59, 130, 246, 0.8)"
-                    }}
-                    whileDrag={{
-                      scale: 1.8,
-                      boxShadow: "0 0 35px rgba(59, 130, 246, 1)"
                     }}
                     animate={{
                       scale: activeNodes[`hidden2-${i}`] 
                         ? [1, 1.5, 1]
                         : [1, 1.3, 1],
                       opacity: activeNodes[`hidden2-${i}`] 
-                        ? [0.95, 1, 0.95]
-                        : [0.3, 0.5, 0.3]
+                        ? [(nodeBrightness[`hidden2-${i}`] || 0.5) * 0.95, nodeBrightness[`hidden2-${i}`] || 0.5, (nodeBrightness[`hidden2-${i}`] || 0.5) * 0.95]
+                        : [(nodeBrightness[`hidden2-${i}`] || 0.3) * 0.3, (nodeBrightness[`hidden2-${i}`] || 0.3) * 0.5, (nodeBrightness[`hidden2-${i}`] || 0.3) * 0.3]
                     }}
                     transition={{
                       duration: activeNodes[`hidden2-${i}`] ? 0.8 : 2.2 + i * 0.3,
@@ -362,43 +426,44 @@ export default function Hero() {
                 {nodePositions.output.map((position, i) => (
                   <motion.div
                     key={`output-${i}`}
-                    className={`absolute w-10 h-10 rounded-full shadow-lg cursor-grab active:cursor-grabbing ${
+                    className={`absolute w-10 h-10 rounded-full shadow-lg border-4 ${
                       activeNodes[`output-${i}`] 
-                        ? 'bg-gradient-to-br from-pink-200 to-rose-300' 
-                        : 'bg-gradient-to-br from-pink-500 to-rose-600'
+                        ? concentratedNode === i
+                          ? 'bg-gradient-to-br from-pink-100 to-rose-200 border-pink-100'
+                          : 'bg-gradient-to-br from-pink-200 to-rose-300 border-pink-200'
+                        : 'bg-gradient-to-br from-pink-500 to-rose-600 border-pink-300'
                     }`}
                     style={{
                       left: `${position.x}px`,
                       top: `${position.y}px`,
                       transform: 'translate(-50%, -50%)',
+                      opacity: nodeBrightness[`output-${i}`] || 0.3,
                       boxShadow: activeNodes[`output-${i}`] 
-                        ? '0 0 40px rgba(244, 114, 182, 1), 0 0 80px rgba(244, 114, 182, 0.8), 0 0 120px rgba(244, 114, 182, 0.4)'
+                        ? concentratedNode === i
+                          ? `0 0 ${60 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${nodeBrightness[`output-${i}`] || 0.9}), 0 0 ${120 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.9) * 0.9}), 0 0 ${180 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.9) * 0.6}), 0 0 ${240 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.9) * 0.3})`
+                          : `0 0 ${40 * (nodeBrightness[`output-${i}`] || 0.5)}px rgba(244, 114, 182, ${nodeBrightness[`output-${i}`] || 0.5}), 0 0 ${80 * (nodeBrightness[`output-${i}`] || 0.5)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.5) * 0.8}), 0 0 ${120 * (nodeBrightness[`output-${i}`] || 0.5)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.5) * 0.4})`
                         : '0 2px 4px rgba(0, 0, 0, 0.2)'
-                    }}
-                    drag
-                    dragMomentum={false}
-                    dragElastic={0.1}
-                    onDrag={(event, info) => {
-                      updateNodePosition('output', i, position.x + info.delta.x, position.y + info.delta.y)
                     }}
                     whileHover={{ 
                       scale: 2,
                       boxShadow: "0 0 30px rgba(244, 114, 182, 0.8)"
                     }}
-                    whileDrag={{
-                      scale: 1.6,
-                      boxShadow: "0 0 40px rgba(244, 114, 182, 1)"
-                    }}
                     animate={{
                       scale: activeNodes[`output-${i}`] 
-                        ? [1, 1.6, 1]
+                        ? concentratedNode === i
+                          ? [1, 2, 1]
+                          : [1, 1.6, 1]
                         : [1, 1.4, 1],
                       opacity: activeNodes[`output-${i}`] 
-                        ? [0.95, 1, 0.95]
-                        : [0.3, 0.5, 0.3]
+                        ? concentratedNode === i
+                          ? [(nodeBrightness[`output-${i}`] || 0.9) * 0.98, nodeBrightness[`output-${i}`] || 0.9, (nodeBrightness[`output-${i}`] || 0.9) * 0.98]
+                          : [(nodeBrightness[`output-${i}`] || 0.5) * 0.95, nodeBrightness[`output-${i}`] || 0.5, (nodeBrightness[`output-${i}`] || 0.5) * 0.95]
+                        : [(nodeBrightness[`output-${i}`] || 0.3) * 0.3, (nodeBrightness[`output-${i}`] || 0.3) * 0.5, (nodeBrightness[`output-${i}`] || 0.3) * 0.3]
                     }}
                     transition={{
-                      duration: activeNodes[`output-${i}`] ? 0.8 : 1.5 + i * 0.5,
+                      duration: activeNodes[`output-${i}`] 
+                        ? concentratedNode === i ? 0.6 : 0.8
+                        : 1.5 + i * 0.5,
                       repeat: Infinity,
                       ease: "easeInOut",
                       delay: i * 0.6,
@@ -410,14 +475,14 @@ export default function Hero() {
                 {/* Animated Connections */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none">
                   {/* Input to Hidden Layer 1 */}
-                  {visibleConnections['input-hidden1'] && [0, 1, 2].map((inputIdx) => 
-                    [0, 1, 2, 3].map((hiddenIdx) => (
+                  {visibleConnections['input-hidden1'] && Array.from({ length: 6 }, (_, inputIdx) => 
+                    Array.from({ length: 8 }, (_, hiddenIdx) => (
                       <motion.line
                         key={`input-hidden1-${inputIdx}-${hiddenIdx}`}
-                        x1={layerCoordinates.input.x}
-                        y1={layerCoordinates.input.y + inputIdx * nodeSpacing.input - (inputIdx === 0 ? 10 : inputIdx === 1 ? 7 : 0)}
-                        x2={layerCoordinates.hidden1.x}
-                        y2={layerCoordinates.hidden1.y + hiddenIdx * nodeSpacing.hidden1 - (hiddenIdx === 0 ? 10 : 0)}
+                        x1={nodePositions.input[inputIdx].x + 14 + 9}
+                        y1={nodePositions.input[inputIdx].y - (inputIdx === 0 ? 0 : inputIdx === 1 ? 0 : 0) + 14}
+                        x2={nodePositions.hidden1[hiddenIdx].x + 14 - 13}
+                        y2={nodePositions.hidden1[hiddenIdx].y - (hiddenIdx === 0 ? 5 : 0) + 16}
                         stroke="url(#gradient1)"
                         strokeWidth="1"
                         opacity={activeNodes[`input-${inputIdx}`] ? 0.9 : 0.6}
@@ -425,23 +490,21 @@ export default function Hero() {
                         animate={{ pathLength: 1 }}
                         transition={{
                           duration: 2,
-                          delay: inputIdx * 0.2 + hiddenIdx * 0.1,
-                          repeat: Infinity,
-                          repeatType: "reverse"
+                          delay: inputIdx * 0.2 + hiddenIdx * 0.1
                         }}
                       />
                     ))
                   )}
 
                   {/* Hidden Layer 1 to Hidden Layer 2 */}
-                  {visibleConnections['hidden1-hidden2'] && [0, 1, 2, 3].map((hidden1Idx) => 
-                    [0, 1, 2, 3].map((hidden2Idx) => (
+                  {visibleConnections['hidden1-hidden2'] && Array.from({ length: 8 }, (_, hidden1Idx) => 
+                    Array.from({ length: 8 }, (_, hidden2Idx) => (
                       <motion.line
                         key={`hidden1-hidden2-${hidden1Idx}-${hidden2Idx}`}
-                        x1={layerCoordinates.hidden1.x}
-                        y1={layerCoordinates.hidden1.y + hidden1Idx * nodeSpacing.hidden1 - (hidden1Idx === 0 ? 10 : 0)}
-                        x2={layerCoordinates.hidden2.x}
-                        y2={layerCoordinates.hidden2.y + hidden2Idx * nodeSpacing.hidden2 - (hidden2Idx === 0 ? 10 : 0)}
+                        x1={nodePositions.hidden1[hidden1Idx].x + 14 + 16}
+                        y1={nodePositions.hidden1[hidden1Idx].y - (hidden1Idx === 0 ? 5 : 0) + 16}
+                        x2={nodePositions.hidden2[hidden2Idx].x + 14 - 13}
+                        y2={nodePositions.hidden2[hidden2Idx].y - (hidden2Idx === 0 ? 5 : 0) + 16}
                         stroke="url(#gradient2)"
                         strokeWidth="1.5"
                         opacity={activeNodes[`hidden1-${hidden1Idx}`] ? 0.9 : 0.7}
@@ -449,23 +512,21 @@ export default function Hero() {
                         animate={{ pathLength: 1 }}
                         transition={{
                           duration: 2.5,
-                          delay: hidden1Idx * 0.15 + hidden2Idx * 0.1,
-                          repeat: Infinity,
-                          repeatType: "reverse"
+                          delay: hidden1Idx * 0.15 + hidden2Idx * 0.1
                         }}
                       />
                     ))
                   )}
 
                   {/* Hidden Layer 2 to Output */}
-                  {visibleConnections['hidden2-output'] && [0, 1, 2, 3].map((hidden2Idx) => 
-                    [0, 1].map((outputIdx) => (
+                  {visibleConnections['hidden2-output'] && Array.from({ length: 8 }, (_, hidden2Idx) => 
+                    Array.from({ length: 4 }, (_, outputIdx) => (
                       <motion.line
                         key={`hidden2-output-${hidden2Idx}-${outputIdx}`}
-                        x1={layerCoordinates.hidden2.x}
-                        y1={layerCoordinates.hidden2.y + hidden2Idx * nodeSpacing.hidden2 - (hidden2Idx === 0 ? 10 : 0)}
-                        x2={layerCoordinates.output.x}
-                        y2={layerCoordinates.output.y + outputIdx * nodeSpacing.output - (outputIdx === 0 ? 10 : 0)}
+                        x1={nodePositions.hidden2[hidden2Idx].x + 14 + 16}
+                        y1={nodePositions.hidden2[hidden2Idx].y - (hidden2Idx === 0 ? 5 : 0) + 16}
+                        x2={nodePositions.output[outputIdx].x + 14 - 13}
+                        y2={nodePositions.output[outputIdx].y - (outputIdx === 0 ? 5 : 0) + 19}
                         stroke="url(#gradient3)"
                         strokeWidth="2"
                         opacity={activeNodes[`hidden2-${hidden2Idx}`] ? 0.9 : 0.8}
@@ -473,9 +534,7 @@ export default function Hero() {
                         animate={{ pathLength: 1 }}
                         transition={{
                           duration: 3,
-                          delay: hidden2Idx * 0.2 + outputIdx * 0.3,
-                          repeat: Infinity,
-                          repeatType: "reverse"
+                          delay: hidden2Idx * 0.2 + outputIdx * 0.3
                         }}
                       />
                     ))
