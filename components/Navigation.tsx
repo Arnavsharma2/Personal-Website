@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Mail, Github, Linkedin, Instagram } from 'lucide-react'
+import { Menu, X, Mail, Github, Linkedin, Instagram, ExternalLink } from 'lucide-react'
 
 interface NavigationProps {
   activeSection: string
@@ -13,7 +13,7 @@ const navItems = [
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
   { name: 'Contact', href: '#contact' },
-    { name: 'Resume', href: 'https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing', external: true },
+  { name: 'Resume', href: 'https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing', external: true, isResume: true },
 ]
 
 const socialLinks = [
@@ -57,13 +57,18 @@ export default function Navigation({ activeSection }: NavigationProps) {
                   <button
                     key={item.name}
                     onClick={() => scrollToSection(item.href, item.external)}
-                    className={`px-4 py-3 rounded-md text-lg font-medium transition-colors duration-200 ${
-                      activeSection === item.href.slice(1)
+                    className={`px-3 py-2 rounded-md text-lg font-medium transition-all duration-200 ${
+                      item.isResume
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 border border-blue-500/50 shadow-lg hover:shadow-blue-500/25 transform hover:scale-105'
+                        : activeSection === item.href.slice(1)
                         ? 'text-primary-400 bg-primary-400/20'
                         : 'text-gray-300 hover:text-white hover:bg-gray-800'
                     }`}
                   >
-                    {item.name}
+                    <div className="flex items-center space-x-2">
+                      {item.isResume && <ExternalLink className="w-4 h-4" />}
+                      <span>{item.name}</span>
+                    </div>
                   </button>
                 ))}
               </div>
@@ -117,13 +122,18 @@ export default function Navigation({ activeSection }: NavigationProps) {
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href, item.external)}
-                  className={`block px-4 py-3 rounded-md text-lg font-medium w-full text-left transition-colors duration-200 ${
-                    activeSection === item.href.slice(1)
+                  className={`block px-3 py-2 rounded-md text-lg font-medium w-full text-left transition-all duration-200 ${
+                    item.isResume
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 border border-blue-500/50 shadow-lg hover:shadow-blue-500/25 transform hover:scale-105'
+                      : activeSection === item.href.slice(1)
                       ? 'text-primary-400 bg-primary-400/20'
                       : 'text-gray-300 hover:text-white hover:bg-gray-800'
                   }`}
                 >
-                  {item.name}
+                  <div className="flex items-center space-x-2">
+                    {item.isResume && <ExternalLink className="w-4 h-4" />}
+                    <span>{item.name}</span>
+                  </div>
                 </button>
               ))}
               
