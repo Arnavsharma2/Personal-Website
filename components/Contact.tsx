@@ -9,26 +9,26 @@ const socialLinks = [
   {
     name: 'Email',
     icon: Mail,
-    href: 'mailto:your.email@example.com',
+    href: 'mailto:aqs7726@psu.edu',
     color: 'hover:text-red-400'
   },
   {
     name: 'GitHub',
     icon: Github,
-    href: 'https://github.com/yourusername',
+    href: 'https://github.com/Arnavsharma2',
     color: 'hover:text-gray-300'
   },
   {
     name: 'LinkedIn',
     icon: Linkedin,
-    href: 'https://linkedin.com/in/yourusername',
+    href: 'https://linkedin.com/in/arnav-sharma2',
     color: 'hover:text-blue-400'
   },
   {
-    name: 'Twitter',
-    icon: Twitter,
-    href: 'https://twitter.com/yourusername',
-    color: 'hover:text-blue-400'
+    name: 'Website',
+    icon: ExternalLink,
+    href: 'https://arnav-sharma2.com',
+    color: 'hover:text-purple-400'
   }
 ]
 
@@ -37,7 +37,7 @@ export default function Contact() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-800/50">
+    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-black">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -79,7 +79,7 @@ export default function Contact() {
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className={`group flex items-center space-x-2 px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 hover:bg-white/10 transition-all duration-300 ${social.color}`}
+                className={`group flex items-center space-x-2 px-6 py-3 bg-gray-900/50 backdrop-blur-sm rounded-full border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 ${social.color}`}
               >
                 <social.icon className="w-5 h-5" />
                 <span className="font-medium">{social.name}</span>
@@ -93,15 +93,15 @@ export default function Contact() {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="pt-12 border-t border-white/10"
+            className="pt-12 border-t border-gray-800"
           >
             <p className="text-gray-400 text-sm">
-              © Your Name 2024. All rights reserved.
+              © Arnav Sharma 2024. All rights reserved.
             </p>
             <p className="text-gray-500 text-xs mt-2">
               This site is built from scratch with Next.js, Tailwind CSS, and Framer Motion.{' '}
               <a 
-                href="https://github.com/yourusername/personal-website" 
+                href="https://github.com/Arnavsharma2/personal-website" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-gray-300 transition-colors duration-200"

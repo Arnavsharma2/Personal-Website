@@ -7,35 +7,28 @@ import { ExternalLink, Github } from 'lucide-react'
 
 const projects = [
   {
-    title: 'Handscript',
-    description: 'A web app that helps users learn American Sign Language with real time translation, instruction, and feedback.',
-    technologies: ['TensorFlow', 'React.js', 'AWS', 'Flask'],
+    title: 'Predictive Modeling Implementations',
+    description: 'A comprehensive collection of machine learning projects including house price prediction, customer churn analysis, and stock return forecasting. Features multiple Jupyter notebooks with end-to-end implementations using various ML algorithms and techniques.',
+    technologies: ['Python', 'Jupyter Notebook', 'Scikit-learn', 'Pandas', 'NumPy', 'Matplotlib', 'Seaborn'],
     image: '/api/placeholder/400/300',
-    github: '#',
-    live: '#'
+    github: 'https://github.com/Arnavsharma2/Predictive-Modeling-Implementations',
+    live: '#',
+    showLive: false
   },
   {
-    title: 'Chatter',
-    description: 'An app for messaging your friends and family with a visually aesthetic design.',
-    technologies: ['React.js', 'MongoDB', 'Express', 'NodeJS'],
+    title: 'PSU Menu Analyzer Website',
+    description: 'A full-stack web application that scrapes and analyzes Penn State University dining menus. Features AI-powered nutritional analysis using Google Gemini API, real-time menu scraping, dietary preference filtering, and CSV export functionality for comprehensive nutritional data.',
+    technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'Web Scraping'],
     image: '/api/placeholder/400/300',
-    github: '#',
-    live: '#'
+    github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
+    live: 'https://psumenuanalyzerwebsite-production-e586.up.railway.app/'
   },
   {
-    title: 'Community Connect',
-    description: 'A social media app that connects the community through recycling by various rewards systems and social features.',
-    technologies: ['React Native', 'Firebase', 'CSS', 'Node'],
+    title: 'Chat With My Resume',
+    description: 'An intelligent resume chatbot built with Retrieval-Augmented Generation (RAG) technology. Allows users to have natural conversations about professional background, skills, and experience through an AI-powered interface that understands context and provides detailed responses.',
+    technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'FAISS', 'Flask', 'RAG'],
     image: '/api/placeholder/400/300',
-    github: '#',
-    live: '#'
-  },
-  {
-    title: 'ML Research',
-    description: 'Reducing algorithmic bias in imbalanced datasets through conditional synthetic image generation.',
-    technologies: ['TensorFlow', 'Pandas', 'Seaborn', 'Numpy'],
-    image: '/api/placeholder/400/300',
-    github: '#',
+    github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
     live: '#'
   }
 ]
@@ -45,7 +38,7 @@ export default function Projects() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="projects" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
+    <section id="projects" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-black">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -69,7 +62,7 @@ export default function Projects() {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="group bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105"
+              className="group bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105"
             >
               {/* Project Image */}
               <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden">
@@ -89,14 +82,16 @@ export default function Projects() {
                   >
                     <Github className="w-6 h-6 text-white" />
                   </a>
-                  <a
-                    href={project.live}
-                    className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="w-6 h-6 text-white" />
-                  </a>
+                  {project.showLive !== false && (
+                    <a
+                      href={project.live}
+                      className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ExternalLink className="w-6 h-6 text-white" />
+                    </a>
+                  )}
                 </div>
               </div>
 
@@ -115,7 +110,7 @@ export default function Projects() {
                   {project.technologies.map((tech, techIndex) => (
                     <span
                       key={techIndex}
-                      className="px-3 py-1 bg-white/10 text-gray-300 rounded-full text-sm font-medium hover:bg-white/20 transition-colors duration-200"
+                      className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium hover:bg-gray-700 transition-colors duration-200"
                     >
                       {tech}
                     </span>
