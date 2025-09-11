@@ -66,7 +66,7 @@ export default function AdminPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="text-white text-xl">Loading visit statistics...</div>
       </div>
     )
@@ -74,7 +74,7 @@ export default function AdminPage() {
 
   if (!stats) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="text-center max-w-2xl mx-auto p-8">
           <div className="text-white text-xl mb-4">Failed to load statistics</div>
           <div className="text-gray-400 text-sm mb-6">
@@ -83,7 +83,7 @@ export default function AdminPage() {
           <div className="text-gray-300 text-sm mb-6 space-y-2">
             <p><strong>To fix this:</strong></p>
             <p>1. Disable ad blockers or privacy extensions for localhost</p>
-            <p>2. Add localhost:3000 to your extension's whitelist</p>
+            <p>2. Add localhost:3000 to your extension&apos;s whitelist</p>
             <p>3. Try opening the page in an incognito/private window</p>
             <p>4. Check the browser console for more details</p>
           </div>
@@ -95,7 +95,7 @@ export default function AdminPage() {
               Retry
             </button>
             <button 
-              onClick={() => window.open('http://localhost:3000', '_blank')} 
+              onClick={() => window.open('/', '_blank')} 
               className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
             >
               Visit Main Site
@@ -107,7 +107,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="text-white p-8">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
