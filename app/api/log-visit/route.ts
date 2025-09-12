@@ -3,6 +3,11 @@ import { writeFile, readFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
 
+// Rate limiting storage
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 10 // 10 requests per minute per IP
+
 interface VisitData {
   ip: string
   timestamp: string
@@ -50,6 +55,30 @@ function getClientIP(request: NextRequest): string {
 
 // Cache for location data to avoid repeated API calls
 const locationCache = new Map<string, VisitData['location']>()
+
+// Rate limiting function
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
+  const now = Date.now()
+  const key = ip
+  
+  const current = rateLimitMap.get(key)
+  
+  if (!current || now > current.resetTime) {
+    // Reset or create new entry
+    rateLimitMap.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
+    return { allowed: true, remaining: RATE_LIMIT_MAX_REQUESTS - 1 }
+  }
+  
+  if (current.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return { allowed: false, remaining: 0 }
+  }
+  
+  // Increment count
+  current.count++
+  rateLimitMap.set(key, current)
+  
+  return { allowed: true, remaining: RATE_LIMIT_MAX_REQUESTS - current.count }
+}
 
 // Get location from IP using ipinfo.io
 async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
@@ -160,6 +189,28 @@ async function writeVisits(visitLog: VisitLog): Promise<void> {
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIP(request)
+    
+    // Check rate limit
+    const rateLimit = checkRateLimit(ip)
+    if (!rateLimit.allowed) {
+      console.warn(`Rate limit exceeded for IP: ${ip}`)
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Rate limit exceeded. Too many requests.',
+          retryAfter: Math.ceil((rateLimitMap.get(ip)?.resetTime || Date.now() + RATE_LIMIT_WINDOW - Date.now()) / 1000)
+        },
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitMap.get(ip)?.resetTime || Date.now() + RATE_LIMIT_WINDOW - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_MAX_REQUESTS.toString(),
+            'X-RateLimit-Remaining': '0'
+          }
+        }
+      )
+    }
+    
     const userAgent = request.headers.get('user-agent') || 'unknown'
     const referer = request.headers.get('referer') || undefined
     
@@ -203,6 +254,11 @@ export async function POST(request: NextRequest) {
       isUniqueVisit,
       totalVisits: visitLog.totalVisits,
       uniqueVisits: visitLog.uniqueVisits
+    }, {
+      headers: {
+        'X-RateLimit-Limit': RATE_LIMIT_MAX_REQUESTS.toString(),
+        'X-RateLimit-Remaining': rateLimit.remaining.toString()
+      }
     })
     
   } catch (error) {
@@ -214,8 +270,31 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const ip = getClientIP(request)
+    
+    // Check rate limit
+    const rateLimit = checkRateLimit(ip)
+    if (!rateLimit.allowed) {
+      console.warn(`Rate limit exceeded for IP: ${ip}`)
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Rate limit exceeded. Too many requests.',
+          retryAfter: Math.ceil((rateLimitMap.get(ip)?.resetTime || Date.now() + RATE_LIMIT_WINDOW - Date.now()) / 1000)
+        },
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitMap.get(ip)?.resetTime || Date.now() + RATE_LIMIT_WINDOW - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_MAX_REQUESTS.toString(),
+            'X-RateLimit-Remaining': '0'
+          }
+        }
+      )
+    }
+    
     const visitLog = await readVisits()
     
     return NextResponse.json({
@@ -223,6 +302,11 @@ export async function GET() {
       totalVisits: visitLog.totalVisits,
       uniqueVisits: visitLog.uniqueVisits,
       recentVisits: visitLog.visits.slice(-10) // Last 10 visits
+    }, {
+      headers: {
+        'X-RateLimit-Limit': RATE_LIMIT_MAX_REQUESTS.toString(),
+        'X-RateLimit-Remaining': rateLimit.remaining.toString()
+      }
     })
     
   } catch (error) {

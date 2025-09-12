@@ -39,12 +39,27 @@ export default function AdminLayout({
     setIsLoading(false)
   }, [])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     if (password === adminPassword) {
       setIsAuthenticated(true)
       sessionStorage.setItem('adminAuthenticated', 'true')
     } else {
+      // Log failed login attempt
+      try {
+        await fetch('/api/log-failed-login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            attemptedPassword: password
+          })
+        })
+      } catch (error) {
+        console.error('Error logging failed login attempt:', error)
+      }
+      
       alert('Incorrect password')
     }
   }

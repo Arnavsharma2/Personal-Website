@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Eye, MapPin, Clock, Globe } from 'lucide-react'
+import { Users, Eye, MapPin, Clock, Globe, Shield, AlertTriangle } from 'lucide-react'
 
 interface VisitData {
   ip: string
@@ -22,33 +22,64 @@ interface VisitStats {
   recentVisits: VisitData[]
 }
 
+interface FailedLoginAttempt {
+  ip: string
+  timestamp: string
+  userAgent: string
+  attemptedPassword: string
+  location?: {
+    country?: string
+    region?: string
+    city?: string
+  }
+}
+
+interface SecurityStats {
+  totalAttempts: number
+  activeBlocks: number
+  recentAttempts: FailedLoginAttempt[]
+}
+
 export default function AdminPage() {
   const [stats, setStats] = useState<VisitStats | null>(null)
+  const [securityStats, setSecurityStats] = useState<SecurityStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/log-visit', {
+        // Fetch visit stats
+        const visitResponse = await fetch('/api/log-visit', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          // Add cache control to prevent caching issues
           cache: 'no-cache',
         })
         
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
+        if (visitResponse.ok) {
+          const visitData = await visitResponse.json()
+          if (visitData.success) {
+            setStats(visitData)
+          }
+        }
+
+        // Fetch security stats
+        const securityResponse = await fetch('/api/log-failed-login', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-cache',
+        })
+        
+        if (securityResponse.ok) {
+          const securityData = await securityResponse.json()
+          if (securityData.success) {
+            setSecurityStats(securityData)
+          }
         }
         
-        const data = await response.json()
-        
-        if (data.success) {
-          setStats(data)
-        } else {
-          console.error('API Error:', data)
-        }
       } catch (error) {
         console.error('Error fetching stats:', error)
         
@@ -120,7 +151,7 @@ export default function AdminPage() {
         </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,13 +198,48 @@ export default function AdminPage() {
               </div>
             </div>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-gray-900 p-6 rounded-lg border border-gray-800"
+          >
+            <div className="flex items-center space-x-3">
+              <Shield className="w-8 h-8 text-red-400" />
+              <div>
+                <h3 className="text-2xl font-bold text-red-400">
+                  {securityStats?.activeBlocks || 0}
+                </h3>
+                <p className="text-gray-400">Blocked IPs</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* Security Alerts */}
+        {securityStats && securityStats.activeBlocks > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-red-900/20 border border-red-500/50 rounded-lg p-4 mb-6"
+          >
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+              <h3 className="text-red-400 font-semibold">Security Alert</h3>
+            </div>
+            <p className="text-red-300 text-sm mt-1">
+              {securityStats.activeBlocks} IP address(es) are currently blocked due to suspicious activity.
+            </p>
+          </motion.div>
+        )}
 
         {/* Recent Visits */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
           className="bg-gray-900 rounded-lg border border-gray-800 overflow-hidden"
         >
           <div className="p-6 border-b border-gray-800">
@@ -246,6 +312,73 @@ export default function AdminPage() {
             </table>
           </div>
         </motion.div>
+
+        {/* Failed Login Attempts */}
+        {securityStats && securityStats.recentAttempts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="bg-gray-900 rounded-lg border border-gray-800 overflow-hidden mt-8"
+          >
+            <div className="p-6 border-b border-gray-800">
+              <h2 className="text-2xl font-bold text-red-400">Security Log</h2>
+              <p className="text-gray-400">Recent failed login attempts and blocked IPs</p>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-800">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">IP Address</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Location</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Time</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Attempted Password</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">User Agent</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-800">
+                  {securityStats.recentAttempts.slice(-10).map((attempt, index) => (
+                    <tr key={index} className="hover:bg-gray-800/50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-300">
+                        {attempt.ip}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <div className="flex items-center space-x-1">
+                          <MapPin className="w-4 h-4 text-gray-400" />
+                          <span>
+                            {attempt.location?.city && attempt.location?.region && attempt.location?.country 
+                              ? `${attempt.location.city}, ${attempt.location.region}, ${attempt.location.country}`
+                              : attempt.location?.country === 'Local'
+                              ? 'Local Development'
+                              : 'Location Unknown'
+                            }
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <div className="flex items-center space-x-1">
+                          <Clock className="w-4 h-4 text-gray-400" />
+                          <span>
+                            {new Date(attempt.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                        <span className="font-mono bg-red-900/20 text-red-300 px-2 py-1 rounded">
+                          {attempt.attemptedPassword}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-300 max-w-xs truncate">
+                        {attempt.userAgent}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   )
