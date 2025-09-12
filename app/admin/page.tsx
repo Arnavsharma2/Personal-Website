@@ -202,7 +202,12 @@ export default function AdminPage() {
                         <div className="flex items-center space-x-1">
                           <MapPin className="w-4 h-4 text-gray-400" />
                           <span>
-                            {visit.location?.city}, {visit.location?.region}, {visit.location?.country}
+                            {visit.location?.city && visit.location?.region && visit.location?.country 
+                              ? `${visit.location.city}, ${visit.location.region}, ${visit.location.country}`
+                              : visit.location?.country === 'Local'
+                              ? 'Local Development'
+                              : 'Location Unknown'
+                            }
                           </span>
                         </div>
                       </td>

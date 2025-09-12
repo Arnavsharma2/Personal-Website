@@ -48,7 +48,10 @@ function getClientIP(request: NextRequest): string {
   return request.ip || 'unknown'
 }
 
-// Get location from IP (simplified - you can integrate with a geolocation service)
+// Cache for location data to avoid repeated API calls
+const locationCache = new Map<string, VisitData['location']>()
+
+// Get location from IP using ipinfo.io
 async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
   // For development/localhost, return mock data
   if (ip === '127.0.0.1' || ip === '::1' || ip === 'unknown') {
@@ -59,15 +62,46 @@ async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
     }
   }
   
-  // In production, you could integrate with services like:
-  // - ipapi.co
-  // - ipinfo.io
-  // - maxmind GeoIP
-  // For now, return basic info
-  return {
-    country: 'Unknown',
-    region: 'Unknown',
-    city: 'Unknown'
+  // Check cache first
+  if (locationCache.has(ip)) {
+    return locationCache.get(ip)!
+  }
+  
+  try {
+    // Use ipinfo.io API (free tier: 50,000 requests/month)
+    const response = await fetch(`https://ipinfo.io/${ip}/json?token=${process.env.GEOLOCATION_API_TOKEN || ''}`)
+    
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`)
+    }
+    
+    const data = await response.json()
+    
+    const location: VisitData['location'] = {
+      country: data.country || 'Unknown',
+      region: data.region || 'Unknown', 
+      city: data.city || 'Unknown'
+    }
+    
+    // Cache the result
+    locationCache.set(ip, location)
+    
+    return location
+    
+  } catch (error) {
+    console.error('Error fetching location for IP:', ip, error)
+    
+    // Return fallback data on error
+    const fallbackLocation: VisitData['location'] = {
+      country: 'Unknown',
+      region: 'Unknown',
+      city: 'Unknown'
+    }
+    
+    // Cache the fallback to avoid repeated failed requests
+    locationCache.set(ip, fallbackLocation)
+    
+    return fallbackLocation
   }
 }
 

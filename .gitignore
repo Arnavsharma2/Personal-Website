@@ -27,6 +27,9 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+.env.production
+.env.development
 
 # vercel
 .vercel
@@ -37,3 +40,12 @@ next-env.d.ts
 
 # visit tracking data (contains IP addresses and personal data)
 /data/
+
+# security and configuration files
+LOCATION_SETUP.md
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+config.json
