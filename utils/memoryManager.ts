@@ -7,6 +7,15 @@ interface MemoryStats {
   rss: number
 }
 
+// Extend Performance interface for Chrome-specific memory API
+interface PerformanceMemory extends Performance {
+  memory?: {
+    usedJSHeapSize: number
+    totalJSHeapSize: number
+    jsHeapSizeLimit: number
+  }
+}
+
 // Global cleanup intervals
 let cleanupInterval: NodeJS.Timeout | null = null
 
@@ -21,8 +30,9 @@ export function startMemoryManagement() {
       }
       
       // Clear any large objects or caches
-      if (window.performance && window.performance.memory) {
-        const memory = window.performance.memory as MemoryStats
+      const perf = window.performance as PerformanceMemory
+      if (perf && perf.memory) {
+        const memory = perf.memory
         const memoryUsagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100
         
         // If memory usage is high, trigger cleanup

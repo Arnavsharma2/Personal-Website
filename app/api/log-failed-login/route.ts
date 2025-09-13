@@ -138,11 +138,15 @@ async function writeFailedLogins(failedLoginLog: FailedLoginLog): Promise<void> 
 // Cleanup expired blocked IPs from memory cache
 function cleanupBlockedIPs() {
   const now = Date.now()
-  for (const [ip, blockTime] of blockedIPsCache.entries()) {
+  const keysToDelete: string[] = []
+  
+  blockedIPsCache.forEach((blockTime, ip) => {
     if (now - blockTime > BLOCK_DURATION) {
-      blockedIPsCache.delete(ip)
+      keysToDelete.push(ip)
     }
-  }
+  })
+  
+  keysToDelete.forEach(ip => blockedIPsCache.delete(ip))
 }
 
 // Check if IP is blocked

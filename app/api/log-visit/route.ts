@@ -62,21 +62,29 @@ const LOCATION_CACHE_TTL = 24 * 60 * 60 * 1000 // 24 hours
 // Cleanup expired rate limit entries
 function cleanupRateLimit() {
   const now = Date.now()
-  for (const [key, value] of rateLimitMap.entries()) {
+  const keysToDelete: string[] = []
+  
+  rateLimitMap.forEach((value, key) => {
     if (now > value.resetTime) {
-      rateLimitMap.delete(key)
+      keysToDelete.push(key)
     }
-  }
+  })
+  
+  keysToDelete.forEach(key => rateLimitMap.delete(key))
 }
 
 // Cleanup expired location cache entries
 function cleanupLocationCache() {
   const now = Date.now()
-  for (const [key, value] of locationCache.entries()) {
+  const keysToDelete: string[] = []
+  
+  locationCache.forEach((value, key) => {
     if (now > value.expires) {
-      locationCache.delete(key)
+      keysToDelete.push(key)
     }
-  }
+  })
+  
+  keysToDelete.forEach(key => locationCache.delete(key))
 }
 
 // Rate limiting function
