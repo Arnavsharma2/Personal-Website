@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, readFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
+import { cleanupApiMemory, logMemoryUsage } from '@/utils/memoryManager'
 
-// Rate limiting storage
+// Rate limiting storage with cleanup
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
 const RATE_LIMIT_MAX_REQUESTS = 10 // 10 requests per minute per IP
+const RATE_LIMIT_CLEANUP_INTERVAL = 5 * 60 * 1000 // Clean up every 5 minutes
 
 interface VisitData {
   ip: string
@@ -53,13 +55,40 @@ function getClientIP(request: NextRequest): string {
   return request.ip || 'unknown'
 }
 
-// Cache for location data to avoid repeated API calls
-const locationCache = new Map<string, VisitData['location']>()
+// Cache for location data to avoid repeated API calls (with TTL)
+const locationCache = new Map<string, { data: VisitData['location']; expires: number }>()
+const LOCATION_CACHE_TTL = 24 * 60 * 60 * 1000 // 24 hours
+
+// Cleanup expired rate limit entries
+function cleanupRateLimit() {
+  const now = Date.now()
+  for (const [key, value] of rateLimitMap.entries()) {
+    if (now > value.resetTime) {
+      rateLimitMap.delete(key)
+    }
+  }
+}
+
+// Cleanup expired location cache entries
+function cleanupLocationCache() {
+  const now = Date.now()
+  for (const [key, value] of locationCache.entries()) {
+    if (now > value.expires) {
+      locationCache.delete(key)
+    }
+  }
+}
 
 // Rate limiting function
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
   const now = Date.now()
   const key = ip
+  
+  // Cleanup expired entries periodically
+  if (Math.random() < 0.1) { // 10% chance to cleanup on each request
+    cleanupRateLimit()
+    cleanupLocationCache()
+  }
   
   const current = rateLimitMap.get(key)
   
@@ -92,8 +121,9 @@ async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
   }
   
   // Check cache first
-  if (locationCache.has(ip)) {
-    return locationCache.get(ip)!
+  const cached = locationCache.get(ip)
+  if (cached && Date.now() < cached.expires) {
+    return cached.data
   }
   
   try {
@@ -112,8 +142,11 @@ async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
       city: data.city || 'Unknown'
     }
     
-    // Cache the result
-    locationCache.set(ip, location)
+    // Cache the result with expiration
+    locationCache.set(ip, { 
+      data: location, 
+      expires: Date.now() + LOCATION_CACHE_TTL 
+    })
     
     return location
     
@@ -128,7 +161,10 @@ async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
     }
     
     // Cache the fallback to avoid repeated failed requests
-    locationCache.set(ip, fallbackLocation)
+    locationCache.set(ip, { 
+      data: fallbackLocation, 
+      expires: Date.now() + LOCATION_CACHE_TTL 
+    })
     
     return fallbackLocation
   }
@@ -188,6 +224,9 @@ async function writeVisits(visitLog: VisitLog): Promise<void> {
 
 export async function POST(request: NextRequest) {
   try {
+    // Log memory usage at start
+    logMemoryUsage('log-visit POST')
+    
     const ip = getClientIP(request)
     
     // Check rate limit
@@ -248,6 +287,9 @@ export async function POST(request: NextRequest) {
     
     // Write back to file
     await writeVisits(visitLog)
+    
+    // Cleanup memory after processing
+    cleanupApiMemory()
     
     return NextResponse.json({
       success: true,

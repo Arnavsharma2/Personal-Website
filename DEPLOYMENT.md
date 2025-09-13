@@ -79,6 +79,31 @@ git push origin main
 2. Click "Test API Endpoints"
 3. Verify all endpoints are working
 
+## Memory Management & Performance
+
+### Memory Optimization Features
+- **Automatic Cleanup**: Rate limiting and cache data automatically expire
+- **Memory Monitoring**: Built-in memory usage tracking and cleanup
+- **File Size Limits**: Visit logs are limited to 1000 entries to prevent file bloat
+- **Cache TTL**: Location data cache expires after 24 hours
+
+### Memory Status Monitoring
+- **Endpoint**: `https://your-site.com/api/memory-status`
+- **Purpose**: Monitor server memory usage and uptime
+- **Usage**: Check this endpoint regularly to ensure healthy memory levels
+
+### Production Memory Settings
+For Vercel deployment, add these environment variables:
+```
+NODE_OPTIONS=--max-old-space-size=512
+NEXT_TELEMETRY_DISABLED=1
+```
+
+### Memory Troubleshooting
+- **High Memory Usage**: Check `/api/memory-status` endpoint
+- **Out of Memory Errors**: Restart the application or check for memory leaks
+- **Slow Performance**: Monitor memory usage patterns over time
+
 ## Troubleshooting
 
 ### Admin Panel Not Loading
@@ -95,3 +120,9 @@ git push origin main
 - Check Vercel/Netlify logs
 - Verify environment variables
 - Test API endpoints directly
+- Monitor memory usage via `/api/memory-status`
+
+### Memory Issues
+- **Out of Memory**: Check memory status endpoint
+- **Slow Performance**: Monitor memory usage over time
+- **Crashes**: Review server logs for memory-related errors

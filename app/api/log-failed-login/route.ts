@@ -20,6 +20,10 @@ interface FailedLoginLog {
   blockedIPs: Set<string>
 }
 
+// In-memory cache for blocked IPs with cleanup
+const blockedIPsCache = new Map<string, number>()
+const BLOCK_CLEANUP_INTERVAL = 5 * 60 * 1000 // Clean up every 5 minutes
+
 const FAILED_LOGINS_FILE = path.join(process.cwd(), 'data', 'failed-logins.json')
 const MAX_ATTEMPTS_PER_IP = 5 // Block after 5 failed attempts
 const BLOCK_DURATION = 24 * 60 * 60 * 1000 // 24 hours
@@ -131,8 +135,29 @@ async function writeFailedLogins(failedLoginLog: FailedLoginLog): Promise<void> 
   }
 }
 
+// Cleanup expired blocked IPs from memory cache
+function cleanupBlockedIPs() {
+  const now = Date.now()
+  for (const [ip, blockTime] of blockedIPsCache.entries()) {
+    if (now - blockTime > BLOCK_DURATION) {
+      blockedIPsCache.delete(ip)
+    }
+  }
+}
+
 // Check if IP is blocked
 function isIPBlocked(ip: string, failedLoginLog: FailedLoginLog): boolean {
+  // Cleanup expired entries periodically
+  if (Math.random() < 0.1) { // 10% chance to cleanup on each request
+    cleanupBlockedIPs()
+  }
+  
+  // Check in-memory cache first
+  const blockTime = blockedIPsCache.get(ip)
+  if (blockTime && (Date.now() - blockTime) < BLOCK_DURATION) {
+    return true
+  }
+  
   if (!failedLoginLog.blockedIPs.has(ip)) {
     return false
   }
@@ -147,6 +172,7 @@ function isIPBlocked(ip: string, failedLoginLog: FailedLoginLog): boolean {
   if (recentAttempts.length === 0) {
     // Block has expired, remove from blocked list
     failedLoginLog.blockedIPs.delete(ip)
+    blockedIPsCache.delete(ip)
     return false
   }
   
@@ -200,6 +226,7 @@ export async function POST(request: NextRequest) {
     // Block IP if too many attempts
     if (recentAttempts.length >= MAX_ATTEMPTS_PER_IP) {
       failedLoginLog.blockedIPs.add(ip)
+      blockedIPsCache.set(ip, Date.now())
       console.warn(`IP blocked due to too many failed attempts: ${ip}`)
     }
     
