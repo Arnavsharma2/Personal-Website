@@ -14,20 +14,11 @@ export default function AdminLayout({
   const [adminPassword, setAdminPassword] = useState('admin123')
   const router = useRouter()
 
-  // Fetch the admin password from the server
+  // Set default admin password (will be verified server-side)
   useEffect(() => {
-    const fetchAdminPassword = async () => {
-      try {
-        const response = await fetch('/api/admin-password')
-        if (response.ok) {
-          const data = await response.json()
-          setAdminPassword(data.password)
-        }
-      } catch (error) {
-        console.error('Error fetching admin password:', error)
-      }
-    }
-    fetchAdminPassword()
+    // No longer fetch password from server for security
+    // Password verification happens server-side only
+    setIsLoading(false)
   }, [])
 
   useEffect(() => {
@@ -41,26 +32,46 @@ export default function AdminLayout({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === adminPassword) {
-      setIsAuthenticated(true)
-      sessionStorage.setItem('adminAuthenticated', 'true')
-    } else {
-      // Log failed login attempt
-      try {
-        await fetch('/api/log-failed-login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            attemptedPassword: password
-          })
+    
+    try {
+      // Verify password server-side
+      const response = await fetch('/api/admin-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          providedPassword: password
         })
-      } catch (error) {
-        console.error('Error logging failed login attempt:', error)
-      }
+      })
       
-      alert('Incorrect password')
+      const data = await response.json()
+      
+      if (response.ok && data.success) {
+        setIsAuthenticated(true)
+        sessionStorage.setItem('adminAuthenticated', 'true')
+        setPassword('')
+      } else {
+        // Log failed login attempt
+        try {
+          await fetch('/api/log-failed-login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              attemptedPassword: password
+            })
+          })
+        } catch (error) {
+          console.error('Error logging failed login attempt:', error)
+        }
+        
+        alert(data.error || 'Incorrect password')
+      }
+    } catch (error) {
+      console.error('Error during login:', error)
+      alert('Login failed. Please try again.')
     }
   }
 

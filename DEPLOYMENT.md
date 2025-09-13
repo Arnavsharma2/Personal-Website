@@ -25,8 +25,14 @@ git push origin main
 
 ## Admin Access
 
+### Security Features
+- **Server-Side Verification**: Passwords are verified server-side only
+- **Rate Limiting**: 3 attempts per IP, 15-minute lockout
+- **No Public Exposure**: Admin password is never exposed via API
+- **Failed Login Tracking**: All failed attempts are logged and monitored
+
 ### Default Credentials
-- **Password**: `admin123`
+- **Password**: `admin123` (change in production!)
 - **Environment Variable**: Set `ADMIN_PASSWORD` in Vercel for production
 
 ### Setting Production Password
@@ -34,6 +40,11 @@ git push origin main
 2. Select your project
 3. Go to Settings → Environment Variables
 4. Add: `ADMIN_PASSWORD` = `your-secure-password`
+
+### Security Best Practices
+- Use a strong, unique password for production
+- Monitor failed login attempts via admin dashboard
+- Consider changing the default password immediately
 
 ## Alternative Deployments
 
