@@ -113,6 +113,9 @@ export default function Hero() {
     return () => clearTimeout(timeout)
   }, [displayedText, isDeleting, currentRole, roles])
 
+  // Store timeout IDs for cleanup
+  const [timeoutIds, setTimeoutIds] = useState<ReturnType<typeof setTimeout>[]>([])
+
   // Show stats on scroll only once
   useEffect(() => {
     const handleScroll = () => {
@@ -125,8 +128,19 @@ export default function Hero() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [statsShownOnce])
 
+  // Cleanup timeouts on component unmount
+  useEffect(() => {
+    return () => {
+      timeoutIds.forEach(id => clearTimeout(id))
+    }
+  }, [timeoutIds])
+
   // Function to start data flow animation
   const startDataFlow = () => {
+    // Clear any existing timeouts first
+    timeoutIds.forEach(id => clearTimeout(id))
+    setTimeoutIds([])
+    
     setIsAnimating(true)
     setActiveNodes({})
     setVisibleConnections({})
@@ -204,7 +218,7 @@ export default function Hero() {
     
     // Helper function to randomly activate nodes in a layer
     const activateLayerRandomly = (layer: string, count: number, delay: number) => {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         const indices = Array.from({ length: count }, (_, i) => i)
         const shuffled = indices.sort(() => Math.random() - 0.5)
         const numToActivate = Math.floor(Math.random() * (count - 1)) + 1 // At least 1, at most all
@@ -215,34 +229,39 @@ export default function Hero() {
         }
         setActiveNodes(prev => ({ ...prev, ...nodes }))
       }, delay)
+      
+      setTimeoutIds(prev => [...prev, timeoutId])
     }
     
     // Show input to hidden1 connections first
-    setTimeout(() => {
+    const timeout1 = setTimeout(() => {
       setVisibleConnections(prev => ({ ...prev, 'input-hidden1': true }))
     }, 100)
+    setTimeoutIds(prev => [...prev, timeout1])
 
     // Animate input layer after lines start (lines take max 3.7s to complete)
     activateLayerRandomly('input', 6, 100)
     
     // Show hidden1 to hidden2 connections after input lines complete + processing time
-    setTimeout(() => {
+    const timeout2 = setTimeout(() => {
       setVisibleConnections(prev => ({ ...prev, 'hidden1-hidden2': true }))
     }, 6000) // 100ms start + 3700ms max line duration + 2200ms processing time
+    setTimeoutIds(prev => [...prev, timeout2])
 
     // Animate hidden1 layer after its lines complete (lines take max 4.25s to complete)
     activateLayerRandomly('hidden1', 8, 3500) // 6000ms + 4250ms + 250ms buffer
 
     // Show hidden2 to output connections after hidden1 lines complete + processing time
-    setTimeout(() => {
+    const timeout3 = setTimeout(() => {
       setVisibleConnections(prev => ({ ...prev, 'hidden2-output': true }))
     }, 12500) // 10500ms + 4250ms + 3250ms processing time
+    setTimeoutIds(prev => [...prev, timeout3])
 
     // Animate hidden2 layer after its lines complete (lines take max 5.3s to complete)
     activateLayerRandomly('hidden2', 8, 10000) // 18000ms + 5300ms + 1200ms buffer
 
     // Animate output layer with concentration effect after hidden2 lines complete + processing time
-    setTimeout(() => {
+    const timeout4 = setTimeout(() => {
       // First activate all output nodes
       const outputNodes: {[key: string]: boolean} = {}
       for (let i = 0; i < 4; i++) {
@@ -251,21 +270,24 @@ export default function Hero() {
       setActiveNodes(prev => ({ ...prev, ...outputNodes }))
       
       // Then gradually deactivate others, leaving only the concentrated one
-      setTimeout(() => {
+      const timeout5 = setTimeout(() => {
         const finalNodes: {[key: string]: boolean} = {}
         finalNodes[`output-${finalNode}`] = true
         setActiveNodes(prev => ({ ...prev, ...finalNodes }))
       }, 1000) // 1 second delay for concentration effect
+      setTimeoutIds(prev => [...prev, timeout5])
     }, 17500) // 24500ms + 5300ms + 2200ms processing time
+    setTimeoutIds(prev => [...prev, timeout4])
 
     // Reset after animation
-    setTimeout(() => {
+    const timeout6 = setTimeout(() => {
       setIsAnimating(false)
       setActiveNodes({})
       setVisibleConnections({})
       setConcentratedNode(null)
       setNodeBrightness({})
     }, 20000) // 32000ms + 1000ms concentration + 5000ms display time
+    setTimeoutIds(prev => [...prev, timeout6])
   }
 
   const scrollToAbout = () => {
