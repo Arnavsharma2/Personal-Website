@@ -46,9 +46,10 @@ const projects = [
     title: 'Chat With My Resume',
     description: 'An intelligent resume chatbot built with Retrieval-Augmented Generation (RAG) technology. Allows users to have natural conversations about professional background, skills, and experience through an AI-powered interface that understands context and provides detailed responses.',
     technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'FAISS', 'Flask', 'RAG'],
-    image: '/api/placeholder/400/300',
+    image: '/chatwresume.png',
     github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
-    live: '#'
+    live: '#',
+    showLive: false
   }
 ]
 
