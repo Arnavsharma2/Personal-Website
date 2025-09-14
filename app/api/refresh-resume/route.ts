@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { refreshResumeText } from '@/utils/pdfProcessor'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,6 +12,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Dynamically import the PDF processor to avoid build-time issues
+    const { refreshResumeText } = await import('@/utils/pdfProcessor')
+    
     // Refresh the resume text from PDF
     const resumeText = await refreshResumeText()
     

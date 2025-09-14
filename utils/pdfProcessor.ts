@@ -22,7 +22,14 @@ export async function extractResumeText(): Promise<string> {
     }
 
     // Check if we have cached text and if PDF hasn't been modified
-    const pdfStats = statSync(RESUME_PDF_PATH)
+    let pdfStats
+    try {
+      pdfStats = statSync(RESUME_PDF_PATH)
+    } catch (error) {
+      console.warn('Could not access PDF file:', error)
+      return getFallbackResumeText()
+    }
+    
     const pdfModified = pdfStats.mtime.getTime()
 
     if (cachedResumeText && lastModified === pdfModified) {
@@ -30,8 +37,21 @@ export async function extractResumeText(): Promise<string> {
     }
 
     // Read and process PDF
-    const dataBuffer = readFileSync(RESUME_PDF_PATH)
-    const pdfData = await pdf(dataBuffer)
+    let dataBuffer
+    try {
+      dataBuffer = readFileSync(RESUME_PDF_PATH)
+    } catch (error) {
+      console.warn('Could not read PDF file:', error)
+      return getFallbackResumeText()
+    }
+    
+    let pdfData
+    try {
+      pdfData = await pdf(dataBuffer)
+    } catch (error) {
+      console.warn('Could not parse PDF file:', error)
+      return getFallbackResumeText()
+    }
     
     // Clean and format the extracted text
     const cleanedText = cleanExtractedText(pdfData.text)

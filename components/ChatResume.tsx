@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
-import { Send, Bot, User, Loader2, MessageCircle, Sparkles } from 'lucide-react'
+import { Send, Bot, User, Loader2, MessageCircle, Sparkles, Trash2 } from 'lucide-react'
 
 interface Message {
   id: string
@@ -28,7 +28,7 @@ export default function ChatResume() {
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-  const [messageCount, setMessageCount] = useState({ remaining: 30, limit: 30 })
+  const [messageCount, setMessageCount] = useState({ remaining: 100, limit: 100 })
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -165,6 +165,29 @@ export default function ChatResume() {
     }
   }
 
+  const resetConversation = async () => {
+    if (window.confirm('Are you sure you want to clear the conversation? This action cannot be undone.')) {
+      try {
+        // Clear local messages
+        setMessages([])
+        
+        // Clear conversation history only (not message count)
+        const response = await fetch('/api/clear-conversation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) {
+          console.error('Failed to clear conversation history')
+        }
+      } catch (error) {
+        console.error('Error resetting conversation:', error)
+      }
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     sendMessage(inputValue)
@@ -196,7 +219,7 @@ export default function ChatResume() {
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mb-6"></div>
           <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Ask me anything about my experience, skills, projects, or career goals. 
-            I'm powered by AI and have access to my complete resume information.
+            I&apos;m powered by AI and have access to my complete resume information.
           </p>
         </motion.div>
 
@@ -215,7 +238,7 @@ export default function ChatResume() {
                   <Bot className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-white">Arnav's Resume Assistant</h4>
+                  <h4 className="text-lg font-semibold text-white">Arnav&apos;s Resume Assistant</h4>
                   <p className="text-sm text-gray-400">Ask me anything about my background</p>
                 </div>
                 <div className="ml-auto flex items-center space-x-4">
@@ -228,10 +251,13 @@ export default function ChatResume() {
                       <span className="ml-1 text-xs">🚫</span>
                     )}
                   </div>
-                  <div className="flex items-center space-x-1 text-green-400">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm">Online</span>
-                  </div>
+                  <button
+                    onClick={resetConversation}
+                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors duration-200"
+                    title="Clear conversation"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
             </div>

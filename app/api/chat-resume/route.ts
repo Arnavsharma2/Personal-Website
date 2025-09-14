@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { 
   checkMessageLimit, 
   addMessageToConversation, 
+  addUserMessageToConversation,
   getConversationHistory 
 } from '@/utils/conversationManager'
 
@@ -183,7 +184,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString()
     }
 
-    const userMessageResult = addMessageToConversation(clientIP, userMessage)
+    const userMessageResult = addUserMessageToConversation(clientIP, userMessage)
     if (!userMessageResult.success) {
       console.error('Failed to save user message:', userMessageResult.error)
     }

@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 
 // Message limit configuration
-const DAILY_MESSAGE_LIMIT = 30
+const DAILY_MESSAGE_LIMIT = 100
 const CONVERSATION_RETENTION_DAYS = 1 // Keep conversations for 1 day
 
 // File paths
@@ -151,8 +151,37 @@ export function checkMessageLimit(ip: string): { allowed: boolean; remaining: nu
   }
 }
 
-// Add message to conversation
+// Add message to conversation (without counting)
 export function addMessageToConversation(
+  ip: string, 
+  message: ConversationMessage
+): { success: boolean; error?: string } {
+  try {
+    const data = readConversationData()
+    
+    // Get or create conversation
+    const conversation = getOrCreateConversation(data, ip)
+    
+    // Add message
+    conversation.messages.push(message)
+    conversation.lastActivity = new Date().toISOString()
+    conversation.totalMessages++
+    
+    // Clean up old data
+    const cleanedData = cleanupOldData(data)
+    
+    // Save to file
+    writeConversationData(cleanedData)
+    
+    return { success: true }
+  } catch (error) {
+    console.error('Error adding message to conversation:', error)
+    return { success: false, error: 'Failed to save message' }
+  }
+}
+
+// Add user message to conversation and count it
+export function addUserMessageToConversation(
   ip: string, 
   message: ConversationMessage
 ): { success: boolean; error?: string } {
@@ -176,7 +205,7 @@ export function addMessageToConversation(
     conversation.lastActivity = new Date().toISOString()
     conversation.totalMessages++
     
-    // Increment daily message count
+    // Increment daily message count (only for user messages)
     incrementMessageCount(data, ip)
     
     // Clean up old data
@@ -187,7 +216,7 @@ export function addMessageToConversation(
     
     return { success: true }
   } catch (error) {
-    console.error('Error adding message to conversation:', error)
+    console.error('Error adding user message to conversation:', error)
     return { success: false, error: 'Failed to save message' }
   }
 }
