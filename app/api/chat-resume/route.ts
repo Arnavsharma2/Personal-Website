@@ -158,7 +158,8 @@ export async function POST(request: NextRequest) {
     - Always respond in first person as Arnav ("I", "my", "me")
     - Be specific about technologies, methodologies, and business impact
     - Show passion for technology and continuous learning
-    - MAINTAIN CONVERSATION CONTEXT - reference previous messages and continue the discussion naturally
+    - MAINTAIN CONVERSATION CONTEXT - carefully read and reference the PREVIOUS CONVERSATION section to understand what the user has already said
+    - When user asks about "my previous message" or "what did I say", refer to their actual previous messages in the conversation history
 
     ARNAV'S RESUME CONTENT (extracted from PDF):
     ${resumeContent}
@@ -171,6 +172,7 @@ export async function POST(request: NextRequest) {
     - If asked about something not in the resume, politely redirect to relevant experience
     - Always end responses that could lead to follow-up questions with a question to keep the conversation engaging
     - CONTINUE THE CONVERSATION TOPIC - don't restart with generic responses
+    - IMPORTANT: When user asks "what was my previous message" or similar, look at the PREVIOUS CONVERSATION section and tell them exactly what they said in their last message
 
     Remember: You are representing Arnav to potential employers and industry professionals. Make him look exceptional.`
 
@@ -228,12 +230,12 @@ async function generateGeminiResponse(
     // Build conversation context
     let conversationContext = ""
     if (conversationHistory.length > 0) {
-      conversationContext = "\n\nCONVERSATION HISTORY:\n"
+      conversationContext = "\n\nPREVIOUS CONVERSATION:\n"
       conversationHistory.forEach((msg, index) => {
-        const role = msg.role === 'user' ? 'User' : 'Arnav'
-        conversationContext += `${role}: ${msg.content}\n`
+        const role = msg.role === 'user' ? 'USER' : 'ARNAV'
+        conversationContext += `${role}: "${msg.content}"\n`
       })
-      conversationContext += "\nCURRENT MESSAGE:\n"
+      conversationContext += "\nCURRENT USER MESSAGE:\n"
     }
     
     const prompt = `${systemPrompt}${conversationContext}User Question: ${message}\n\nResponse:`
