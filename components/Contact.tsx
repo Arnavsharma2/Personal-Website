@@ -58,7 +58,7 @@ export default function Contact() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            04.
+            06.
           </h2>
           <h3 className="text-2xl sm:text-3xl font-semibold text-gray-300 mb-4">
             Contact

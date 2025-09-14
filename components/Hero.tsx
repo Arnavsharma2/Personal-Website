@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Code, Cpu, Database, Globe, Zap, Sparkles } from 'lucide-react'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 
 export default function Hero() {
   // Configurable layer coordinates
@@ -57,6 +57,7 @@ export default function Hero() {
   const [isAnimating, setIsAnimating] = useState(false)
   const [concentratedNode, setConcentratedNode] = useState<number | null>(null)
   const [nodeBrightness, setNodeBrightness] = useState<{[key: string]: number}>({})
+  const [timeRemaining, setTimeRemaining] = useState(0)
 
   // State for typing animation
   const [currentRole, setCurrentRole] = useState(0)
@@ -115,6 +116,7 @@ export default function Hero() {
 
   // Store timeout IDs for cleanup
   const [timeoutIds, setTimeoutIds] = useState<ReturnType<typeof setTimeout>[]>([])
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Show stats on scroll only once
   useEffect(() => {
@@ -135,19 +137,62 @@ export default function Hero() {
     }
   }, [timeoutIds])
 
-  // Function to start data flow animation
-  const startDataFlow = () => {
-    // Clear any existing timeouts first
-    timeoutIds.forEach(id => clearTimeout(id))
-    setTimeoutIds([])
+  // Countdown timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
     
-    setIsAnimating(true)
+    if (isAnimating && timeRemaining > 0) {
+      interval = setInterval(() => {
+        setTimeRemaining(prev => {
+          if (prev <= 1) {
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [isAnimating, timeRemaining])
+
+  // Function to reset animation state
+  const resetAnimation = () => {
+    setIsAnimating(false)
     setActiveNodes({})
     setVisibleConnections({})
     setConcentratedNode(null)
+    setNodeBrightness({})
+    setTimeRemaining(0)
     
-    // Generate neural network-like brightness patterns
-    const generateBrightness = () => {
+    // Clear any existing reset timeout
+    if (resetTimeoutRef.current) {
+      clearTimeout(resetTimeoutRef.current)
+      resetTimeoutRef.current = null
+    }
+  }
+
+  // Function to start data flow animation
+  const startDataFlow = () => {
+    // Reset state first (this will clear any ongoing animation)
+    resetAnimation()
+    
+    // Clear any existing timeouts first (except reset timeout)
+    timeoutIds.forEach(id => clearTimeout(id))
+    setTimeoutIds([])
+    
+    console.log('Starting new animation, clearing old timeouts')
+    
+    // Start new animation after a brief delay
+    setTimeout(() => {
+      setIsAnimating(true)
+      setTimeRemaining(25) // Start countdown from 25 seconds
+      
+      // Generate neural network-like brightness patterns
+      const generateBrightness = () => {
       const brightness: {[key: string]: number} = {}
       
       // Simulate input data with varying signal strength
@@ -279,15 +324,15 @@ export default function Hero() {
     }, 17500) // 24500ms + 5300ms + 2200ms processing time
     setTimeoutIds(prev => [...prev, timeout4])
 
-    // Reset after animation
-    const timeout6 = setTimeout(() => {
-      setIsAnimating(false)
-      setActiveNodes({})
-      setVisibleConnections({})
-      setConcentratedNode(null)
-      setNodeBrightness({})
-    }, 20000) // 32000ms + 1000ms concentration + 5000ms display time
-    setTimeoutIds(prev => [...prev, timeout6])
+    // Reset after animation - separate timeout that doesn't get cleared
+    resetTimeoutRef.current = setTimeout(() => {
+      console.log('Resetting animation after timeout')
+      resetAnimation()
+    }, 25000) // 25s total - longer for full animation
+    
+    console.log('Reset timeout set for 25 seconds')
+    
+    }, 100) // End of animation start setTimeout
   }
 
   const scrollToAbout = () => {
@@ -832,7 +877,7 @@ export default function Hero() {
                     disabled={isAnimating}
                     className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 text-white text-xs font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:scale-100 disabled:cursor-not-allowed"
                   >
-                    {isAnimating ? 'Processing...' : 'Animate Network'}
+                    {isAnimating ? `Processing... ${timeRemaining}s` : 'Animate Network'}
                   </button>
                   
                   <button

@@ -7,6 +7,7 @@ import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
+import ChatResume from '@/components/ChatResume'
 import Contact from '@/components/Contact'
 import VisitStats from '@/components/VisitStats'
 
@@ -15,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'projects', 'contact']
+      const sections = ['home', 'about', 'experience', 'projects', 'chat-resume', 'contact']
       const scrollPosition = window.scrollY + 100
 
       for (const section of sections) {
@@ -47,6 +48,7 @@ export default function Home() {
         <About />
         <Experience />
         <Projects />
+        <ChatResume />
         <Contact />
       </motion.div>
       

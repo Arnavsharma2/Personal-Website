@@ -12,6 +12,7 @@ const navItems = [
   { name: 'About', href: '#about' },
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
+  { name: 'Chat Resume', href: '#chat-resume' },
   { name: 'Contact', href: '#contact' },
   { name: 'Resume', href: 'https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing', external: true, isResume: true },
 ]
