@@ -40,7 +40,7 @@ const projects = [
     technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'Web Scraping'],
     image: '/psu-menu-analyzer.png',
     github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
-    live: 'https://psumenuanalyzerwebsite-production-e586.up.railway.app/'
+    live: 'https://psumenu.com'
   },
   {
     title: 'Chat With My Resume',
