@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 const technologies = [
   { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
@@ -23,9 +24,50 @@ const technologies = [
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' }
 ]
 
+  const personalPhotos = [
+    { src: '/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' },
+    { src: '/bakeddrum.jpg', alt: 'Baked drum' },
+    { src: '/korfriedch.jpg', alt: 'Korean fried chicken' },
+    { src: '/meal.jpg', alt: 'Meal' },
+    { src: '/pestowrap.jpg', alt: 'Pesto wrap' },
+    { src: '/popcornch.jpg', alt: 'Popcorn chicken' },
+    { src: '/sesch.jpg', alt: 'Sesame chicken' },
+    { src: '/treehike.jpg', alt: 'Tree hike' },
+    { src: '/valleynature.jpg', alt: 'Valley nature' },
+    { src: '/yellowcurry.jpg', alt: 'Yellow curry' }
+  ]
+
 export default function About() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
+  const [currentProfilePhotoIndex, setCurrentProfilePhotoIndex] = useState(0)
+
+  const nextPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev + 1) % personalPhotos.length)
+  }
+
+  const prevPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev - 1 + personalPhotos.length) % personalPhotos.length)
+  }
+
+  const openGallery = (index: number) => {
+    setCurrentPhotoIndex(index)
+    setIsGalleryOpen(true)
+  }
+
+  const closeGallery = () => {
+    setIsGalleryOpen(false)
+  }
+
+  const rotateProfilePhoto = () => {
+    setCurrentProfilePhotoIndex((prev) => {
+      const nextIndex = (prev + 1) % personalPhotos.length
+      console.log('Rotating from', prev, 'to', nextIndex, 'photo:', personalPhotos[nextIndex].src)
+      return nextIndex
+    })
+  }
 
   return (
     <section id="about" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-200">
@@ -61,6 +103,7 @@ export default function About() {
             
             <p className="text-lg text-primary-800 leading-relaxed">
               When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or hiking up a mountain or trail. 
+              I love eating food and at the moment I really want to try KBBQ and Poke Bowls.
               I&apos;m also a big fan of staying active and have been hitting the gym regularly for almost two years now. I would always be down to hit the gym with anyone, anytime!
             </p>
           </motion.div>
@@ -79,10 +122,11 @@ export default function About() {
                 <div className="w-full h-full bg-white rounded-2xl flex items-center justify-center relative overflow-hidden">
                   {/* Profile Image */}
                   <Image 
-                    src="/PERSONALWEBSITE.jpg" 
-                    alt="Arnav Sharma"
+                    key={currentProfilePhotoIndex} // Force re-render when index changes
+                    src={personalPhotos[currentProfilePhotoIndex].src}
+                    alt={personalPhotos[currentProfilePhotoIndex].alt}
                     fill
-                    className="object-cover object-bottom rounded-2xl"
+                    className="object-cover rounded-2xl transition-all duration-500"
                     priority
                     sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
                   />
@@ -97,6 +141,22 @@ export default function About() {
                     <span className="text-4xl sm:text-5xl lg:text-7xl font-bold text-accent-600 relative z-10">AS</span>
                   </div>
                 </div>
+              </div>
+              
+              {/* Rotation Button */}
+              <motion.button
+                onClick={rotateProfilePhoto}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="absolute -bottom-4 -right-4 bg-accent-500 hover:bg-accent-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 z-10"
+                title={`Click to see more photos (${currentProfilePhotoIndex + 1}/${personalPhotos.length})`}
+              >
+                <ChevronRight className="w-5 h-5" />
+              </motion.button>
+              
+              {/* Photo Counter */}
+              <div className="absolute -top-2 -left-2 bg-accent-500 text-white text-xs px-2 py-1 rounded-full font-medium z-10">
+                {currentProfilePhotoIndex + 1}/{personalPhotos.length}
               </div>
               
               {/* Clean minimal dots */}
@@ -149,7 +209,67 @@ export default function About() {
             ))}
           </div>
         </motion.div>
+
       </div>
+
+      {/* Gallery Modal */}
+      {isGalleryOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+          onClick={closeGallery}
+        >
+          <div className="relative max-w-4xl max-h-full">
+            {/* Close Button */}
+            <button
+              onClick={closeGallery}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors duration-200 z-10"
+            >
+              <X className="w-8 h-8" />
+            </button>
+
+            {/* Main Image */}
+            <div className="relative w-full h-[80vh] rounded-lg overflow-hidden">
+              <Image
+                src={personalPhotos[currentPhotoIndex].src}
+                alt={personalPhotos[currentPhotoIndex].alt}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+            </div>
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                prevPhoto()
+              }}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                nextPhoto()
+              }}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            {/* Photo Counter */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-full text-sm">
+              {currentPhotoIndex + 1} / {personalPhotos.length}
+            </div>
+          </div>
+        </motion.div>
+      )}
     </section>
   )
 }
