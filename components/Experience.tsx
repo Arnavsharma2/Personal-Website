@@ -22,7 +22,7 @@ const experiences = [
       },
       {
         title: 'SubReddit Monitor & Notification Tool',
-        description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market intelligence tracking.',
+        description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market sentiment tracking.',
         github: 'https://github.com/Arnavsharma2/SubReddit-Monitor'
       }
     ]

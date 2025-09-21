@@ -43,7 +43,7 @@ export default function Contact() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-200 relative overflow-hidden">
+    <section id="contact" ref={ref} className="py-32 px-4 sm:px-6 lg:px-8 bg-primary-200 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent-100/20 via-transparent to-secondary-100/20"></div>
@@ -70,7 +70,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center space-y-8"
+          className="text-center space-y-16"
         >
           <p className="text-lg text-primary-800 leading-relaxed max-w-2xl mx-auto">
             If you have opportunities or are interested in collaboration, please email me. 
@@ -106,12 +106,13 @@ export default function Contact() {
             ))}
           </div>
 
+
           {/* Footer */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="pt-12 border-t border-accent-300"
+            className="pt-16 border-t border-accent-300"
           >
             <p className="text-primary-600 text-xs mt-2">
               This site is built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion.{' '}

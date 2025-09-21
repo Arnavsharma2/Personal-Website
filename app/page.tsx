@@ -22,13 +22,24 @@ export default function Home() {
       const sections = ['home', 'about', 'experience', 'projects', 'chat-resume', 'contact']
       const scrollPosition = window.scrollY + 100
 
-      for (const section of sections) {
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i]
         const element = document.getElementById(section)
         if (element) {
           const { offsetTop, offsetHeight } = element
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section)
-            break
+          const isLastSection = i === sections.length - 1
+          
+          // For the last section (contact), use a more lenient condition
+          if (isLastSection) {
+            if (scrollPosition >= offsetTop - 200) {
+              setActiveSection(section)
+              break
+            }
+          } else {
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(section)
+              break
+            }
           }
         }
       }
