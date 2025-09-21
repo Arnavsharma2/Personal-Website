@@ -9,9 +9,13 @@ import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
 import ChatResume from '@/components/ChatResume'
 import Contact from '@/components/Contact'
+import { useVisitTracker } from '@/hooks/useVisitTracker'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home')
+  
+  // Track visits (invisible to users)
+  useVisitTracker()
 
   useEffect(() => {
     const handleScroll = () => {

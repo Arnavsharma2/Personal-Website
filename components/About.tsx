@@ -60,7 +60,7 @@ export default function About() {
             </p>
             
             <p className="text-lg text-primary-800 leading-relaxed">
-              When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or getting competitive over board games. 
+              When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or hiking up a mountain or trail. 
               I&apos;m also a big fan of staying active and have been hitting the gym regularly for almost two years now. I would always be down to hit the gym with anyone, anytime!
             </p>
           </motion.div>
