@@ -49,18 +49,19 @@ export default function About() {
             </div>
             <p className="text-lg text-gray-300 leading-relaxed">
               Hey! I&apos;m Arnav Sharma, and I&apos;m currently pursuing a Bachelor&apos;s Degree of Science in Computer Science at Penn State University, 
-              with a minor in Artificial Intelligence. I&apos;m passionate about creating AI-powered solutions and love the entire process 
-              of taking an idea from ideation to design to production.
+              with a minor in Artificial Intelligence. I absolutely love AI and the possibilities it has opened up for software development in the world today, 
+              which is why you will probably see that a lot of my projects utilize the Gemini or OpenAI APIs.
             </p>
             
             <p className="text-lg text-gray-300 leading-relaxed">
-              My favorite part of programming is building full-stack applications and AI models that solve real-world problems. I love working 
-              with machine learning, data science, and creating web applications that make a difference. I&apos;m particularly interested in 
-              natural language processing and building conversational AI systems.
+              Another thing I love about programming is AI&apos;s predictive ability, made possible by its ability to be trained on data. 
+              A lot of my time is usually spent making small tools to automate tedious things in my life but I am slowly but surely learning to be able to 
+              make big things that can change the world. Right now I am focused on completely understanding the process behind neural networks.
             </p>
             
             <p className="text-lg text-gray-300 leading-relaxed">
-              When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or getting competitive over board games. I&apos;m also a big fan of staying active and have been hitting the gym regularly for almost two years now.
+              When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or getting competitive over board games. 
+              I&apos;m also a big fan of staying active and have been hitting the gym regularly for almost two years now. I would always be down to hit the gym with anyone, anytime!
             </p>
           </motion.div>
 
