@@ -218,8 +218,8 @@ export default function ChatResume() {
           </h3>
           <div className="w-24 h-1 bg-accent-500 mx-auto mb-6"></div>
           <p className="text-lg text-primary-700 max-w-3xl mx-auto">
-            Ask me anything about Arnav's experience, skills, projects, career goals, or even hobbies. 
-            I&apos;m powered by AI and have access to Arnav's information.
+            Ask me anything about Arnav&apos;s experience, skills, projects, career goals, or even hobbies. 
+            I&apos;m powered by AI and have access to Arnav&apos;s information.
           </p>
         </motion.div>
 

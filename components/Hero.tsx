@@ -61,7 +61,7 @@ export default function Hero() {
         y: layerCoordinates.output.y - 20 + 50 + (i - 1.5) * (nodeSpacing.output * 1.3)
       }))
     })
-  }, [layerCoordinates.input.x, layerCoordinates.hidden1.x, layerCoordinates.hidden2.x, layerCoordinates.output.x])
+  }, [layerCoordinates.input.x, layerCoordinates.hidden1.x, layerCoordinates.hidden2.x, layerCoordinates.output.x, layerCoordinates.input.y, layerCoordinates.hidden1.y, layerCoordinates.hidden2.y, layerCoordinates.output.y, nodeSpacing.input, nodeSpacing.hidden1, nodeSpacing.hidden2, nodeSpacing.output])
 
   // Function to update node position - memoized to prevent unnecessary re-renders
   const updateNodePosition = useMemo(() => (layer: keyof typeof nodePositions, index: number, x: number, y: number) => {
