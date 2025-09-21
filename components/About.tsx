@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X, ArrowLeft } from 'lucide-react'
 
 const technologies = [
   { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
@@ -222,12 +222,21 @@ export default function About() {
           onClick={closeGallery}
         >
           <div className="relative max-w-4xl max-h-full">
+            {/* Back Button */}
+            <button
+              onClick={closeGallery}
+              className="absolute top-4 left-4 flex items-center space-x-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white px-3 py-2 rounded-lg transition-all duration-200 z-10"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="text-sm font-medium">Back</span>
+            </button>
+
             {/* Close Button */}
             <button
               onClick={closeGallery}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors duration-200 z-10"
+              className="absolute top-4 right-4 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-lg transition-all duration-200 z-10"
             >
-              <X className="w-8 h-8" />
+              <X className="w-6 h-6" />
             </button>
 
             {/* Main Image */}

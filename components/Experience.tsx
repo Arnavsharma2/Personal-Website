@@ -6,26 +6,26 @@ import { useRef } from 'react'
 import { Building2, Calendar, MapPin } from 'lucide-react'
 import Image from 'next/image'
 
-const experiences = [
+interface Experience {
+  company: string
+  position: string
+  duration: string
+  location: string
+  description: string
+  projects?: {
+    title: string
+    description: string
+    github: string
+  }[]
+}
+
+const experiences: Experience[] = [
   {
     company: 'Wefire',
     position: 'Software Engineering Intern',
     duration: 'January 2025 - Present',
     location: 'Hayward, CA',
-    description: 'Developed Reddit data analysis and monitoring software for financial sentiment tracking and market sentiment tracking.',
-    technologies: ['Python', 'Google Gemini API', 'PRAW', 'Pandas', 'SMTP', 'NLP', 'Data Processing', 'Web Scraping', 'Real-time Processing', 'Automation', 'Monitoring'],
-    projects: [
-      {
-        title: 'AI-Powered Reddit Post Analyzer',
-        description: 'A Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits to track market sentiment. Uses Google Gemini API for NLP classification and summary generation, with Pandas for data processing and structuring insights.',
-        github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis'
-      },
-      {
-        title: 'SubReddit Monitor & Notification Tool',
-        description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market sentiment tracking.',
-        github: 'https://github.com/Arnavsharma2/SubReddit-Monitor'
-      }
-    ]
+    description: 'Developed and deployed advanced Python-based programs that transformed 5,000+ Reddit posts into actionable financial insights, driving company publicity initiatives through sentiment analysis powered by Google Gemini API and Pandas. Created a high-performance real-time monitoring infrastructure using PRAW tracking brand mentions and sales keywords across multiple subreddits, generating 500+ instant alerts through an automated SMTP pipeline during 24-hour testing periods, resulting in 40% faster customer response times and enhanced brand reputation management.'
   }
 ]
 
@@ -141,17 +141,6 @@ export default function Experience() {
                     </div>
                   )}
                   
-                  {/* Technologies */}
-                  <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech, techIndex) => (
-                      <span
-                        key={techIndex}
-                        className="px-3 py-1 bg-accent-200 text-accent-800 rounded-full text-sm font-medium hover:bg-accent-300 transition-colors duration-200 border border-accent-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
             </motion.div>

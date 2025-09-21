@@ -50,6 +50,24 @@ const projects = [
     github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
     live: '#',
     showLive: false
+  },
+  {
+    title: 'AI-Powered Reddit Post Analyzer',
+    description: 'A Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits to track market sentiment. Uses Google Gemini API for NLP classification and summary generation, with Pandas for data processing and structuring insights.',
+    technologies: ['Python', 'Google Gemini API', 'PRAW', 'Pandas', 'NLP'],
+    image: '/stockprediction.png', // Using existing image as placeholder
+    github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis',
+    live: '#',
+    showLive: false
+  },
+  {
+    title: 'SubReddit Monitor & Notification Tool',
+    description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market sentiment tracking.',
+    technologies: ['Python', 'PRAW', 'SMTP'],
+    image: '/Churn.png', // Using existing image as placeholder
+    github: 'https://github.com/Arnavsharma2/SubReddit-Monitor',
+    live: '#',
+    showLive: false
   }
 ]
 
