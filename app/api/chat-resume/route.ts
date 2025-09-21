@@ -6,6 +6,7 @@ import {
   addUserMessageToConversation,
   getConversationHistory 
 } from '@/utils/conversationManager'
+// Remove static import to avoid build-time issues
 
 // Fallback resume content for now
 const FALLBACK_RESUME_CONTENT = `Arnav Sharma - Resume Information
@@ -136,8 +137,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Use fallback resume content for now
-    const resumeContent = FALLBACK_RESUME_CONTENT
+    // Extract resume content from PDF using dynamic import
+    let resumeContent
+    try {
+      console.log('Attempting to extract resume text from PDF...')
+      const { extractResumeText } = await import('@/utils/pdfProcessor')
+      resumeContent = await extractResumeText()
+      console.log('Successfully extracted resume text from PDF, length:', resumeContent.length)
+      console.log('First 200 chars of extracted text:', resumeContent.substring(0, 200))
+    } catch (error) {
+      console.error('Failed to extract resume text from PDF:', error)
+      console.error('Error details:', error)
+      console.log('Falling back to hardcoded resume content')
+      resumeContent = FALLBACK_RESUME_CONTENT
+    }
 
     // Get conversation history for context
     const conversationHistory = getConversationHistory(clientIP)

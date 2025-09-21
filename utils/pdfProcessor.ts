@@ -1,6 +1,5 @@
 import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync } from 'fs'
 import { join } from 'path'
-import pdf from 'pdf-parse'
 
 // Path to the resume PDF
 const RESUME_PDF_PATH = join(process.cwd(), 'public', 'RAG Resume.pdf')
@@ -47,7 +46,11 @@ export async function extractResumeText(): Promise<string> {
     
     let pdfData
     try {
-      pdfData = await pdf(dataBuffer)
+      // Use dynamic require to avoid test file issues
+      const pdfParse = require('pdf-parse')
+      // Clear any cached modules that might be causing issues
+      delete require.cache[require.resolve('pdf-parse')]
+      pdfData = await pdfParse(dataBuffer)
     } catch (error) {
       console.warn('Could not parse PDF file:', error)
       return getFallbackResumeText()
