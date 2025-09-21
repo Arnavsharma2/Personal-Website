@@ -15,7 +15,7 @@ Your Chat Resume section now uses actual PDF processing! Here's how it works:
 #### 1. **Add Your Resume PDF**
 ```bash
 # Place your resume PDF in the public folder
-cp /path/to/your/resume.pdf "/Users/aps/PythonProject/Personal Website/public/resume.pdf"
+cp /path/to/your/RAG\ Resume.pdf "/Users/aps/PythonProject/Personal Website/public/RAG Resume.pdf"
 ```
 
 #### 2. **Set Environment Variables**
@@ -51,7 +51,7 @@ curl -X POST http://localhost:3000/api/refresh-resume \
 ### **File Structure:**
 ```
 public/
-  └── resume.pdf          # Your actual resume PDF
+  └── RAG Resume.pdf      # Your actual resume PDF
 data/
   └── resume-text.txt     # Extracted text (auto-generated)
 utils/
@@ -70,12 +70,12 @@ app/api/
 - ✅ **Admin Controls**: Refresh endpoint for manual updates
 
 ### **Updating Your Resume:**
-1. Replace `public/resume.pdf` with your new resume
+1. Replace `public/RAG Resume.pdf` with your new resume
 2. The system will automatically detect the change
 3. Or manually refresh: `POST /api/refresh-resume`
 
 ### **Troubleshooting:**
-- **PDF not found**: Check that `resume.pdf` is in the `public/` folder
+- **PDF not found**: Check that `RAG Resume.pdf` is in the `public/` folder
 - **Extraction fails**: Check PDF format (should be text-based, not scanned image)
 - **API errors**: Check console logs for detailed error messages
 

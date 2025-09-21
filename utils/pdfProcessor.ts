@@ -3,7 +3,7 @@ import { join } from 'path'
 import pdf from 'pdf-parse'
 
 // Path to the resume PDF
-const RESUME_PDF_PATH = join(process.cwd(), 'public', 'resume.pdf')
+const RESUME_PDF_PATH = join(process.cwd(), 'public', 'RAG Resume.pdf')
 const EXTRACTED_TEXT_PATH = join(process.cwd(), 'data', 'resume-text.txt')
 
 // Cache for extracted text
