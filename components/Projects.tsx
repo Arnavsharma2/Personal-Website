@@ -9,7 +9,7 @@ import Image from 'next/image'
 const projects = [
   {
     title: 'Stock Return Forecaster with Deep Learning',
-    description: 'Architected and trained a Long Short-Term Memory (LSTM) neural network to forecast future stock returns based on historical time-series price data. Implemented a data processing workflow to structure sequential stock data, normalizing features and creating sliding windows suitable for training a recurrent neural network. Developed the deep learning model using Keras, stacking multiple LSTM and Dropout layers to effectively capture temporal dependencies and prevent overfitting, saving the final trained model as an H5 file.',
+    description: 'A deep learning model that predicts future stock returns using LSTM neural networks trained on historical price data. Built it processes data over 1000+ stocks to identify patterns and predict market movements.',
     technologies: ['Python', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas'],
     image: '/stockprediction.png',
     github: 'https://github.com/Arnavsharma2/StockReturnPrediction',
@@ -18,7 +18,7 @@ const projects = [
   },
   {
     title: 'Customer Churn Predictor',
-    description: 'Built a classification model to predict customer churn for a telecommunications company, enabling proactive retention strategies by identifying at-risk customers with optimal accuracy for the dataset provided. Leveraged the PyCaret AutoML library to accelerate the end-to-end machine learning workflow, from data preparation and feature engineering to model training and performance evaluation. Analyzed and visualized key features influencing churn using Plotly, delivering actionable insights into customer behavior and demographics.',
+    description: 'A machine learning system that identifies customers likely to cancel their services using classification algorithms. Analyzes customer data and provides insights for retention strategies.',
     technologies: ['Python', 'Scikit-learn', 'Pandas', 'Plotly', 'PyCaret'],
     image: '/Churn.png',
     github: 'https://github.com/Arnavsharma2/CustomerChurnPredictor',
@@ -27,7 +27,7 @@ const projects = [
   },
   {
     title: 'House Price Prediction Model',
-    description: 'Developed a predictive model to forecast house sale prices by analyzing a dataset of over 1,400 properties and 80 distinct features, delivering results with 80% accuracy. Engineered a data preprocessing pipeline to handle missing values, encode categorical data, and scale numerical features, preparing the dataset for optimal model performance. Trained and evaluated multiple regression algorithms, including Linear Regression, Ridge, Lasso, and XGBoost, identifying the most accurate model and serializing it for future deployment using Pickle.',
+    description: 'A predictive model that estimates house sale prices by analyzing over 1,400 properties with 80+ features. Trains multiple regression algorithms to achieve 80% accuracy in price forecasting, potentially projecting better accuracy with more data. ',
     technologies: ['Python', 'Scikit-learn', 'Pandas', 'XGBoost', 'Matplotlib'],
     image: '/housingpriceprediction.png',
     github: 'https://github.com/Arnavsharma2/HousingPricePrediction',
@@ -36,7 +36,7 @@ const projects = [
   },
   {
     title: 'PSU Menu Analyzer Website',
-    description: 'A full-stack web application that scrapes and analyzes Penn State University dining menus. Features AI-powered nutritional analysis using Google Gemini API, real-time menu scraping, dietary preference filtering, and CSV export functionality for comprehensive nutritional data.',
+    description: 'A full-stack web application that scrapes Penn State dining menus and provides AI-powered nutritional analysis. Features real-time menu updates, dietary filtering, and CSV export using Google Gemini API.',
     technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'Web Scraping'],
     image: '/psu-menu-analyzer.png',
     github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
@@ -44,7 +44,7 @@ const projects = [
   },
   {
     title: 'Chat With My Resume',
-    description: 'An intelligent resume chatbot built with Retrieval-Augmented Generation (RAG) technology. Allows users to have natural conversations about professional background, skills, and experience through an AI-powered interface that understands context and provides detailed responses.',
+    description: 'An intelligent resume chatbot that allows natural conversations about professional background and experience. Built with Retrieval-Augmented Generation (RAG) technology using LangChain and OpenAI API for responses.',
     technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'FAISS', 'Flask', 'RAG'],
     image: '/chatwresume.png',
     github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
