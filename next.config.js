@@ -13,6 +13,8 @@ const nextConfig = {
   images: {
     unoptimized: false,
   },
+  // Font optimization
+  optimizeFonts: true,
   // Memory management
   onDemandEntries: {
     // Period (in ms) where the server will keep pages in the buffer
