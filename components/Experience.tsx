@@ -12,17 +12,17 @@ const experiences = [
     position: 'Software Engineering Intern',
     duration: 'January 2025 - Present',
     location: 'Hayward, CA',
-    description: 'Developed comprehensive Reddit data analysis and monitoring solutions for financial sentiment tracking and market intelligence.',
+    description: 'Developed Reddit data analysis and monitoring software for financial sentiment tracking and market sentiment tracking.',
     technologies: ['Python', 'Google Gemini API', 'PRAW', 'Pandas', 'SMTP', 'NLP', 'Data Processing', 'Web Scraping', 'Real-time Processing', 'Automation', 'Monitoring'],
     projects: [
       {
         title: 'AI-Powered Reddit Post Analyzer',
-        description: 'Developed a robust scraping tool in Python to collect and analyze up to 5,000 posts from targeted subreddits, automating the process of gathering user sentiment. Integrated the Google Gemini API to perform complex NLP tasks, automatically classifying each post by financial domain and question type, and generating concise summaries. Engineered a data processing pipeline using Pandas to systematically structure the raw scraped data and AI-generated insights.',
+        description: 'A Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits to track market sentiment. Uses Google Gemini API for NLP classification and summary generation, with Pandas for data processing and structuring insights.',
         github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis'
       },
       {
         title: 'SubReddit Monitor & Notification Tool',
-        description: 'Engineered an automated bot to monitor Reddit posts in real-time by streaming data from specified subreddits using the PRAW library. Implemented a keyword-matching system to instantly identify relevant posts and developed a notification pipeline that sends detailed email alerts via SMTP. Features real-time data streaming, intelligent filtering algorithms, and multi-channel notification delivery.',
+        description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market intelligence tracking.',
         github: 'https://github.com/Arnavsharma2/SubReddit-Monitor'
       }
     ]
