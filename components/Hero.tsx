@@ -1,16 +1,16 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, Code, Cpu, Database, Globe, Zap, Sparkles } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useState, useEffect, useMemo, useRef } from 'react'
 
 export default function Hero() {
   // Configurable layer coordinates
   const layerCoordinates = {
-    input: { x: 55, y: 200 }, // Starting position for input layer
-    hidden1: { x: 200, y: 180 }, // Starting position for hidden layer 1
-    hidden2: { x: 400, y: 180 }, // Starting position for hidden layer 2
-    output: { x: 550, y: 200 }, // Starting position for output layer
+    input: { x: 45, y: 200 }, // Starting position for input layer
+    hidden1: { x: 190, y: 180 }, // Starting position for hidden layer 1
+    hidden2: { x: 390, y: 180 }, // Starting position for hidden layer 2
+    output: { x: 540, y: 200 }, // Starting position for output layer
   }
 
   // Node spacing within each layer
@@ -41,6 +41,28 @@ export default function Hero() {
     }))
   })
 
+  // Update node positions when layer coordinates change
+  useEffect(() => {
+    setNodePositions({
+      input: Array.from({ length: 6 }, (_, i) => ({
+        x: layerCoordinates.input.x - 15,
+        y: layerCoordinates.input.y - 20 + 50 + (i - 2.5) * (nodeSpacing.input * 0.8)
+      })),
+      hidden1: Array.from({ length: 8 }, (_, i) => ({
+        x: layerCoordinates.hidden1.x - 15,
+        y: layerCoordinates.hidden1.y - 20 + 50 + 20 + (i - 3.5) * (nodeSpacing.hidden1 * 1.2)
+      })),
+      hidden2: Array.from({ length: 8 }, (_, i) => ({
+        x: layerCoordinates.hidden2.x - 15,
+        y: layerCoordinates.hidden2.y - 20 + 50 + 20 + (i - 3.5) * (nodeSpacing.hidden2 * 1.2)
+      })),
+      output: Array.from({ length: 4 }, (_, i) => ({
+        x: layerCoordinates.output.x - 15,
+        y: layerCoordinates.output.y - 20 + 50 + (i - 1.5) * (nodeSpacing.output * 1.3)
+      }))
+    })
+  }, [layerCoordinates.input.x, layerCoordinates.hidden1.x, layerCoordinates.hidden2.x, layerCoordinates.output.x])
+
   // Function to update node position - memoized to prevent unnecessary re-renders
   const updateNodePosition = useMemo(() => (layer: keyof typeof nodePositions, index: number, x: number, y: number) => {
     setNodePositions(prev => ({
@@ -66,10 +88,7 @@ export default function Hero() {
   
   // State for interactive features
   const [hoveredElement, setHoveredElement] = useState<string | null>(null)
-  const [showStats, setShowStats] = useState(false)
-  const [statsShownOnce, setStatsShownOnce] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(false)
-  const [themeMode, setThemeMode] = useState<'default' | 'cyber' | 'neon'>('neon')
 
   // Roles for typing animation - based on actual work
   const roles = useMemo(() => [
@@ -83,13 +102,6 @@ export default function Hero() {
     'Predictive Modeler'
   ], [])
 
-  // Stats data - based on actual projects and experience
-  const stats = [
-    { label: 'ML Projects', value: 5, icon: Code },
-    { label: 'Years Experience', value: 1, icon: Cpu },
-    { label: 'Technologies', value: 20, icon: Database },
-    { label: 'GitHub Repositories', value: 7, icon: Globe }
-  ]
 
   // Typing animation effect - optimized with slower updates
   useEffect(() => {
@@ -118,17 +130,6 @@ export default function Hero() {
   const [timeoutIds, setTimeoutIds] = useState<ReturnType<typeof setTimeout>[]>([])
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Show stats on scroll only once
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 100 && !statsShownOnce) {
-        setShowStats(true)
-        setStatsShownOnce(true)
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [statsShownOnce])
 
   // Cleanup timeouts on component unmount
   useEffect(() => {
@@ -343,14 +344,9 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="min-h-[140vh] flex items-center justify-center relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-indigo-900/20" />
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-        <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-        <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" />
-      </div>
+    <section id="home" className="min-h-[100vh] flex items-center justify-center relative overflow-hidden">
+      {/* Clean minimal background */}
+      <div className="absolute inset-0 bg-primary-50" />
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -365,7 +361,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl sm:text-2xl text-gray-300 font-medium mb-2"
+              className="text-xl sm:text-2xl text-primary-800 font-medium mb-2"
             >
               Hey there! I&apos;m
             </motion.h2>
@@ -374,7 +370,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-purple-500 bg-clip-text text-transparent leading-tight mb-2"
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-900 leading-tight mb-2"
             >
               Arnav Sharma
             </motion.h1>
@@ -383,7 +379,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-gray-300 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center whitespace-nowrap"
+              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-primary-900 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center whitespace-nowrap"
             >
               <span className="mr-2 flex-shrink-0">I&apos;m a</span>
               <motion.span
@@ -392,7 +388,7 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent font-bold flex-shrink-0"
+                className="text-accent-600 font-bold flex-shrink-0"
               >
                 {displayedText}
                 <motion.span
@@ -409,7 +405,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-base sm:text-lg text-gray-400 mt-4 max-w-lg mx-auto"
+              className="text-base sm:text-lg text-primary-700 mt-4 max-w-lg mx-auto"
             >
               Building ML models, analyzing data, and creating AI-powered applications.
             </motion.p>
@@ -420,90 +416,18 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="pt-8 space-y-6"
             >
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
+              <div className="flex justify-center">
                 <motion.button
                   onClick={scrollToAbout}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-700 to-blue-700 sm:from-purple-600 sm:to-blue-600 sm:hover:from-purple-700 sm:hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
+                  className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-accent-500 text-white hover:bg-accent-600 font-semibold rounded-full transition-all duration-300 text-sm sm:text-base"
                 >
-                  <Sparkles className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   See my experience
                   <ChevronDown className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </motion.button>
-                
-                <motion.button
-                  onClick={() => setShowStats(!showStats)}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-700 to-emerald-700 sm:from-green-600 sm:to-emerald-600 sm:hover:from-green-700 sm:hover:to-emerald-700 text-white font-medium rounded-full transition-all duration-300 shadow-lg hover:shadow-xl text-sm sm:text-base"
-                >
-                  <Zap className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
-                  {showStats ? 'Hide Stats' : 'Show Stats'}
-                </motion.button>
               </div>
 
-              {/* Animated Stats */}
-              <AnimatePresence>
-                {showStats && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="space-y-6 mt-6"
-                  >
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                      {stats.map((stat, index) => (
-                        <motion.div
-                          key={stat.label}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-purple-400/20 text-center"
-                          whileHover={{ scale: 1.05, y: -5 }}
-                        >
-                          <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-purple-400 mx-auto mb-2" />
-                          <motion.div
-                            className="text-xl sm:text-2xl font-bold text-white"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 + index * 0.1 }}
-                          >
-                            {stat.value}+
-                          </motion.div>
-                          <div className="text-xs sm:text-sm text-gray-300">{stat.label}</div>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Tech Stack */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 }}
-                      className="bg-gradient-to-br from-gray-900/50 to-purple-900/30 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-purple-400/20"
-                    >
-                      <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 text-center">Tech Stack</h4>
-                      <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
-                        {['Python', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas', 'LangChain', 'OpenAI API', 'Flask', 'PRAW', 'NLP', 'LSTM', 'XGBoost'].map((tech, index) => (
-                          <motion.span
-                            key={tech}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.8 + index * 0.05 }}
-                            className="px-2 sm:px-3 py-1 bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-purple-300 rounded-full text-xs sm:text-sm font-medium border border-purple-400/30 hover:from-purple-600/30 hover:to-blue-600/30 transition-all duration-300"
-                            whileHover={{ scale: 1.1, y: -2 }}
-                          >
-                            {tech}
-                          </motion.span>
-                        ))}
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           </motion.div>
 
@@ -517,13 +441,13 @@ export default function Hero() {
             <div className="relative w-[300px] h-[250px] sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[400px] xl:w-[600px] xl:h-[500px] cursor-pointer">
               {/* Neural Network Container */}
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-3xl border border-purple-400/20 shadow-2xl backdrop-blur-sm group-hover:shadow-purple-500/25 group-hover:shadow-3xl transition-all duration-500"
+                className="absolute inset-0 bg-gradient-to-br from-accent-100 to-primary-100 rounded-3xl border border-accent-200 shadow-2xl backdrop-blur-sm group-hover:shadow-accent-300/25 group-hover:shadow-3xl transition-all duration-500"
                 whileHover={{ scale: 1.02 }}
                 animate={{
                   boxShadow: [
-                    "0 0 20px rgba(147, 51, 234, 0.1)",
-                    "0 0 40px rgba(147, 51, 234, 0.2)",
-                    "0 0 20px rgba(147, 51, 234, 0.1)"
+                    "0 0 20px rgba(242, 147, 12, 0.1)",
+                    "0 0 40px rgba(242, 147, 12, 0.2)",
+                    "0 0 20px rgba(242, 147, 12, 0.1)"
                   ]
                 }}
                 transition={{
@@ -536,10 +460,10 @@ export default function Hero() {
                 {nodePositions.input.map((position, i) => (
                   <motion.div
                     key={`input-${i}`}
-                    className={`absolute w-6 h-6 rounded-full shadow-lg border-4 ${
+                    className={`absolute w-6 h-6 rounded-full shadow-lg border-2 ${
                       activeNodes[`input-${i}`] 
-                        ? 'bg-gradient-to-br from-green-200 to-emerald-300 border-green-200' 
-                        : 'bg-gradient-to-br from-green-500 to-emerald-600 border-green-300'
+                        ? 'bg-gradient-to-br from-yellow-400 to-yellow-500 border-yellow-300' 
+                        : 'bg-gradient-to-br from-yellow-600 to-yellow-700 border-yellow-500'
                     }`}
                     style={{
                       left: `${position.x}px`,
@@ -547,19 +471,19 @@ export default function Hero() {
                       transform: 'translate(-50%, -50%)',
                       opacity: nodeBrightness[`input-${i}`] || 0.3,
                       boxShadow: activeNodes[`input-${i}`] 
-                        ? `0 0 ${30 * (nodeBrightness[`input-${i}`] || 0.5)}px rgba(34, 197, 94, ${nodeBrightness[`input-${i}`] || 0.5}), 0 0 ${60 * (nodeBrightness[`input-${i}`] || 0.5)}px rgba(34, 197, 94, ${(nodeBrightness[`input-${i}`] || 0.5) * 0.8}), 0 0 ${90 * (nodeBrightness[`input-${i}`] || 0.5)}px rgba(34, 197, 94, ${(nodeBrightness[`input-${i}`] || 0.5) * 0.4})`
-                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
+                        ? `0 0 ${20 * (nodeBrightness[`input-${i}`] || 0.8)}px rgba(234, 179, 8, ${nodeBrightness[`input-${i}`] || 0.8}), 0 0 ${40 * (nodeBrightness[`input-${i}`] || 0.8)}px rgba(234, 179, 8, ${(nodeBrightness[`input-${i}`] || 0.8) * 0.8}), 0 0 ${60 * (nodeBrightness[`input-${i}`] || 0.8)}px rgba(234, 179, 8, ${(nodeBrightness[`input-${i}`] || 0.8) * 0.4})`
+                        : '0 2px 8px rgba(234, 179, 8, 0.3)'
                     }}
                     whileHover={{ 
                       scale: 2,
-                      boxShadow: "0 0 20px rgba(34, 197, 94, 0.8)"
+                      boxShadow: "0 0 25px rgba(234, 179, 8, 0.9)"
                     }}
                     animate={{
                       scale: activeNodes[`input-${i}`] 
                         ? [1, 1.4, 1]
                         : [1, 1.2, 1],
                       opacity: activeNodes[`input-${i}`] 
-                        ? [(nodeBrightness[`input-${i}`] || 0.5) * 0.95, nodeBrightness[`input-${i}`] || 0.5, (nodeBrightness[`input-${i}`] || 0.5) * 0.95]
+                        ? [(nodeBrightness[`input-${i}`] || 0.8) * 0.95, nodeBrightness[`input-${i}`] || 0.8, (nodeBrightness[`input-${i}`] || 0.8) * 0.95]
                         : [(nodeBrightness[`input-${i}`] || 0.3) * 0.4, (nodeBrightness[`input-${i}`] || 0.3) * 0.6, (nodeBrightness[`input-${i}`] || 0.3) * 0.4]
                     }}
                     transition={{
@@ -576,10 +500,10 @@ export default function Hero() {
                 {nodePositions.hidden1.map((position, i) => (
                   <motion.div
                     key={`hidden1-${i}`}
-                    className={`absolute w-8 h-8 rounded-full shadow-lg border-4 ${
+                    className={`absolute w-8 h-8 rounded-full shadow-lg border-2 ${
                       activeNodes[`hidden1-${i}`] 
-                        ? 'bg-gradient-to-br from-purple-200 to-blue-300 border-purple-200' 
-                        : 'bg-gradient-to-br from-purple-500 to-blue-600 border-purple-300'
+                        ? 'bg-gradient-to-br from-orange-400 to-orange-500 border-orange-300' 
+                        : 'bg-gradient-to-br from-orange-600 to-orange-700 border-orange-500'
                     }`}
                     style={{
                       left: `${position.x}px`,
@@ -587,19 +511,19 @@ export default function Hero() {
                       transform: 'translate(-50%, -50%)',
                       opacity: nodeBrightness[`hidden1-${i}`] || 0.3,
                       boxShadow: activeNodes[`hidden1-${i}`] 
-                        ? `0 0 ${35 * (nodeBrightness[`hidden1-${i}`] || 0.5)}px rgba(147, 51, 234, ${nodeBrightness[`hidden1-${i}`] || 0.5}), 0 0 ${70 * (nodeBrightness[`hidden1-${i}`] || 0.5)}px rgba(147, 51, 234, ${(nodeBrightness[`hidden1-${i}`] || 0.5) * 0.8}), 0 0 ${100 * (nodeBrightness[`hidden1-${i}`] || 0.5)}px rgba(147, 51, 234, ${(nodeBrightness[`hidden1-${i}`] || 0.5) * 0.4})`
-                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
+                        ? `0 0 ${25 * (nodeBrightness[`hidden1-${i}`] || 0.8)}px rgba(251, 146, 60, ${nodeBrightness[`hidden1-${i}`] || 0.8}), 0 0 ${50 * (nodeBrightness[`hidden1-${i}`] || 0.8)}px rgba(251, 146, 60, ${(nodeBrightness[`hidden1-${i}`] || 0.8) * 0.8}), 0 0 ${75 * (nodeBrightness[`hidden1-${i}`] || 0.8)}px rgba(251, 146, 60, ${(nodeBrightness[`hidden1-${i}`] || 0.8) * 0.4})`
+                        : '0 2px 8px rgba(251, 146, 60, 0.3)'
                     }}
                     whileHover={{ 
                       scale: 2.5,
-                      boxShadow: "0 0 25px rgba(147, 51, 234, 0.8)"
+                      boxShadow: "0 0 30px rgba(251, 146, 60, 0.9)"
                     }}
                     animate={{
                       scale: activeNodes[`hidden1-${i}`] 
                         ? [1, 1.5, 1]
                         : [1, 1.3, 1],
                       opacity: activeNodes[`hidden1-${i}`] 
-                        ? [(nodeBrightness[`hidden1-${i}`] || 0.5) * 0.95, nodeBrightness[`hidden1-${i}`] || 0.5, (nodeBrightness[`hidden1-${i}`] || 0.5) * 0.95]
+                        ? [(nodeBrightness[`hidden1-${i}`] || 0.8) * 0.95, nodeBrightness[`hidden1-${i}`] || 0.8, (nodeBrightness[`hidden1-${i}`] || 0.8) * 0.95]
                         : [(nodeBrightness[`hidden1-${i}`] || 0.3) * 0.3, (nodeBrightness[`hidden1-${i}`] || 0.3) * 0.5, (nodeBrightness[`hidden1-${i}`] || 0.3) * 0.3]
                     }}
                     transition={{
@@ -616,10 +540,10 @@ export default function Hero() {
                 {nodePositions.hidden2.map((position, i) => (
                   <motion.div
                     key={`hidden2-${i}`}
-                    className={`absolute w-8 h-8 rounded-full shadow-lg border-4 ${
+                    className={`absolute w-8 h-8 rounded-full shadow-lg border-2 ${
                       activeNodes[`hidden2-${i}`] 
-                        ? 'bg-gradient-to-br from-blue-200 to-cyan-300 border-blue-200' 
-                        : 'bg-gradient-to-br from-blue-500 to-cyan-600 border-blue-300'
+                        ? 'bg-gradient-to-br from-orange-500 to-red-400 border-orange-400' 
+                        : 'bg-gradient-to-br from-orange-700 to-red-600 border-orange-600'
                     }`}
                     style={{
                       left: `${position.x}px`,
@@ -627,19 +551,19 @@ export default function Hero() {
                       transform: 'translate(-50%, -50%)',
                       opacity: nodeBrightness[`hidden2-${i}`] || 0.3,
                       boxShadow: activeNodes[`hidden2-${i}`] 
-                        ? `0 0 ${35 * (nodeBrightness[`hidden2-${i}`] || 0.5)}px rgba(59, 130, 246, ${nodeBrightness[`hidden2-${i}`] || 0.5}), 0 0 ${70 * (nodeBrightness[`hidden2-${i}`] || 0.5)}px rgba(59, 130, 246, ${(nodeBrightness[`hidden2-${i}`] || 0.5) * 0.8}), 0 0 ${100 * (nodeBrightness[`hidden2-${i}`] || 0.5)}px rgba(59, 130, 246, ${(nodeBrightness[`hidden2-${i}`] || 0.5) * 0.4})`
-                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
+                        ? `0 0 ${25 * (nodeBrightness[`hidden2-${i}`] || 0.8)}px rgba(251, 146, 60, ${nodeBrightness[`hidden2-${i}`] || 0.8}), 0 0 ${50 * (nodeBrightness[`hidden2-${i}`] || 0.8)}px rgba(251, 146, 60, ${(nodeBrightness[`hidden2-${i}`] || 0.8) * 0.8}), 0 0 ${75 * (nodeBrightness[`hidden2-${i}`] || 0.8)}px rgba(251, 146, 60, ${(nodeBrightness[`hidden2-${i}`] || 0.8) * 0.4})`
+                        : '0 2px 8px rgba(251, 146, 60, 0.3)'
                     }}
                     whileHover={{ 
                       scale: 2.5,
-                      boxShadow: "0 0 25px rgba(59, 130, 246, 0.8)"
+                      boxShadow: "0 0 30px rgba(251, 146, 60, 0.9)"
                     }}
                     animate={{
                       scale: activeNodes[`hidden2-${i}`] 
                         ? [1, 1.5, 1]
                         : [1, 1.3, 1],
                       opacity: activeNodes[`hidden2-${i}`] 
-                        ? [(nodeBrightness[`hidden2-${i}`] || 0.5) * 0.95, nodeBrightness[`hidden2-${i}`] || 0.5, (nodeBrightness[`hidden2-${i}`] || 0.5) * 0.95]
+                        ? [(nodeBrightness[`hidden2-${i}`] || 0.8) * 0.95, nodeBrightness[`hidden2-${i}`] || 0.8, (nodeBrightness[`hidden2-${i}`] || 0.8) * 0.95]
                         : [(nodeBrightness[`hidden2-${i}`] || 0.3) * 0.3, (nodeBrightness[`hidden2-${i}`] || 0.3) * 0.5, (nodeBrightness[`hidden2-${i}`] || 0.3) * 0.3]
                     }}
                     transition={{
@@ -656,12 +580,12 @@ export default function Hero() {
                 {nodePositions.output.map((position, i) => (
                   <motion.div
                     key={`output-${i}`}
-                    className={`absolute w-10 h-10 rounded-full shadow-lg border-4 ${
+                    className={`absolute w-10 h-10 rounded-full shadow-lg border-2 ${
                       activeNodes[`output-${i}`] 
                         ? concentratedNode === i
-                          ? 'bg-gradient-to-br from-pink-100 to-rose-200 border-pink-100'
-                          : 'bg-gradient-to-br from-pink-200 to-rose-300 border-pink-200'
-                        : 'bg-gradient-to-br from-pink-500 to-rose-600 border-pink-300'
+                          ? 'bg-gradient-to-br from-red-400 to-red-500 border-red-300'
+                          : 'bg-gradient-to-br from-red-500 to-red-600 border-red-400'
+                        : 'bg-gradient-to-br from-red-600 to-red-700 border-red-500'
                     }`}
                     style={{
                       left: `${position.x}px`,
@@ -670,13 +594,13 @@ export default function Hero() {
                       opacity: nodeBrightness[`output-${i}`] || 0.3,
                       boxShadow: activeNodes[`output-${i}`] 
                         ? concentratedNode === i
-                          ? `0 0 ${60 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${nodeBrightness[`output-${i}`] || 0.9}), 0 0 ${120 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.9) * 0.9}), 0 0 ${180 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.9) * 0.6}), 0 0 ${240 * (nodeBrightness[`output-${i}`] || 0.9)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.9) * 0.3})`
-                          : `0 0 ${40 * (nodeBrightness[`output-${i}`] || 0.5)}px rgba(244, 114, 182, ${nodeBrightness[`output-${i}`] || 0.5}), 0 0 ${80 * (nodeBrightness[`output-${i}`] || 0.5)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.5) * 0.8}), 0 0 ${120 * (nodeBrightness[`output-${i}`] || 0.5)}px rgba(244, 114, 182, ${(nodeBrightness[`output-${i}`] || 0.5) * 0.4})`
-                        : '0 2px 4px rgba(0, 0, 0, 0.2)'
+                          ? `0 0 ${50 * (nodeBrightness[`output-${i}`] || 1.0)}px rgba(220, 38, 38, ${nodeBrightness[`output-${i}`] || 1.0}), 0 0 ${100 * (nodeBrightness[`output-${i}`] || 1.0)}px rgba(220, 38, 38, ${(nodeBrightness[`output-${i}`] || 1.0) * 0.9}), 0 0 ${150 * (nodeBrightness[`output-${i}`] || 1.0)}px rgba(220, 38, 38, ${(nodeBrightness[`output-${i}`] || 1.0) * 0.6}), 0 0 ${200 * (nodeBrightness[`output-${i}`] || 1.0)}px rgba(220, 38, 38, ${(nodeBrightness[`output-${i}`] || 1.0) * 0.3})`
+                          : `0 0 ${35 * (nodeBrightness[`output-${i}`] || 0.8)}px rgba(220, 38, 38, ${nodeBrightness[`output-${i}`] || 0.8}), 0 0 ${70 * (nodeBrightness[`output-${i}`] || 0.8)}px rgba(220, 38, 38, ${(nodeBrightness[`output-${i}`] || 0.8) * 0.8}), 0 0 ${105 * (nodeBrightness[`output-${i}`] || 0.8)}px rgba(220, 38, 38, ${(nodeBrightness[`output-${i}`] || 0.8) * 0.4})`
+                        : '0 2px 8px rgba(220, 38, 38, 0.3)'
                     }}
                     whileHover={{ 
                       scale: 2,
-                      boxShadow: "0 0 30px rgba(244, 114, 182, 0.8)"
+                      boxShadow: "0 0 35px rgba(220, 38, 38, 0.9)"
                     }}
                     animate={{
                       scale: activeNodes[`output-${i}`] 
@@ -686,8 +610,8 @@ export default function Hero() {
                         : [1, 1.4, 1],
                       opacity: activeNodes[`output-${i}`] 
                         ? concentratedNode === i
-                          ? [(nodeBrightness[`output-${i}`] || 0.9) * 0.98, nodeBrightness[`output-${i}`] || 0.9, (nodeBrightness[`output-${i}`] || 0.9) * 0.98]
-                          : [(nodeBrightness[`output-${i}`] || 0.5) * 0.95, nodeBrightness[`output-${i}`] || 0.5, (nodeBrightness[`output-${i}`] || 0.5) * 0.95]
+                          ? [(nodeBrightness[`output-${i}`] || 1.0) * 0.98, nodeBrightness[`output-${i}`] || 1.0, (nodeBrightness[`output-${i}`] || 1.0) * 0.98]
+                          : [(nodeBrightness[`output-${i}`] || 0.8) * 0.95, nodeBrightness[`output-${i}`] || 0.8, (nodeBrightness[`output-${i}`] || 0.8) * 0.95]
                         : [(nodeBrightness[`output-${i}`] || 0.3) * 0.3, (nodeBrightness[`output-${i}`] || 0.3) * 0.5, (nodeBrightness[`output-${i}`] || 0.3) * 0.3]
                     }}
                     transition={{
@@ -773,73 +697,47 @@ export default function Hero() {
                   {/* Gradient Definitions */}
                   <defs>
                     <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.4" />
+                      <stop offset="0%" stopColor="#eab308" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#fb923c" stopOpacity="0.6" />
                     </linearGradient>
                     <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.6" />
+                      <stop offset="0%" stopColor="#fb923c" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#fb923c" stopOpacity="0.6" />
                     </linearGradient>
                     <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#f472b6" stopOpacity="0.6" />
+                      <stop offset="0%" stopColor="#fb923c" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#dc2626" stopOpacity="0.6" />
                     </linearGradient>
                   </defs>
                 </svg>
 
-                {/* Floating Data Particles */}
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={`particle-${i}`}
-                    className="absolute w-2 h-2 bg-white/80 rounded-full"
-                    style={{
-                      left: `${20 + (i * 10) % 60}%`,
-                      top: `${30 + (i * 15) % 40}%`
-                    }}
-                    whileHover={{ 
-                      scale: 3,
-                      opacity: 1
-                    }}
-                    animate={{
-                      y: [0, -30, 0],
-                      x: [0, Math.sin(i) * 20, 0],
-                      opacity: [0.3, 1, 0.3]
-                    }}
-                    transition={{
-                      duration: 3 + i * 0.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 0.3,
-                      scale: { duration: 0.3, ease: "easeOut" }
-                    }}
-                  />
-                ))}
 
                 {/* Layer Labels */}
                 <motion.div 
-                  className="absolute left-4 top-4 text-xs font-mono text-green-400"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  className="absolute top-4 text-xs font-mono text-accent-600 font-semibold"
+                  style={{ left: '26px' }}
+                  animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
                   INPUT
                 </motion.div>
                 <motion.div 
-                  className="absolute left-1/3 top-4 text-xs font-mono text-purple-400 transform -translate-x-1/2"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  className="absolute left-1/3 top-4 text-xs font-mono text-primary-700 font-semibold transform -translate-x-1/2"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
                 >
                   HIDDEN 1
                 </motion.div>
                 <motion.div 
-                  className="absolute right-1/3 top-4 text-xs font-mono text-blue-400 transform translate-x-1/2"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  className="absolute right-1/3 top-4 text-xs font-mono text-secondary-600 font-semibold transform translate-x-1/2"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity, delay: 1 }}
                 >
                   HIDDEN 2
                 </motion.div>
                 <motion.div 
-                  className="absolute right-4 top-4 text-xs font-mono text-pink-400"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  className="absolute right-4 top-4 text-xs font-mono text-accent-600 font-semibold"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
                 >
                   OUTPUT
@@ -875,17 +773,11 @@ export default function Hero() {
                   <button
                     onClick={startDataFlow}
                     disabled={isAnimating}
-                    className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-500 disabled:to-gray-600 text-white text-xs font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:scale-100 disabled:cursor-not-allowed"
+                    className="inline-flex items-center px-4 py-2 bg-gray-200 text-black hover:bg-gray-300 disabled:bg-gray-500 disabled:text-gray-300 text-xs font-medium rounded-full transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
                   >
                     {isAnimating ? `Processing... ${timeRemaining}s` : 'Animate Network'}
                   </button>
                   
-                  <button
-                    onClick={() => setThemeMode(themeMode === 'default' ? 'cyber' : themeMode === 'cyber' ? 'neon' : 'default')}
-                    className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-xs font-medium rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-                  >
-                    {themeMode === 'default' ? '🌙' : themeMode === 'cyber' ? '⚡' : '🎨'}
-                  </button>
                 </motion.div>
 
                 {/* Interactive Hover Effects */}
@@ -942,29 +834,6 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Theme-based visual enhancements */}
-      {themeMode === 'cyber' && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-green-500 animate-pulse" />
-          <div className="absolute bottom-0 right-0 w-full h-1 bg-gradient-to-l from-purple-500 via-blue-500 to-green-500 animate-pulse" />
-        </motion.div>
-      )}
-
-      {themeMode === 'neon' && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-cyan-500/10 animate-pulse" />
-        </motion.div>
-      )}
     </section>
   )
 }

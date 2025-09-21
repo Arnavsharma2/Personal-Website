@@ -34,7 +34,7 @@ export default function Experience() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="experience" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-black">
+    <section id="experience" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-100">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -42,13 +42,13 @@ export default function Experience() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
             02.
           </h2>
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-300 mb-4">
+          <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
             Experience
           </h3>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto"></div>
+          <div className="w-24 h-1 bg-accent-500 mx-auto"></div>
         </motion.div>
 
         <div className="space-y-12">
@@ -82,7 +82,7 @@ export default function Experience() {
                   
                   {/* Timeline Line */}
                   {index < experiences.length - 1 && (
-                    <div className="w-1 h-24 bg-gradient-to-b from-purple-500 to-blue-500 mt-4"></div>
+                    <div className="w-1 h-24 bg-gray-200 mt-4"></div>
                   )}
                 </div>
 
@@ -92,26 +92,26 @@ export default function Experience() {
                   <div className="mb-6">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
                       <div>
-                        <h4 className="text-2xl font-bold text-white mb-1">
+                        <h4 className="text-2xl font-bold text-primary-900 mb-1">
                           {exp.position}
                         </h4>
-                        <p className="text-xl font-semibold text-purple-400 mb-2">
+                        <p className="text-xl font-semibold text-accent-600 mb-2">
                           {exp.company}
                         </p>
                       </div>
-                      <div className="text-sm text-gray-400">
+                      <div className="text-sm text-primary-600">
                         {exp.duration}
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-1 text-gray-400 mb-4">
+                    <div className="flex items-center gap-1 text-primary-600 mb-4">
                       <MapPin className="w-4 h-4" />
                       <span>{exp.location}</span>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-300 leading-relaxed mb-6 text-lg">
+                  <p className="text-primary-700 leading-relaxed mb-6 text-lg">
                     {exp.description}
                   </p>
                   
@@ -119,21 +119,21 @@ export default function Experience() {
                   {exp.projects && (
                     <div className="space-y-4 mb-6">
                       {exp.projects.map((project, projectIndex) => (
-                        <div key={projectIndex} className="bg-gray-800/30 rounded-xl p-5 border border-gray-700/50 hover:bg-gray-800/50 transition-all duration-300">
+                        <div key={projectIndex} className="bg-accent-100 rounded-xl p-5 border border-accent-200 hover:bg-accent-200 transition-all duration-300">
                           <div className="flex items-start justify-between mb-3">
-                            <h5 className="text-lg font-semibold text-white">
+                            <h5 className="text-lg font-semibold text-primary-900">
                               {project.title}
                             </h5>
                             <a
                               href={project.github}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-purple-400 hover:text-purple-300 transition-colors duration-200 text-sm font-medium"
+                              className="text-accent-600 hover:text-accent-700 transition-colors duration-200 text-sm font-medium"
                             >
                               View on GitHub →
                             </a>
                           </div>
-                          <p className="text-gray-300 leading-relaxed">
+                          <p className="text-primary-700 leading-relaxed">
                             {project.description}
                           </p>
                         </div>
@@ -146,7 +146,7 @@ export default function Experience() {
                     {exp.technologies.map((tech, techIndex) => (
                       <span
                         key={techIndex}
-                        className="px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full text-sm font-medium hover:bg-gray-700/50 transition-colors duration-200 border border-gray-700/50"
+                        className="px-3 py-1 bg-accent-200 text-accent-800 rounded-full text-sm font-medium hover:bg-accent-300 transition-colors duration-200 border border-accent-300"
                       >
                         {tech}
                       </span>
@@ -169,7 +169,7 @@ export default function Experience() {
             href="https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center px-6 py-3 bg-accent-500 text-white hover:bg-accent-600 font-semibold rounded-full transition-all duration-300 transform hover:scale-105"
           >
             View full resume
           </a>

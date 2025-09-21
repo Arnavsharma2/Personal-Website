@@ -43,12 +43,12 @@ export default function Contact() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-black relative overflow-hidden">
+    <section id="contact" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-200 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10"></div>
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent-100/20 via-transparent to-secondary-100/20"></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-accent-200/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary-200/10 rounded-full blur-3xl"></div>
       </div>
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div
@@ -57,13 +57,13 @@ export default function Contact() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
             06.
           </h2>
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-300 mb-4">
+          <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
             Contact
           </h3>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto"></div>
+          <div className="w-24 h-1 bg-accent-500 mx-auto"></div>
         </motion.div>
 
         <motion.div
@@ -72,7 +72,7 @@ export default function Contact() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-center space-y-8"
         >
-          <p className="text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg text-primary-800 leading-relaxed max-w-2xl mx-auto">
             If you have opportunities or are interested in collaboration, please email me. 
             You can also connect on social media for questions or just to say hi! My inbox 
             is always open, and I&apos;ll try to get back as soon as possible.
@@ -91,7 +91,7 @@ export default function Contact() {
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className={`group flex items-center space-x-2 px-4 py-2 bg-gray-900/50 backdrop-blur-sm rounded-full border border-gray-800 hover:bg-gray-800/50 transition-all duration-200 ${social.color} whitespace-nowrap hover:scale-105 hover:shadow-md hover:shadow-blue-500/20`}
+                className={`group flex items-center space-x-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full border border-accent-200 hover:bg-accent-100 transition-all duration-200 ${social.color} whitespace-nowrap hover:scale-105 hover:shadow-md hover:shadow-accent-300/20`}
               >
                 {social.name === 'Discord' ? (
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -111,18 +111,18 @@ export default function Contact() {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="pt-12 border-t border-gray-800"
+            className="pt-12 border-t border-accent-300"
           >
-            <p className="text-gray-400 text-sm">
+            <p className="text-primary-700 text-sm">
               © Arnav Sharma 2025. All rights reserved.
             </p>
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="text-primary-600 text-xs mt-2">
               This site is built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion.{' '}
               <a 
                 href="https://github.com/Arnavsharma2/personal-website" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hover:text-gray-300 transition-colors duration-200"
+                className="hover:text-accent-600 transition-colors duration-200"
               >
                 View the source code on Github
               </a>

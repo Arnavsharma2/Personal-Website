@@ -45,7 +45,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800"
+      className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-primary-200"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-20">
@@ -60,10 +60,10 @@ export default function Navigation({ activeSection }: NavigationProps) {
                     onClick={() => scrollToSection(item.href, item.external)}
                     className={`px-3 py-2 rounded-md text-lg font-medium transition-all duration-200 ${
                       item.isResume
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 border border-blue-500/50 shadow-lg hover:shadow-blue-500/25 transform hover:scale-105'
+                        ? 'bg-accent-500 text-white hover:bg-accent-600 border border-accent-500 transform hover:scale-105'
                         : activeSection === item.href.slice(1)
-                        ? 'text-primary-400 bg-primary-400/20'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                        ? 'text-accent-600 bg-accent-100'
+                        : 'text-primary-700 hover:text-primary-900 hover:bg-primary-100'
                     }`}
                   >
                     <div className="flex items-center space-x-2">

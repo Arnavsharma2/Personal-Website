@@ -58,7 +58,7 @@ export default function Projects() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="projects" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-black">
+    <section id="projects" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-200">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -66,13 +66,13 @@ export default function Projects() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
             03.
           </h2>
-          <h3 className="text-2xl sm:text-3xl font-semibold text-gray-300 mb-4">
+          <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
             Projects
           </h3>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto"></div>
+          <div className="w-24 h-1 bg-accent-500 mx-auto"></div>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -82,10 +82,10 @@ export default function Projects() {
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="group bg-gray-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 hover:bg-gray-800/50 transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/15 hover:border-purple-500/30"
+              className="group bg-white rounded-xl overflow-hidden border border-primary-200 hover:shadow-lg hover:shadow-primary-200/50 transition-all duration-300 ring-2 ring-primary-700/60 hover:ring-primary-800/80"
             >
               {/* Project Image */}
-              <div className="relative h-48 bg-gradient-to-br from-purple-500/20 to-blue-500/20 overflow-hidden group-hover:from-purple-500/30 group-hover:to-blue-500/30 transition-all duration-300">
+              <div className="relative h-48 bg-gradient-to-br from-primary-100 to-primary-50 overflow-hidden group-hover:from-primary-200 group-hover:to-primary-100 transition-all duration-300">
                 {project.image && project.image !== '/api/placeholder/400/300' ? (
                   <Image 
                     src={project.image} 
@@ -104,7 +104,7 @@ export default function Projects() {
                   />
                 ) : null}
                 <div 
-                  className={`absolute inset-0 bg-gradient-to-br from-purple-600/30 to-blue-600/30 flex items-center justify-center ${
+                  className={`absolute inset-0 bg-gray-200/20 flex items-center justify-center ${
                     project.image && project.image !== '/api/placeholder/400/300' ? 'hidden' : ''
                   }`}
                 >
@@ -138,11 +138,11 @@ export default function Projects() {
 
               {/* Project Content */}
               <div className="p-6">
-                <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-purple-400 transition-colors duration-200">
+                <h4 className="text-xl font-semibold text-primary-900 mb-3 group-hover:text-accent-600 transition-colors duration-200">
                   {project.title}
                 </h4>
                 
-                <p className="text-gray-300 leading-relaxed mb-4">
+                <p className="text-primary-700 leading-relaxed mb-4">
                   {project.description}
                 </p>
 
@@ -151,7 +151,7 @@ export default function Projects() {
                   {project.technologies.map((tech, techIndex) => (
                     <span
                       key={techIndex}
-                      className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm font-medium hover:bg-gray-700 transition-colors duration-200"
+                      className="px-3 py-1 bg-accent-200 text-accent-800 rounded-full text-sm font-medium hover:bg-accent-300 transition-colors duration-200"
                     >
                       {tech}
                     </span>
