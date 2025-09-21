@@ -55,8 +55,8 @@ export default function About() {
             
             <p className="text-lg text-primary-800 leading-relaxed">
               Another thing I love about programming is AI&apos;s predictive ability, made possible by its ability to be trained on data. 
-              A lot of my time is usually spent making small tools to automate tedious things in my life but I am slowly but surely learning to be able to 
-              make big things that can change the world. Right now I am focused on completely understanding the process behind neural networks.
+              A lot of my time is usually spent making small tools to automate tedious things in my life. My goal is to slowly learn to gain the ability to
+              create big programs that actually matter to people. Right now I am focused on completely understanding the process behind neural networks.
             </p>
             
             <p className="text-lg text-primary-800 leading-relaxed">
