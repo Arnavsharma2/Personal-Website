@@ -113,9 +113,6 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="pt-12 border-t border-accent-300"
           >
-            <p className="text-primary-700 text-sm">
-              © Arnav Sharma 2025. All rights reserved.
-            </p>
             <p className="text-primary-600 text-xs mt-2">
               This site is built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion.{' '}
               <a 
