@@ -8,7 +8,6 @@ import About from '@/components/About'
 import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
 import ChatResume from '@/components/ChatResume'
-import Contact from '@/components/Contact'
 import { useVisitTracker } from '@/hooks/useVisitTracker'
 
 export default function Home() {
@@ -19,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'projects', 'chat-resume', 'contact']
+      const sections = ['home', 'about', 'experience', 'projects', 'chat-resume']
       const scrollPosition = window.scrollY + 100
 
       for (let i = 0; i < sections.length; i++) {
@@ -29,7 +28,6 @@ export default function Home() {
           const { offsetTop, offsetHeight } = element
           const isLastSection = i === sections.length - 1
           
-          // For the last section (contact), use a more lenient condition
           if (isLastSection) {
             if (scrollPosition >= offsetTop - 200) {
               setActiveSection(section)
@@ -63,7 +61,6 @@ export default function Home() {
         <Experience />
         <Projects />
         <ChatResume />
-        <Contact />
       </motion.div>
       
     </main>
