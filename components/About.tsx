@@ -24,7 +24,7 @@ const technologies = [
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' }
 ]
 
-  const profilePhoto = { src: '/optimized/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' }
+  const profilePhoto = { src: '/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' }
 
 export default function About() {
   const ref = useRef(null)
