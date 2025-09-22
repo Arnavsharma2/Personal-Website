@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { ChevronLeft, ChevronRight, X, ArrowLeft } from 'lucide-react'
+// Removed unused imports
 
 const technologies = [
   { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
@@ -24,52 +24,12 @@ const technologies = [
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' }
 ]
 
-  const personalPhotos = [
-    { src: '/optimized/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' },
-    { src: '/optimized/bakeddrum.jpg', alt: 'Baked drum' },
-    { src: '/optimized/korfriedch.jpg', alt: 'Korean fried chicken' },
-    { src: '/optimized/meal.jpg', alt: 'Meal' },
-    { src: '/optimized/pestowrap.jpg', alt: 'Pesto wrap' },
-    { src: '/optimized/popcornch.jpg', alt: 'Popcorn chicken' },
-    { src: '/optimized/sesch.jpg', alt: 'Sesame chicken' },
-    { src: '/optimized/treehike.jpg', alt: 'Tree hike' },
-    { src: '/optimized/valleynature.jpg', alt: 'Valley nature' },
-    { src: '/optimized/yellowcurry.jpg', alt: 'Yellow curry' }
-  ]
+  const profilePhoto = { src: '/optimized/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' }
 
 export default function About() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false)
-  const [currentProfilePhotoIndex, setCurrentProfilePhotoIndex] = useState(0)
   const [imageLoading, setImageLoading] = useState(true)
-
-  const nextPhoto = () => {
-    setCurrentPhotoIndex((prev) => (prev + 1) % personalPhotos.length)
-  }
-
-  const prevPhoto = () => {
-    setCurrentPhotoIndex((prev) => (prev - 1 + personalPhotos.length) % personalPhotos.length)
-  }
-
-  const openGallery = (index: number) => {
-    setCurrentPhotoIndex(index)
-    setIsGalleryOpen(true)
-  }
-
-  const closeGallery = () => {
-    setIsGalleryOpen(false)
-  }
-
-  const rotateProfilePhoto = () => {
-    setImageLoading(true)
-    setCurrentProfilePhotoIndex((prev) => {
-      const nextIndex = (prev + 1) % personalPhotos.length
-      console.log('Rotating from', prev, 'to', nextIndex, 'photo:', personalPhotos[nextIndex].src)
-      return nextIndex
-    })
-  }
 
   const handleImageLoad = () => {
     setImageLoading(false)
@@ -128,9 +88,8 @@ export default function About() {
                 <div className="w-full h-full bg-white rounded-2xl flex items-center justify-center relative overflow-hidden">
                   {/* Profile Image */}
                   <Image 
-                    key={currentProfilePhotoIndex} // Force re-render when index changes
-                    src={personalPhotos[currentProfilePhotoIndex].src}
-                    alt={personalPhotos[currentProfilePhotoIndex].alt}
+                    src={profilePhoto.src}
+                    alt={profilePhoto.alt}
                     fill
                     className={`object-cover rounded-2xl transition-all duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
                     priority
@@ -157,22 +116,6 @@ export default function About() {
                     <span className="text-4xl sm:text-5xl lg:text-7xl font-bold text-accent-600 relative z-10">AS</span>
                   </div>
                 </div>
-              </div>
-              
-              {/* Rotation Button */}
-              <motion.button
-                onClick={rotateProfilePhoto}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="absolute -bottom-4 -right-4 bg-accent-500 hover:bg-accent-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 z-10"
-                title={`Click to see more photos (${currentProfilePhotoIndex + 1}/${personalPhotos.length})`}
-              >
-                <ChevronRight className="w-5 h-5" />
-              </motion.button>
-              
-              {/* Photo Counter */}
-              <div className="absolute -top-2 -left-2 bg-accent-500 text-white text-xs px-2 py-1 rounded-full font-medium z-10">
-                {currentProfilePhotoIndex + 1}/{personalPhotos.length}
               </div>
               
               {/* Clean minimal dots */}
@@ -227,76 +170,6 @@ export default function About() {
         </motion.div>
 
       </div>
-
-      {/* Gallery Modal */}
-      {isGalleryOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
-          onClick={closeGallery}
-        >
-          <div className="relative max-w-4xl max-h-full">
-            {/* Back Button */}
-            <button
-              onClick={closeGallery}
-              className="absolute top-4 left-4 flex items-center space-x-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white px-3 py-2 rounded-lg transition-all duration-200 z-10"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="text-sm font-medium">Back</span>
-            </button>
-
-            {/* Close Button */}
-            <button
-              onClick={closeGallery}
-              className="absolute top-4 right-4 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-lg transition-all duration-200 z-10"
-            >
-              <X className="w-6 h-6" />
-            </button>
-
-            {/* Main Image */}
-            <div className="relative w-full h-[80vh] rounded-lg overflow-hidden">
-              <Image
-                src={personalPhotos[currentPhotoIndex].src}
-                alt={personalPhotos[currentPhotoIndex].alt}
-                fill
-                className="object-contain"
-                sizes="100vw"
-                priority
-                placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-              />
-            </div>
-
-            {/* Navigation Buttons */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                prevPhoto()
-              }}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                nextPhoto()
-              }}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            {/* Photo Counter */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-4 py-2 rounded-full text-sm">
-              {currentPhotoIndex + 1} / {personalPhotos.length}
-            </div>
-          </div>
-        </motion.div>
-      )}
     </section>
   )
 }
