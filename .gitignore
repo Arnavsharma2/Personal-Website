@@ -149,6 +149,9 @@ core
 # Visit tracking data (contains IP addresses and personal data)
 /data/
 
+# Optimized images (generated from original images)
+/public/optimized/
+
 # ===========================================
 # Other frameworks (if you ever use them)
 # ===========================================

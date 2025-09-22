@@ -25,16 +25,16 @@ const technologies = [
 ]
 
   const personalPhotos = [
-    { src: '/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' },
-    { src: '/bakeddrum.jpg', alt: 'Baked drum' },
-    { src: '/korfriedch.jpg', alt: 'Korean fried chicken' },
-    { src: '/meal.jpg', alt: 'Meal' },
-    { src: '/pestowrap.jpg', alt: 'Pesto wrap' },
-    { src: '/popcornch.jpg', alt: 'Popcorn chicken' },
-    { src: '/sesch.jpg', alt: 'Sesame chicken' },
-    { src: '/treehike.jpg', alt: 'Tree hike' },
-    { src: '/valleynature.jpg', alt: 'Valley nature' },
-    { src: '/yellowcurry.jpg', alt: 'Yellow curry' }
+    { src: '/optimized/PERSONALWEBSITE.jpg', alt: 'Arnav Sharma' },
+    { src: '/optimized/bakeddrum.jpg', alt: 'Baked drum' },
+    { src: '/optimized/korfriedch.jpg', alt: 'Korean fried chicken' },
+    { src: '/optimized/meal.jpg', alt: 'Meal' },
+    { src: '/optimized/pestowrap.jpg', alt: 'Pesto wrap' },
+    { src: '/optimized/popcornch.jpg', alt: 'Popcorn chicken' },
+    { src: '/optimized/sesch.jpg', alt: 'Sesame chicken' },
+    { src: '/optimized/treehike.jpg', alt: 'Tree hike' },
+    { src: '/optimized/valleynature.jpg', alt: 'Valley nature' },
+    { src: '/optimized/yellowcurry.jpg', alt: 'Yellow curry' }
   ]
 
 export default function About() {
@@ -43,6 +43,7 @@ export default function About() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   const [currentProfilePhotoIndex, setCurrentProfilePhotoIndex] = useState(0)
+  const [imageLoading, setImageLoading] = useState(true)
 
   const nextPhoto = () => {
     setCurrentPhotoIndex((prev) => (prev + 1) % personalPhotos.length)
@@ -62,11 +63,16 @@ export default function About() {
   }
 
   const rotateProfilePhoto = () => {
+    setImageLoading(true)
     setCurrentProfilePhotoIndex((prev) => {
       const nextIndex = (prev + 1) % personalPhotos.length
       console.log('Rotating from', prev, 'to', nextIndex, 'photo:', personalPhotos[nextIndex].src)
       return nextIndex
     })
+  }
+
+  const handleImageLoad = () => {
+    setImageLoading(false)
   }
 
   return (
@@ -126,10 +132,20 @@ export default function About() {
                     src={personalPhotos[currentProfilePhotoIndex].src}
                     alt={personalPhotos[currentProfilePhotoIndex].alt}
                     fill
-                    className="object-cover rounded-2xl transition-all duration-500"
+                    className={`object-cover rounded-2xl transition-all duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
                     priority
                     sizes="(max-width: 768px) 256px, (max-width: 1024px) 320px, 448px"
+                    onLoad={handleImageLoad}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                   />
+                  
+                  {/* Loading Spinner */}
+                  {imageLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-2xl">
+                      <div className="w-8 h-8 border-4 border-accent-200 border-t-accent-500 rounded-full animate-spin"></div>
+                    </div>
+                  )}
                   {/* Fallback initials */}
                   <div className="hidden w-full h-full bg-white rounded-2xl flex items-center justify-center relative">
                     {/* Decorative elements */}
@@ -248,6 +264,8 @@ export default function About() {
                 className="object-contain"
                 sizes="100vw"
                 priority
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               />
             </div>
 
