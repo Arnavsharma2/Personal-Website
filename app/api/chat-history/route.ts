@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getConversationHistory } from '@/utils/conversationManager'
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+
 // Get client IP address
 function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for')

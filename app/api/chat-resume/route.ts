@@ -8,6 +8,9 @@ import {
 } from '@/utils/conversationManager'
 // Remove static import to avoid build-time issues
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic'
+
 // Fallback resume content for now
 const FALLBACK_RESUME_CONTENT = `Arnav Sharma - Resume Information
 

@@ -1,76 +1,49 @@
-import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
 
-// Path to the resume PDF
-const RESUME_PDF_PATH = join(process.cwd(), 'public', 'RAG Resume.pdf')
-const EXTRACTED_TEXT_PATH = join(process.cwd(), 'data', 'resume-text.txt')
+// Path to the resume text file (Vercel-compatible)
+const RESUME_TEXT_PATH = join(process.cwd(), 'data', 'resume-text.txt')
 
 // Cache for extracted text
 let cachedResumeText: string | null = null
-let lastModified: number | null = null
 
 /**
- * Extract text content from the resume PDF
+ * Extract text content from the resume text file
+ * Vercel-compatible version that reads from static text file
  */
 export async function extractResumeText(): Promise<string> {
   try {
-    // Check if PDF exists
-    if (!existsSync(RESUME_PDF_PATH)) {
-      console.warn('Resume PDF not found at:', RESUME_PDF_PATH)
-      return getFallbackResumeText()
-    }
-
-    // Check if we have cached text and if PDF hasn't been modified
-    let pdfStats
-    try {
-      pdfStats = statSync(RESUME_PDF_PATH)
-    } catch (error) {
-      console.warn('Could not access PDF file:', error)
-      return getFallbackResumeText()
-    }
-    
-    const pdfModified = pdfStats.mtime.getTime()
-
-    if (cachedResumeText && lastModified === pdfModified) {
+    // Check if we have cached text
+    if (cachedResumeText) {
       return cachedResumeText
     }
 
-    // Read and process PDF
-    let dataBuffer
-    try {
-      dataBuffer = readFileSync(RESUME_PDF_PATH)
-    } catch (error) {
-      console.warn('Could not read PDF file:', error)
+    // Check if text file exists
+    if (!existsSync(RESUME_TEXT_PATH)) {
+      console.warn('Resume text file not found at:', RESUME_TEXT_PATH)
       return getFallbackResumeText()
     }
-    
-    let pdfData
+
+    // Read the text file
+    let textContent
     try {
-      // Use dynamic require to avoid test file issues
-      const pdfParse = require('pdf-parse')
-      // Clear any cached modules that might be causing issues
-      delete require.cache[require.resolve('pdf-parse')]
-      pdfData = await pdfParse(dataBuffer)
+      textContent = readFileSync(RESUME_TEXT_PATH, 'utf-8')
     } catch (error) {
-      console.warn('Could not parse PDF file:', error)
+      console.warn('Could not read resume text file:', error)
       return getFallbackResumeText()
     }
     
     // Clean and format the extracted text
-    const cleanedText = cleanExtractedText(pdfData.text)
+    const cleanedText = cleanExtractedText(textContent)
     
     // Cache the result
     cachedResumeText = cleanedText
-    lastModified = pdfModified
 
-    // Save extracted text to file for backup
-    await saveExtractedText(cleanedText)
-
-    console.log('Successfully extracted resume text from PDF')
+    console.log('Successfully loaded resume text from file')
     return cleanedText
 
   } catch (error) {
-    console.error('Error extracting text from PDF:', error)
+    console.error('Error loading resume text:', error)
     return getFallbackResumeText()
   }
 }
@@ -94,21 +67,13 @@ function cleanExtractedText(text: string): string {
 }
 
 /**
- * Save extracted text to file
+ * Save extracted text to file (Vercel-compatible)
+ * Note: In Vercel, we can't write to the file system, so this is a no-op
  */
 async function saveExtractedText(text: string): Promise<void> {
-  try {
-    // Ensure data directory exists
-    const dataDir = join(process.cwd(), 'data')
-    if (!existsSync(dataDir)) {
-      mkdirSync(dataDir, { recursive: true })
-    }
-
-    writeFileSync(EXTRACTED_TEXT_PATH, text, 'utf-8')
-    console.log('Extracted resume text saved to:', EXTRACTED_TEXT_PATH)
-  } catch (error) {
-    console.error('Error saving extracted text:', error)
-  }
+  // In Vercel, we can't write to the file system
+  // The text file should be committed to the repository
+  console.log('Text file operations disabled in Vercel environment')
 }
 
 /**
@@ -202,9 +167,9 @@ CONTACT INFORMATION:
 
 /**
  * Force refresh of resume text (useful for updates)
+ * Vercel-compatible version
  */
 export async function refreshResumeText(): Promise<string> {
   cachedResumeText = null
-  lastModified = null
   return await extractResumeText()
 }

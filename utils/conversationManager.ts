@@ -1,20 +1,14 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
-import { join } from 'path'
+// Vercel-compatible conversation manager using in-memory storage
+// Note: Data will reset on each Vercel function restart
 
 // Message limit configuration
 const DAILY_MESSAGE_LIMIT = 100
 const CONVERSATION_RETENTION_DAYS = 1 // Keep conversations for 1 day
 
-// File paths
-const CONVERSATIONS_FILE = join(process.cwd(), 'data', 'conversations.json')
-const MESSAGE_COUNTS_FILE = join(process.cwd(), 'data', 'message-counts.json')
-
-// Ensure data directory exists
-function ensureDataDir() {
-  const dataDir = join(process.cwd(), 'data')
-  if (!existsSync(dataDir)) {
-    mkdirSync(dataDir, { recursive: true })
-  }
+// In-memory storage for Vercel compatibility
+let conversationData: ConversationData = {
+  conversations: [],
+  messageCounts: []
 }
 
 // Interface for conversation data
@@ -49,31 +43,14 @@ function getTodayString(): string {
   return new Date().toISOString().split('T')[0]
 }
 
-// Read conversation data from file
+// Read conversation data from memory (Vercel-compatible)
 function readConversationData(): ConversationData {
-  try {
-    ensureDataDir()
-    
-    if (!existsSync(CONVERSATIONS_FILE)) {
-      return { conversations: [], messageCounts: [] }
-    }
-    
-    const data = readFileSync(CONVERSATIONS_FILE, 'utf-8')
-    return JSON.parse(data)
-  } catch (error) {
-    console.error('Error reading conversation data:', error)
-    return { conversations: [], messageCounts: [] }
-  }
+  return conversationData
 }
 
-// Write conversation data to file
+// Write conversation data to memory (Vercel-compatible)
 function writeConversationData(data: ConversationData): void {
-  try {
-    ensureDataDir()
-    writeFileSync(CONVERSATIONS_FILE, JSON.stringify(data, null, 2))
-  } catch (error) {
-    console.error('Error writing conversation data:', error)
-  }
+  conversationData = data
 }
 
 // Clean up old conversations and message counts
