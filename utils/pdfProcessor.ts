@@ -1,76 +1,52 @@
-import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync } from 'fs'
-import { join } from 'path'
-
-// Path to the resume PDF
-const RESUME_PDF_PATH = join(process.cwd(), 'public', 'RAG Resume.pdf')
-const EXTRACTED_TEXT_PATH = join(process.cwd(), 'data', 'resume-text.txt')
-
-// Cache for extracted text
+// In-memory cache for resume text (Vercel compatible)
 let cachedResumeText: string | null = null
-let lastModified: number | null = null
 
 /**
- * Extract text content from the resume PDF
+ * Extract text content from the resume PDF or environment variable
  */
 export async function extractResumeText(): Promise<string> {
   try {
-    // Check if PDF exists
-    if (!existsSync(RESUME_PDF_PATH)) {
-      console.warn('Resume PDF not found at:', RESUME_PDF_PATH)
-      return getFallbackResumeText()
-    }
-
-    // Check if we have cached text and if PDF hasn't been modified
-    let pdfStats
-    try {
-      pdfStats = statSync(RESUME_PDF_PATH)
-    } catch (error) {
-      console.warn('Could not access PDF file:', error)
-      return getFallbackResumeText()
-    }
-    
-    const pdfModified = pdfStats.mtime.getTime()
-
-    if (cachedResumeText && lastModified === pdfModified) {
+    // Check if we have cached text
+    if (cachedResumeText) {
       return cachedResumeText
     }
 
-    // Read and process PDF
-    let dataBuffer
-    try {
-      dataBuffer = readFileSync(RESUME_PDF_PATH)
-    } catch (error) {
-      console.warn('Could not read PDF file:', error)
-      return getFallbackResumeText()
+    // First, try to get resume content from environment variable (Vercel compatible)
+    const envResumeContent = process.env.RESUME_CONTENT
+    if (envResumeContent) {
+      console.log('Using resume content from environment variable')
+      cachedResumeText = envResumeContent
+      return cachedResumeContent
     }
-    
-    let pdfData
+
+    // Fallback: Try to read from PDF file (may not work on Vercel)
     try {
-      // Use dynamic require to avoid test file issues
+      const { readFileSync, existsSync, statSync } = await import('fs')
+      const { join } = await import('path')
+      
+      const RESUME_PDF_PATH = join(process.cwd(), 'public', 'RAG Resume.pdf')
+      
+      if (!existsSync(RESUME_PDF_PATH)) {
+        console.warn('Resume PDF not found, using fallback content')
+        return getFallbackResumeText()
+      }
+
+      const dataBuffer = readFileSync(RESUME_PDF_PATH)
       const pdfParse = require('pdf-parse')
-      // Clear any cached modules that might be causing issues
-      delete require.cache[require.resolve('pdf-parse')]
-      pdfData = await pdfParse(dataBuffer)
-    } catch (error) {
-      console.warn('Could not parse PDF file:', error)
+      const pdfData = await pdfParse(dataBuffer)
+      
+      const cleanedText = cleanExtractedText(pdfData.text)
+      cachedResumeText = cleanedText
+      
+      console.log('Successfully extracted resume text from PDF')
+      return cleanedText
+    } catch (pdfError) {
+      console.warn('PDF processing failed, using fallback content:', pdfError)
       return getFallbackResumeText()
     }
-    
-    // Clean and format the extracted text
-    const cleanedText = cleanExtractedText(pdfData.text)
-    
-    // Cache the result
-    cachedResumeText = cleanedText
-    lastModified = pdfModified
-
-    // Save extracted text to file for backup
-    await saveExtractedText(cleanedText)
-
-    console.log('Successfully extracted resume text from PDF')
-    return cleanedText
 
   } catch (error) {
-    console.error('Error extracting text from PDF:', error)
+    console.error('Error extracting text from resume:', error)
     return getFallbackResumeText()
   }
 }
@@ -93,23 +69,7 @@ function cleanExtractedText(text: string): string {
     .trim()
 }
 
-/**
- * Save extracted text to file
- */
-async function saveExtractedText(text: string): Promise<void> {
-  try {
-    // Ensure data directory exists
-    const dataDir = join(process.cwd(), 'data')
-    if (!existsSync(dataDir)) {
-      mkdirSync(dataDir, { recursive: true })
-    }
-
-    writeFileSync(EXTRACTED_TEXT_PATH, text, 'utf-8')
-    console.log('Extracted resume text saved to:', EXTRACTED_TEXT_PATH)
-  } catch (error) {
-    console.error('Error saving extracted text:', error)
-  }
-}
+// Removed file saving for Vercel compatibility
 
 /**
  * Get fallback resume text if PDF processing fails
@@ -205,6 +165,5 @@ CONTACT INFORMATION:
  */
 export async function refreshResumeText(): Promise<string> {
   cachedResumeText = null
-  lastModified = null
   return await extractResumeText()
 }

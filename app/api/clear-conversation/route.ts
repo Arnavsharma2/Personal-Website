@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
-import { join } from 'path'
+import { clearConversation } from '@/utils/conversationManager'
 
 // Helper function to get client IP
 function getClientIP(request: NextRequest): string {
@@ -21,31 +20,24 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const clientIP = getClientIP(request)
-    const conversationsFile = join(process.cwd(), 'data', 'conversations.json')
     
-    // Read current conversations data
-    let conversationsData = { conversations: [], messageCounts: [] }
-    if (existsSync(conversationsFile)) {
-      try {
-        const fileContent = readFileSync(conversationsFile, 'utf-8')
-        conversationsData = JSON.parse(fileContent)
-      } catch (error) {
-        console.error('Error reading conversations file:', error)
-      }
+    // Clear conversation using in-memory storage
+    const success = clearConversation(clientIP)
+    
+    if (success) {
+      return NextResponse.json({
+        success: true,
+        message: 'Conversation history cleared successfully'
+      })
+    } else {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Failed to clear conversation' 
+        },
+        { status: 500 }
+      )
     }
-    
-    // Remove conversation for this IP (but keep message counts)
-    conversationsData.conversations = conversationsData.conversations.filter(
-      (conv: any) => conv.ip !== clientIP
-    )
-    
-    // Save updated data
-    writeFileSync(conversationsFile, JSON.stringify(conversationsData, null, 2))
-    
-    return NextResponse.json({
-      success: true,
-      message: 'Conversation history cleared successfully'
-    })
     
   } catch (error) {
     console.error('Error clearing conversation:', error)

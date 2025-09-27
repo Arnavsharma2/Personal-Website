@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, readFile, mkdir } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
 
 interface FailedLoginAttempt {
   ip: string
@@ -15,26 +12,15 @@ interface FailedLoginAttempt {
   }
 }
 
-interface FailedLoginLog {
-  attempts: FailedLoginAttempt[]
-  blockedIPs: Set<string>
-}
-
-// In-memory cache for blocked IPs with cleanup
+// In-memory storage for Vercel compatibility
+const failedAttempts: FailedLoginAttempt[] = []
+const blockedIPs = new Set<string>()
 const blockedIPsCache = new Map<string, number>()
-const BLOCK_CLEANUP_INTERVAL = 5 * 60 * 1000 // Clean up every 5 minutes
 
-const FAILED_LOGINS_FILE = path.join(process.cwd(), 'data', 'failed-logins.json')
+// Configuration
 const MAX_ATTEMPTS_PER_IP = 5 // Block after 5 failed attempts
 const BLOCK_DURATION = 24 * 60 * 60 * 1000 // 24 hours
-
-// Ensure data directory exists
-async function ensureDataDir() {
-  const dataDir = path.dirname(FAILED_LOGINS_FILE)
-  if (!existsSync(dataDir)) {
-    await mkdir(dataDir, { recursive: true })
-  }
-}
+const MAX_ATTEMPTS_STORED = 1000 // Limit to prevent memory issues
 
 // Get client IP address
 function getClientIP(request: NextRequest): string {
@@ -89,49 +75,28 @@ async function getLocationFromIP(ip: string): Promise<FailedLoginAttempt['locati
   }
 }
 
-// Read existing failed login attempts
-async function readFailedLogins(): Promise<FailedLoginLog> {
-  try {
-    await ensureDataDir()
-    
-    if (!existsSync(FAILED_LOGINS_FILE)) {
-      return {
-        attempts: [],
-        blockedIPs: new Set()
-      }
-    }
-    
-    const data = await readFile(FAILED_LOGINS_FILE, 'utf-8')
-    const parsed = JSON.parse(data)
-    
-    // Convert blockedIPs array back to Set
-    return {
-      attempts: parsed.attempts || [],
-      blockedIPs: new Set(parsed.blockedIPs || [])
-    }
-  } catch (error) {
-    console.error('Error reading failed logins:', error)
-    return {
-      attempts: [],
-      blockedIPs: new Set()
-    }
+// In-memory management functions
+function addFailedAttempt(attempt: FailedLoginAttempt): void {
+  failedAttempts.push(attempt)
+  
+  // Keep only the most recent attempts to prevent memory issues
+  if (failedAttempts.length > MAX_ATTEMPTS_STORED) {
+    failedAttempts.splice(0, failedAttempts.length - MAX_ATTEMPTS_STORED)
   }
 }
 
-// Write failed login attempts to file
-async function writeFailedLogins(failedLoginLog: FailedLoginLog): Promise<void> {
-  try {
-    await ensureDataDir()
-    
-    // Convert Set to Array for JSON serialization
-    const dataToWrite = {
-      ...failedLoginLog,
-      blockedIPs: Array.from(failedLoginLog.blockedIPs)
-    }
-    
-    await writeFile(FAILED_LOGINS_FILE, JSON.stringify(dataToWrite, null, 2))
-  } catch (error) {
-    console.error('Error writing failed logins:', error)
+function getFailedLoginStats() {
+  // Filter out expired blocks
+  const now = Date.now()
+  const activeBlocks = Array.from(blockedIPs).filter(ip => {
+    const blockTime = blockedIPsCache.get(ip)
+    return blockTime && (now - blockTime) < BLOCK_DURATION
+  })
+  
+  return {
+    totalAttempts: failedAttempts.length,
+    activeBlocks: activeBlocks.length,
+    recentAttempts: failedAttempts.slice(-20) // Last 20 attempts
   }
 }
 
@@ -150,7 +115,7 @@ function cleanupBlockedIPs() {
 }
 
 // Check if IP is blocked
-function isIPBlocked(ip: string, failedLoginLog: FailedLoginLog): boolean {
+function isIPBlocked(ip: string): boolean {
   // Cleanup expired entries periodically
   if (Math.random() < 0.1) { // 10% chance to cleanup on each request
     cleanupBlockedIPs()
@@ -162,20 +127,20 @@ function isIPBlocked(ip: string, failedLoginLog: FailedLoginLog): boolean {
     return true
   }
   
-  if (!failedLoginLog.blockedIPs.has(ip)) {
+  if (!blockedIPs.has(ip)) {
     return false
   }
   
   // Check if block has expired (24 hours)
   const now = Date.now()
-  const recentAttempts = failedLoginLog.attempts.filter(attempt => 
+  const recentAttempts = failedAttempts.filter(attempt => 
     attempt.ip === ip && 
     (now - new Date(attempt.timestamp).getTime()) < BLOCK_DURATION
   )
   
   if (recentAttempts.length === 0) {
     // Block has expired, remove from blocked list
-    failedLoginLog.blockedIPs.delete(ip)
+    blockedIPs.delete(ip)
     blockedIPsCache.delete(ip)
     return false
   }
@@ -189,11 +154,8 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || 'unknown'
     const { attemptedPassword } = await request.json()
     
-    // Read existing failed login attempts
-    const failedLoginLog = await readFailedLogins()
-    
     // Check if IP is already blocked
-    if (isIPBlocked(ip, failedLoginLog)) {
+    if (isIPBlocked(ip)) {
       console.warn(`Blocked IP attempted login: ${ip}`)
       return NextResponse.json(
         { 
@@ -217,30 +179,22 @@ export async function POST(request: NextRequest) {
       location
     }
     
-    // Add to attempts
-    failedLoginLog.attempts.push(failedAttempt)
+    // Add to in-memory storage
+    addFailedAttempt(failedAttempt)
     
     // Count recent attempts from this IP (last hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
-    const recentAttempts = failedLoginLog.attempts.filter(attempt => 
+    const recentAttempts = failedAttempts.filter(attempt => 
       attempt.ip === ip && 
       attempt.timestamp > oneHourAgo
     )
     
     // Block IP if too many attempts
     if (recentAttempts.length >= MAX_ATTEMPTS_PER_IP) {
-      failedLoginLog.blockedIPs.add(ip)
+      blockedIPs.add(ip)
       blockedIPsCache.set(ip, Date.now())
       console.warn(`IP blocked due to too many failed attempts: ${ip}`)
     }
-    
-    // Keep only last 1000 attempts to prevent file from growing too large
-    if (failedLoginLog.attempts.length > 1000) {
-      failedLoginLog.attempts = failedLoginLog.attempts.slice(-1000)
-    }
-    
-    // Write back to file
-    await writeFailedLogins(failedLoginLog)
     
     return NextResponse.json({
       success: true,
@@ -259,23 +213,13 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const failedLoginLog = await readFailedLogins()
-    
-    // Filter out expired blocks
-    const now = Date.now()
-    const activeBlocks = Array.from(failedLoginLog.blockedIPs).filter(ip => {
-      const recentAttempts = failedLoginLog.attempts.filter(attempt => 
-        attempt.ip === ip && 
-        (now - new Date(attempt.timestamp).getTime()) < BLOCK_DURATION
-      )
-      return recentAttempts.length > 0
-    })
+    const stats = getFailedLoginStats()
     
     return NextResponse.json({
       success: true,
-      totalAttempts: failedLoginLog.attempts.length,
-      activeBlocks: activeBlocks.length,
-      recentAttempts: failedLoginLog.attempts.slice(-20) // Last 20 attempts
+      totalAttempts: stats.totalAttempts,
+      activeBlocks: stats.activeBlocks,
+      recentAttempts: stats.recentAttempts
     })
     
   } catch (error) {

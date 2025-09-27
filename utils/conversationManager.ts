@@ -1,21 +1,10 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
-import { join } from 'path'
-
 // Message limit configuration
 const DAILY_MESSAGE_LIMIT = 100
 const CONVERSATION_RETENTION_DAYS = 1 // Keep conversations for 1 day
 
-// File paths
-const CONVERSATIONS_FILE = join(process.cwd(), 'data', 'conversations.json')
-const MESSAGE_COUNTS_FILE = join(process.cwd(), 'data', 'message-counts.json')
-
-// Ensure data directory exists
-function ensureDataDir() {
-  const dataDir = join(process.cwd(), 'data')
-  if (!existsSync(dataDir)) {
-    mkdirSync(dataDir, { recursive: true })
-  }
-}
+// In-memory storage for Vercel compatibility
+const conversations = new Map<string, ConversationMessage[]>()
+const messageCounts = new Map<string, { count: number; date: string; lastReset: string }>()
 
 // Interface for conversation data
 interface ConversationMessage {
@@ -25,123 +14,68 @@ interface ConversationMessage {
   timestamp: string
 }
 
-interface Conversation {
-  ip: string
-  messages: ConversationMessage[]
-  lastActivity: string
-  totalMessages: number
-}
-
-interface MessageCount {
-  ip: string
-  count: number
-  date: string // YYYY-MM-DD format
-  lastReset: string
-}
-
-interface ConversationData {
-  conversations: Conversation[]
-  messageCounts: MessageCount[]
-}
+// Removed unused interfaces for in-memory storage
 
 // Get today's date in YYYY-MM-DD format
 function getTodayString(): string {
   return new Date().toISOString().split('T')[0]
 }
 
-// Read conversation data from file
-function readConversationData(): ConversationData {
-  try {
-    ensureDataDir()
-    
-    if (!existsSync(CONVERSATIONS_FILE)) {
-      return { conversations: [], messageCounts: [] }
-    }
-    
-    const data = readFileSync(CONVERSATIONS_FILE, 'utf-8')
-    return JSON.parse(data)
-  } catch (error) {
-    console.error('Error reading conversation data:', error)
-    return { conversations: [], messageCounts: [] }
-  }
-}
-
-// Write conversation data to file
-function writeConversationData(data: ConversationData): void {
-  try {
-    ensureDataDir()
-    writeFileSync(CONVERSATIONS_FILE, JSON.stringify(data, null, 2))
-  } catch (error) {
-    console.error('Error writing conversation data:', error)
-  }
-}
-
 // Clean up old conversations and message counts
-function cleanupOldData(data: ConversationData): ConversationData {
+function cleanupOldData(): void {
   const now = new Date()
   const cutoffDate = new Date(now.getTime() - (CONVERSATION_RETENTION_DAYS * 24 * 60 * 60 * 1000))
   
   // Clean up old conversations
-  data.conversations = data.conversations.filter(conv => {
-    const lastActivity = new Date(conv.lastActivity)
-    return lastActivity > cutoffDate
-  })
-  
-  // Clean up old message counts
-  data.messageCounts = data.messageCounts.filter(count => {
-    const countDate = new Date(count.date)
-    return countDate > cutoffDate
-  })
-  
-  return data
-}
-
-// Get or create conversation for IP
-function getOrCreateConversation(data: ConversationData, ip: string): Conversation {
-  let conversation = data.conversations.find(conv => conv.ip === ip)
-  
-  if (!conversation) {
-    conversation = {
-      ip,
-      messages: [],
-      lastActivity: new Date().toISOString(),
-      totalMessages: 0
+  for (const [ip, messages] of conversations.entries()) {
+    const recentMessages = messages.filter(msg => {
+      const msgDate = new Date(msg.timestamp)
+      return msgDate > cutoffDate
+    })
+    
+    if (recentMessages.length === 0) {
+      conversations.delete(ip)
+    } else {
+      conversations.set(ip, recentMessages)
     }
-    data.conversations.push(conversation)
   }
   
-  return conversation
+  // Clean up old message counts
+  for (const [ip, countData] of messageCounts.entries()) {
+    const countDate = new Date(countData.date)
+    if (countDate <= cutoffDate) {
+      messageCounts.delete(ip)
+    }
+  }
 }
 
 // Get message count for IP today
-function getTodayMessageCount(data: ConversationData, ip: string): number {
+function getTodayMessageCount(ip: string): number {
   const today = getTodayString()
-  const messageCount = data.messageCounts.find(count => count.ip === ip && count.date === today)
-  return messageCount ? messageCount.count : 0
+  const countData = messageCounts.get(ip)
+  return (countData && countData.date === today) ? countData.count : 0
 }
 
 // Increment message count for IP today
-function incrementMessageCount(data: ConversationData, ip: string): void {
+function incrementMessageCount(ip: string): void {
   const today = getTodayString()
-  let messageCount = data.messageCounts.find(count => count.ip === ip && count.date === today)
+  const countData = messageCounts.get(ip)
   
-  if (!messageCount) {
-    messageCount = {
-      ip,
-      count: 0,
+  if (!countData || countData.date !== today) {
+    messageCounts.set(ip, {
+      count: 1,
       date: today,
       lastReset: new Date().toISOString()
-    }
-    data.messageCounts.push(messageCount)
+    })
+  } else {
+    countData.count++
+    messageCounts.set(ip, countData)
   }
-  
-  messageCount.count++
 }
 
 // Check if IP has exceeded daily message limit
 export function checkMessageLimit(ip: string): { allowed: boolean; remaining: number; limit: number } {
-  const data = readConversationData()
-  const todayCount = getTodayMessageCount(data, ip)
+  const todayCount = getTodayMessageCount(ip)
   const remaining = Math.max(0, DAILY_MESSAGE_LIMIT - todayCount)
   
   return {
@@ -157,21 +91,17 @@ export function addMessageToConversation(
   message: ConversationMessage
 ): { success: boolean; error?: string } {
   try {
-    const data = readConversationData()
-    
     // Get or create conversation
-    const conversation = getOrCreateConversation(data, ip)
+    let conversation = conversations.get(ip) || []
     
     // Add message
-    conversation.messages.push(message)
-    conversation.lastActivity = new Date().toISOString()
-    conversation.totalMessages++
+    conversation.push(message)
+    conversations.set(ip, conversation)
     
-    // Clean up old data
-    const cleanedData = cleanupOldData(data)
-    
-    // Save to file
-    writeConversationData(cleanedData)
+    // Clean up old data periodically
+    if (Math.random() < 0.1) { // 10% chance to cleanup
+      cleanupOldData()
+    }
     
     return { success: true }
   } catch (error) {
@@ -186,8 +116,6 @@ export function addUserMessageToConversation(
   message: ConversationMessage
 ): { success: boolean; error?: string } {
   try {
-    const data = readConversationData()
-    
     // Check message limit
     const limitCheck = checkMessageLimit(ip)
     if (!limitCheck.allowed) {
@@ -198,21 +126,19 @@ export function addUserMessageToConversation(
     }
     
     // Get or create conversation
-    const conversation = getOrCreateConversation(data, ip)
+    let conversation = conversations.get(ip) || []
     
     // Add message
-    conversation.messages.push(message)
-    conversation.lastActivity = new Date().toISOString()
-    conversation.totalMessages++
+    conversation.push(message)
+    conversations.set(ip, conversation)
     
     // Increment daily message count (only for user messages)
-    incrementMessageCount(data, ip)
+    incrementMessageCount(ip)
     
-    // Clean up old data
-    const cleanedData = cleanupOldData(data)
-    
-    // Save to file
-    writeConversationData(cleanedData)
+    // Clean up old data periodically
+    if (Math.random() < 0.1) { // 10% chance to cleanup
+      cleanupOldData()
+    }
     
     return { success: true }
   } catch (error) {
@@ -224,9 +150,7 @@ export function addUserMessageToConversation(
 // Get conversation history for IP
 export function getConversationHistory(ip: string): ConversationMessage[] {
   try {
-    const data = readConversationData()
-    const conversation = data.conversations.find(conv => conv.ip === ip)
-    return conversation ? conversation.messages : []
+    return conversations.get(ip) || []
   } catch (error) {
     console.error('Error getting conversation history:', error)
     return []
@@ -236,9 +160,8 @@ export function getConversationHistory(ip: string): ConversationMessage[] {
 // Clear conversation for IP (admin function)
 export function clearConversation(ip: string): boolean {
   try {
-    const data = readConversationData()
-    data.conversations = data.conversations.filter(conv => conv.ip !== ip)
-    writeConversationData(data)
+    conversations.delete(ip)
+    messageCounts.delete(ip)
     return true
   } catch (error) {
     console.error('Error clearing conversation:', error)
@@ -253,18 +176,27 @@ export function getConversationStats(): {
   activeToday: number
 } {
   try {
-    const data = readConversationData()
     const today = getTodayString()
     
-    const activeToday = data.conversations.filter(conv => {
-      const lastActivity = new Date(conv.lastActivity).toISOString().split('T')[0]
-      return lastActivity === today
-    }).length
+    let totalMessages = 0
+    let activeToday = 0
     
-    const totalMessages = data.conversations.reduce((sum, conv) => sum + conv.totalMessages, 0)
+    for (const [ip, messages] of conversations.entries()) {
+      totalMessages += messages.length
+      
+      // Check if there are messages from today
+      const hasTodayMessages = messages.some(msg => {
+        const msgDate = new Date(msg.timestamp).toISOString().split('T')[0]
+        return msgDate === today
+      })
+      
+      if (hasTodayMessages) {
+        activeToday++
+      }
+    }
     
     return {
-      totalConversations: data.conversations.length,
+      totalConversations: conversations.size,
       totalMessages,
       activeToday
     }

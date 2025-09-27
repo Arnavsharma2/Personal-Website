@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, readFile, mkdir } from 'fs/promises'
-import { existsSync } from 'fs'
-import path from 'path'
 import { cleanupApiMemory, logMemoryUsage } from '@/utils/memoryManager'
 
-// Rate limiting storage with cleanup
+// In-memory storage for Vercel compatibility
+const visits: VisitData[] = []
+const uniqueIPs = new Set<string>()
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+const locationCache = new Map<string, { data: VisitData['location']; expires: number }>()
+
+// Rate limiting configuration
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
 const RATE_LIMIT_MAX_REQUESTS = 10 // 10 requests per minute per IP
-const RATE_LIMIT_CLEANUP_INTERVAL = 5 * 60 * 1000 // Clean up every 5 minutes
+const LOCATION_CACHE_TTL = 24 * 60 * 60 * 1000 // 24 hours
+const MAX_VISITS_STORED = 1000 // Limit to prevent memory issues
 
 interface VisitData {
   ip: string
@@ -22,22 +25,7 @@ interface VisitData {
   referer?: string
 }
 
-interface VisitLog {
-  visits: VisitData[]
-  uniqueIPs: Set<string>
-  totalVisits: number
-  uniqueVisits: number
-}
-
-const VISITS_FILE = path.join(process.cwd(), 'data', 'visits.json')
-
-// Ensure data directory exists
-async function ensureDataDir() {
-  const dataDir = path.dirname(VISITS_FILE)
-  if (!existsSync(dataDir)) {
-    await mkdir(dataDir, { recursive: true })
-  }
-}
+// Removed file system operations for Vercel compatibility
 
 // Get client IP address
 function getClientIP(request: NextRequest): string {
@@ -55,9 +43,7 @@ function getClientIP(request: NextRequest): string {
   return request.ip || 'unknown'
 }
 
-// Cache for location data to avoid repeated API calls (with TTL)
-const locationCache = new Map<string, { data: VisitData['location']; expires: number }>()
-const LOCATION_CACHE_TTL = 24 * 60 * 60 * 1000 // 24 hours
+// Location cache is now defined at the top with other in-memory storage
 
 // Cleanup expired rate limit entries
 function cleanupRateLimit() {
@@ -178,55 +164,26 @@ async function getLocationFromIP(ip: string): Promise<VisitData['location']> {
   }
 }
 
-// Read existing visits
-async function readVisits(): Promise<VisitLog> {
-  try {
-    await ensureDataDir()
-    
-    if (!existsSync(VISITS_FILE)) {
-      return {
-        visits: [],
-        uniqueIPs: new Set(),
-        totalVisits: 0,
-        uniqueVisits: 0
-      }
-    }
-    
-    const data = await readFile(VISITS_FILE, 'utf-8')
-    const parsed = JSON.parse(data)
-    
-    // Convert uniqueIPs array back to Set
-    return {
-      visits: parsed.visits || [],
-      uniqueIPs: new Set(parsed.uniqueIPs || []),
-      totalVisits: parsed.totalVisits || 0,
-      uniqueVisits: parsed.uniqueVisits || 0
-    }
-  } catch (error) {
-    console.error('Error reading visits:', error)
-    return {
-      visits: [],
-      uniqueIPs: new Set(),
-      totalVisits: 0,
-      uniqueVisits: 0
-    }
+// In-memory visit management functions
+function addVisit(visitData: VisitData): void {
+  visits.push(visitData)
+  
+  // Keep only the most recent visits to prevent memory issues
+  if (visits.length > MAX_VISITS_STORED) {
+    visits.splice(0, visits.length - MAX_VISITS_STORED)
+  }
+  
+  // Track unique IPs
+  if (!uniqueIPs.has(visitData.ip)) {
+    uniqueIPs.add(visitData.ip)
   }
 }
 
-// Write visits to file
-async function writeVisits(visitLog: VisitLog): Promise<void> {
-  try {
-    await ensureDataDir()
-    
-    // Convert Set to Array for JSON serialization
-    const dataToWrite = {
-      ...visitLog,
-      uniqueIPs: Array.from(visitLog.uniqueIPs)
-    }
-    
-    await writeFile(VISITS_FILE, JSON.stringify(dataToWrite, null, 2))
-  } catch (error) {
-    console.error('Error writing visits:', error)
+function getVisitStats() {
+  return {
+    totalVisits: visits.length,
+    uniqueVisits: uniqueIPs.size,
+    recentVisits: visits.slice(-10) // Last 10 visits
   }
 }
 
@@ -261,14 +218,11 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || 'unknown'
     const referer = request.headers.get('referer') || undefined
     
-    // Get location (simplified for now)
+    // Get location
     const location = await getLocationFromIP(ip)
     
-    // Read existing visits
-    const visitLog = await readVisits()
-    
     // Check if this is a unique visit
-    const isUniqueVisit = !visitLog.uniqueIPs.has(ip)
+    const isUniqueVisit = !uniqueIPs.has(ip)
     
     // Create visit data
     const visitData: VisitData = {
@@ -279,22 +233,11 @@ export async function POST(request: NextRequest) {
       referer
     }
     
-    // Add to visits
-    visitLog.visits.push(visitData)
-    visitLog.totalVisits++
+    // Add to in-memory storage
+    addVisit(visitData)
     
-    if (isUniqueVisit) {
-      visitLog.uniqueIPs.add(ip)
-      visitLog.uniqueVisits++
-    }
-    
-    // Keep only last 1000 visits to prevent file from growing too large
-    if (visitLog.visits.length > 1000) {
-      visitLog.visits = visitLog.visits.slice(-1000)
-    }
-    
-    // Write back to file
-    await writeVisits(visitLog)
+    // Get current stats
+    const stats = getVisitStats()
     
     // Cleanup memory after processing
     cleanupApiMemory()
@@ -302,8 +245,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       isUniqueVisit,
-      totalVisits: visitLog.totalVisits,
-      uniqueVisits: visitLog.uniqueVisits
+      totalVisits: stats.totalVisits,
+      uniqueVisits: stats.uniqueVisits
     }, {
       headers: {
         'X-RateLimit-Limit': RATE_LIMIT_MAX_REQUESTS.toString(),
@@ -345,13 +288,13 @@ export async function GET(request: NextRequest) {
       )
     }
     
-    const visitLog = await readVisits()
+    const stats = getVisitStats()
     
     return NextResponse.json({
       success: true,
-      totalVisits: visitLog.totalVisits,
-      uniqueVisits: visitLog.uniqueVisits,
-      recentVisits: visitLog.visits.slice(-10) // Last 10 visits
+      totalVisits: stats.totalVisits,
+      uniqueVisits: stats.uniqueVisits,
+      recentVisits: stats.recentVisits
     }, {
       headers: {
         'X-RateLimit-Limit': RATE_LIMIT_MAX_REQUESTS.toString(),
