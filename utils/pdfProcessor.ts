@@ -16,7 +16,7 @@ export async function extractResumeText(): Promise<string> {
     if (envResumeContent) {
       console.log('Using resume content from environment variable')
       cachedResumeText = envResumeContent
-      return cachedResumeContent
+      return envResumeContent
     }
 
     // Fallback: Try to read from PDF file (may not work on Vercel)
