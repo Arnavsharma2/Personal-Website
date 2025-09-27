@@ -319,21 +319,11 @@ export default function ChatResume() {
                             : 'bg-primary-100 text-primary-900 border border-primary-200'
                         }`}>
                           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                          <div className={`flex items-center justify-between mt-2 ${
+                          <p className={`text-xs mt-2 ${
                             message.role === 'user' ? 'text-accent-100' : 'text-primary-600'
                           }`}>
-                            <p className="text-xs">
-                              {formatTime(message.timestamp)}
-                            </p>
-                            {message.ragMetadata?.enhancedWithRAG && (
-                              <div className="flex items-center space-x-1 text-xs">
-                                <Sparkles className="w-3 h-3 text-blue-500" />
-                                <span className="text-blue-600">
-                                  RAG Enhanced ({message.ragMetadata.sourcesUsed} sources)
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                            {formatTime(message.timestamp)}
+                          </p>
                         </div>
                       </div>
                     </motion.div>
