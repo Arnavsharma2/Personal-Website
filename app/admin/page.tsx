@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Eye, MapPin, Clock, Globe, Shield, AlertTriangle } from 'lucide-react'
+import { Users, Eye, MapPin, Clock, Globe, Shield, AlertTriangle, Sparkles } from 'lucide-react'
 
 interface VisitData {
   ip: string
@@ -40,9 +40,16 @@ interface SecurityStats {
   recentAttempts: FailedLoginAttempt[]
 }
 
+interface RAGStats {
+  initialized: boolean
+  documentCount: number
+  lastUpdated: string
+}
+
 export default function AdminPage() {
   const [stats, setStats] = useState<VisitStats | null>(null)
   const [securityStats, setSecurityStats] = useState<SecurityStats | null>(null)
+  const [ragStats, setRagStats] = useState<RAGStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -77,6 +84,22 @@ export default function AdminPage() {
           const securityData = await securityResponse.json()
           if (securityData.success) {
             setSecurityStats(securityData)
+          }
+        }
+
+        // Fetch RAG stats
+        const ragResponse = await fetch('/api/rag-status', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-cache',
+        })
+        
+        if (ragResponse.ok) {
+          const ragData = await ragResponse.json()
+          if (ragData.success) {
+            setRagStats(ragData.rag)
           }
         }
         
@@ -151,7 +174,7 @@ export default function AdminPage() {
         </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -212,6 +235,26 @@ export default function AdminPage() {
                   {securityStats?.activeBlocks || 0}
                 </h3>
                 <p className="text-gray-400">Blocked IPs</p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="bg-gray-900 p-6 rounded-lg border border-gray-800"
+          >
+            <div className="flex items-center space-x-3">
+              <Sparkles className="w-8 h-8 text-purple-400" />
+              <div>
+                <h3 className="text-2xl font-bold text-purple-400">
+                  {ragStats?.documentCount || 0}
+                </h3>
+                <p className="text-gray-400">RAG Documents</p>
+                <p className="text-xs text-gray-500">
+                  {ragStats?.initialized ? 'Active' : 'Inactive'}
+                </p>
               </div>
             </div>
           </motion.div>
