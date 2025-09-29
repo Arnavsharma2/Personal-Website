@@ -81,50 +81,9 @@ export default function Hero() {
   const [nodeBrightness, setNodeBrightness] = useState<{[key: string]: number}>({})
   const [timeRemaining, setTimeRemaining] = useState(0)
 
-  // State for typing animation
-  const [currentRole, setCurrentRole] = useState(0)
-  const [displayedText, setDisplayedText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
-  
   // State for interactive features
   const [hoveredElement, setHoveredElement] = useState<string | null>(null)
   const [soundEnabled, setSoundEnabled] = useState(false)
-
-  // Roles for typing animation - based on actual work
-  const roles = useMemo(() => [
-    'Machine Learning Engineer',
-    'Python Developer', 
-    'AI/ML Specialist',
-    'Data Scientist',
-    'Software Engineer',
-    'Reddit Data Analyst',
-    'NLP Engineer',
-    'Predictive Modeler'
-  ], [])
-
-
-  // Typing animation effect - optimized with slower updates
-  useEffect(() => {
-    const currentRoleText = roles[currentRole]
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (displayedText.length < currentRoleText.length) {
-          setDisplayedText(currentRoleText.slice(0, displayedText.length + 1))
-        } else {
-          setTimeout(() => setIsDeleting(true), 2000)
-        }
-      } else {
-        if (displayedText.length > 0) {
-          setDisplayedText(displayedText.slice(0, -1))
-        } else {
-          setIsDeleting(false)
-          setCurrentRole((prev) => (prev + 1) % roles.length)
-        }
-      }
-    }, isDeleting ? 75 : 150) // Slower updates for better performance
-
-    return () => clearTimeout(timeout)
-  }, [displayedText, isDeleting, currentRole, roles])
 
   // Store timeout IDs for cleanup
   const [timeoutIds, setTimeoutIds] = useState<ReturnType<typeof setTimeout>[]>([])
@@ -375,39 +334,13 @@ export default function Hero() {
               Arnav Sharma
             </motion.h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-primary-900 font-medium min-h-[2.5rem] lg:min-h-[3rem] flex items-center justify-center whitespace-nowrap"
-            >
-              <span className="mr-2 flex-shrink-0">I&apos;m a</span>
-              <motion.span
-                key={currentRole}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="text-accent-600 font-bold flex-shrink-0"
-              >
-                {displayedText}
-                <motion.span
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="ml-1"
-                >
-                  |
-                </motion.span>
-              </motion.span>
-            </motion.div>
-
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-base sm:text-lg text-primary-700 mt-4 max-w-lg mx-auto"
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="text-base sm:text-lg text-primary-700 mt-6 max-w-lg mx-auto"
             >
-              Building ML models, analyzing data, and creating AI-powered applications.
+              I like creating ML models, AI-powered applications, and websites.
             </motion.p>
 
             <motion.div
