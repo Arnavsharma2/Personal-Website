@@ -13,7 +13,7 @@ const navItems = [
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
   { name: 'Chat Resume', href: '#chat-resume' },
-  { name: 'Resume', href: 'https://drive.google.com/file/d/13bZ2Mr9gOkkQqzvyIHeaAZUQOgAE49A1/view?usp=sharing', external: true, isResume: true },
+  { name: 'Resume', href: 'https://drive.google.com/file/d/1iTAfWiDSwpUaJAQZzH0g8bCpY1kccbOo/view?usp=sharing', external: true, isResume: true },
 ]
 
 const socialLinks = [
