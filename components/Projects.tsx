@@ -35,9 +35,18 @@ const projects = [
     showLive: false
   },
   {
+    title: 'Blackjack Machine Learning Analysis',
+    description: 'An ML analysis of blackjack simulation data using ensemble methods to predict optimal player actions. Trained on 500k samples with multiple algorithms including Logistic Regression, Random Forest, XGBoost, and Neural Networks. Features strategy visualization heatmaps and win probability prediction.',
+    technologies: ['Python', 'Scikit-learn', 'XGBoost', 'Neural Networks', 'Pandas', 'Jupyter', 'Matplotlib'],
+    image: '/blackj.png',
+    github: 'https://github.com/Arnavsharma2/Blackjack-Analysis',
+    live: '#',
+    showLive: false
+  },
+  {
     title: 'PSU Menu Analyzer Website',
     description: 'A full-stack web application that scrapes Penn State dining menus and provides AI-powered nutritional analysis. Features real-time menu updates, dietary filtering, and CSV export using Google Gemini API.',
-    technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'Web Scraping'],
+    technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'BeautifulSoup'],
     image: '/psu-menu-analyzer.png',
     github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
     live: 'https://psumenu.com'
@@ -68,7 +77,16 @@ const projects = [
     github: 'https://github.com/Arnavsharma2/SubReddit-Monitor',
     live: '#',
     showLive: false
-  }
+  },
+   {
+     title: 'AI Movie Recommendation Engine',
+     description: 'A movie recommendation platform powered by Google Gemini AI that provides personalized movie suggestions through an interactive questionnaire. Features watch history tracking, OMDB API integration for movie metadata, and a responsive UI built with Next.js and Tailwind CSS.',
+     technologies: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Google Gemini API', 'OMDB API', 'Node.js', 'localStorage'],
+     image: '/image.png',
+     github: 'https://github.com/Arnavsharma2/Movie-Suggestion',
+     live: 'https://movie-suggestion-8ty3.onrender.com/',
+     showLive: true
+   }
 ]
 
 export default function Projects() {

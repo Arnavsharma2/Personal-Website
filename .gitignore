@@ -155,9 +155,6 @@ core
 # Nuxt.js
 .nuxt
 
-# Gatsby
-public
-
 # Storybook
 .out
 .storybook-out
