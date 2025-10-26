@@ -78,6 +78,15 @@ const projects = [
     live: '#',
     showLive: false
   },
+  {
+    title: 'Gesture Volume Control',
+    description: 'A real-time computer vision application that controls system volume using hand gestures. Utilizes MediaPipe hand tracking to measure the distance between thumb and index finger, sending terminal commands to adjust Mac volume dynamically based on pinch distance.',
+    technologies: ['Python', 'OpenCV', 'MediaPipe', 'NumPy', 'macOS'],
+    image: '/gestureVolControl.png',
+    github: 'https://github.com/Arnavsharma2/Gesture-Volume-Control',
+    live: '#',
+    showLive: false
+  },
    {
      title: 'AI Movie Recommendation Engine',
      description: 'A movie recommendation platform powered by Google Gemini AI that provides personalized movie suggestions through an interactive questionnaire. Features watch history tracking, OMDB API integration for movie metadata, and a responsive UI built with Next.js and Tailwind CSS.',
