@@ -87,6 +87,15 @@ const projects = [
     live: '#',
     showLive: false
   },
+  {
+    title: 'Virtual Background Application',
+    description: 'A real-time virtual background application that removes webcam backgrounds and replaces them with custom images. Built using cvzone\'s SelfiSegmentation and OpenCV for video capture and background removal. ',
+    technologies: ['Python', 'OpenCV', 'cvzone', 'SelfiSegmentation'],
+    image: '/VirtualBackground.png',
+    github: 'https://github.com/Arnavsharma2/Virtual-Background',
+    live: '#',
+    showLive: false
+  },
    {
      title: 'AI Movie Recommendation Engine',
      description: 'A movie recommendation platform powered by Google Gemini AI that provides personalized movie suggestions through an interactive questionnaire. Features watch history tracking, OMDB API integration for movie metadata, and a responsive UI built with Next.js and Tailwind CSS.',
