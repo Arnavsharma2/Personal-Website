@@ -2,19 +2,20 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { ExternalLink, Github } from 'lucide-react'
 import Image from 'next/image'
 
 const projects = [
   {
-    title: 'Stock Return Forecaster with Deep Learning',
+    title: 'Stock Return Forecaster',
     description: 'A deep learning model that predicts future stock returns using LSTM neural networks trained on historical price data. Built it processes data over 1000+ stocks to identify patterns and predict market movements.',
     technologies: ['Python', 'TensorFlow', 'Keras', 'Scikit-learn', 'Pandas'],
     image: '/stockprediction.png',
     github: 'https://github.com/Arnavsharma2/StockReturnPrediction',
     live: '#',
-    showLive: false
+    showLive: false,
+    category: 'ml-ai'
   },
   {
     title: 'Customer Churn Predictor',
@@ -23,7 +24,8 @@ const projects = [
     image: '/Churn.png',
     github: 'https://github.com/Arnavsharma2/CustomerChurnPredictor',
     live: '#',
-    showLive: false
+    showLive: false,
+    category: 'ml-ai'
   },
   {
     title: 'House Price Prediction Model',
@@ -32,7 +34,8 @@ const projects = [
     image: '/housingpriceprediction.png',
     github: 'https://github.com/Arnavsharma2/HousingPricePrediction',
     live: '#',
-    showLive: false
+    showLive: false,
+    category: 'ml-ai'
   },
   {
     title: 'Blackjack Machine Learning Analysis',
@@ -41,42 +44,8 @@ const projects = [
     image: '/blackj.png',
     github: 'https://github.com/Arnavsharma2/Blackjack-Analysis',
     live: '#',
-    showLive: false
-  },
-  {
-    title: 'PSU Menu Analyzer Website',
-    description: 'A full-stack web application that scrapes Penn State dining menus and provides AI-powered nutritional analysis. Features real-time menu updates, dietary filtering, and CSV export using Google Gemini API.',
-    technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'BeautifulSoup'],
-    image: '/psu-menu-analyzer.png',
-    github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
-    live: 'https://psumenu.com'
-  },
-  {
-    title: 'Chat With My Resume',
-    description: 'An intelligent resume chatbot that allows natural conversations about professional background and experience. Built with Retrieval-Augmented Generation (RAG) technology using LangChain and OpenAI API for responses.',
-    technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'FAISS', 'Flask', 'RAG'],
-    image: '/chatwresume.png',
-    github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
-    live: '#',
-    showLive: false
-  },
-  {
-    title: 'AI-Powered Reddit Post Analyzer',
-    description: 'A Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits to track market sentiment. Uses Google Gemini API for NLP classification and summary generation, with Pandas for data processing and structuring insights.',
-    technologies: ['Python', 'Google Gemini API', 'PRAW', 'Pandas', 'NLP'],
-    image: '/analyse.png',
-    github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis',
-    live: '#',
-    showLive: false
-  },
-  {
-    title: 'SubReddit Monitor & Notification Tool',
-    description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market sentiment tracking.',
-    technologies: ['Python', 'PRAW', 'SMTP'],
-    image: '/monitor.png',
-    github: 'https://github.com/Arnavsharma2/SubReddit-Monitor',
-    live: '#',
-    showLive: false
+    showLive: false,
+    category: 'ml-ai'
   },
   {
     title: 'Gesture Volume Control',
@@ -85,7 +54,8 @@ const projects = [
     image: '/gestureVolControl.png',
     github: 'https://github.com/Arnavsharma2/Gesture-Volume-Control',
     live: '#',
-    showLive: false
+    showLive: false,
+    category: 'cv'
   },
   {
     title: 'Virtual Background Application',
@@ -94,22 +64,76 @@ const projects = [
     image: '/VirtualBackground.png',
     github: 'https://github.com/Arnavsharma2/Virtual-Background',
     live: '#',
-    showLive: false
+    showLive: false,
+    category: 'cv'
   },
-   {
-     title: 'AI Movie Recommendation Engine',
-     description: 'A movie recommendation platform powered by Google Gemini AI that provides personalized movie suggestions through an interactive questionnaire. Features watch history tracking, OMDB API integration for movie metadata, and a responsive UI built with Next.js and Tailwind CSS.',
-     technologies: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Google Gemini API', 'OMDB API', 'Node.js', 'localStorage'],
-     image: '/image.png',
-     github: 'https://github.com/Arnavsharma2/Movie-Suggestion',
-     live: 'https://movie-suggestion-8ty3.onrender.com/',
-     showLive: true
-   }
+  {
+    title: 'AI-Powered Reddit Post Analyzer',
+    description: 'A Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits to track market sentiment. Uses Google Gemini API for NLP classification and summary generation, with Pandas for data processing and structuring insights.',
+    technologies: ['Python', 'Google Gemini API', 'PRAW', 'Pandas', 'NLP'],
+    image: '/analyse.png',
+    github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis',
+    live: '#',
+    showLive: false,
+    category: 'web-scraping'
+  },
+  {
+    title: 'SubReddit Monitor & Notification Tool',
+    description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market sentiment tracking.',
+    technologies: ['Python', 'PRAW', 'SMTP'],
+    image: '/monitor.png',
+    github: 'https://github.com/Arnavsharma2/SubReddit-Monitor',
+    live: '#',
+    showLive: false,
+    category: 'web-scraping'
+  },
+  {
+    title: 'PSU Menu Analyzer Website',
+    description: 'A full-stack web application that scrapes Penn State dining menus and provides AI-powered nutritional analysis. Features real-time menu updates, dietary filtering, and CSV export using Google Gemini API.',
+    technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'BeautifulSoup'],
+    image: '/psu-menu-analyzer.png',
+    github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
+    live: 'https://psumenu.com',
+    category: 'web-app'
+  },
+  {
+    title: 'AI Movie Recommendation Engine',
+    description: 'A movie recommendation platform powered by Google Gemini AI that provides personalized movie suggestions through an interactive questionnaire. Features watch history tracking, OMDB API integration for movie metadata, and a responsive UI built with Next.js and Tailwind CSS.',
+    technologies: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Google Gemini API', 'OMDB API', 'Node.js', 'localStorage'],
+    image: '/image.png',
+    github: 'https://github.com/Arnavsharma2/Movie-Suggestion',
+    live: 'https://movie-suggestion-8ty3.onrender.com/',
+    showLive: true,
+    category: 'web-app'
+  },
+  {
+    title: 'Chat With My Resume',
+    description: 'An intelligent resume chatbot that allows natural conversations about professional background and experience. Built with Retrieval-Augmented Generation (RAG) technology using LangChain and OpenAI API for responses.',
+    technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'FAISS', 'Flask', 'RAG'],
+    image: '/chatwresume.png',
+    github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
+    live: '#',
+    showLive: false,
+    category: 'web-app'
+  }
+]
+
+const categories = [
+  { id: 'all', label: 'All Projects' },
+  { id: 'ml-ai', label: 'ML & AI' },
+  { id: 'cv', label: 'Computer Vision' },
+  { id: 'web-scraping', label: 'Web Scraping' },
+  { id: 'web-app', label: 'Web Applications' }
 ]
 
 export default function Projects() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [activeCategory, setActiveCategory] = useState('all')
+
+  const filteredProjects = activeCategory === 'all' 
+    ? projects 
+    : projects.filter(project => project.category === activeCategory)
 
   return (
     <section id="projects" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-200">
@@ -129,10 +153,32 @@ export default function Projects() {
           <div className="w-24 h-1 bg-accent-500 mx-auto"></div>
         </motion.div>
 
+        {/* Category Filter Tabs */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-3 mb-12"
+        >
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                activeCategory === category.id
+                  ? 'bg-accent-500 text-white shadow-lg shadow-accent-500/50'
+                  : 'bg-white text-primary-700 hover:bg-accent-100 hover:text-accent-600'
+              }`}
+            >
+              {category.label}
+            </button>
+          ))}
+        </motion.div>
+
         <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <motion.div
-              key={index}
+              key={project.title}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
