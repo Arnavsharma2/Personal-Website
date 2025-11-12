@@ -12,8 +12,7 @@ const navItems = [
   { name: 'About', href: '#about' },
   { name: 'Experience', href: '#experience' },
   { name: 'Projects', href: '#projects' },
-  { name: 'Chat Resume', href: '#chat-resume' },
-  { name: 'Resume', href: 'https://drive.google.com/file/d/1iTAfWiDSwpUaJAQZzH0g8bCpY1kccbOo/view?usp=sharing', external: true, isResume: true },
+  { name: 'Resume', href: 'https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing', external: true, isResume: true },
 ]
 
 const socialLinks = [
@@ -44,7 +43,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-primary-200"
+      className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm border-b border-white/20"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-20">
@@ -59,10 +58,10 @@ export default function Navigation({ activeSection }: NavigationProps) {
                     onClick={() => scrollToSection(item.href, item.external)}
                     className={`px-3 py-2 rounded-md text-lg font-medium transition-all duration-200 ${
                       item.isResume
-                        ? 'bg-accent-500 text-white hover:bg-accent-600 border border-accent-500 transform hover:scale-105'
+                        ? 'bg-white/20 backdrop-blur-md text-white hover:bg-white/30 border border-white/30 shadow-lg hover:shadow-xl transform hover:scale-105'
                         : activeSection === item.href.slice(1)
-                        ? 'text-accent-600 bg-accent-100'
-                        : 'text-primary-700 hover:text-primary-900 hover:bg-primary-100'
+                        ? 'text-white bg-white/20 backdrop-blur-sm'
+                        : 'text-white/90 hover:text-white hover:bg-white/10 backdrop-blur-sm'
                     }`}
                   >
                     <div className="flex items-center space-x-2">
@@ -83,7 +82,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-3 rounded-lg text-gray-400 transition-all duration-200 ${social.color} hover:bg-gray-800`}
+                className={`p-3 rounded-lg text-white/80 transition-all duration-200 ${social.color} hover:bg-white/10 backdrop-blur-sm`}
                 title={social.name}
               >
                 {social.name === 'Discord' ? (
@@ -101,7 +100,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-300 hover:text-white focus:outline-none focus:text-white"
+              className="text-white hover:text-white/80 focus:outline-none focus:text-white"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -116,7 +115,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-900/90 backdrop-blur-md rounded-lg mt-2">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black/60 backdrop-blur-md rounded-lg mt-2 border border-white/20">
               {/* Navigation Items */}
               {navItems.map((item) => (
                 <button
@@ -124,10 +123,10 @@ export default function Navigation({ activeSection }: NavigationProps) {
                   onClick={() => scrollToSection(item.href, item.external)}
                   className={`block px-3 py-2 rounded-md text-lg font-medium w-full text-left transition-all duration-200 ${
                     item.isResume
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 border border-blue-500/50 shadow-lg hover:shadow-blue-500/25 transform hover:scale-105'
+                      ? 'bg-white/20 backdrop-blur-md text-white hover:bg-white/30 border border-white/30 shadow-lg hover:shadow-xl'
                       : activeSection === item.href.slice(1)
-                      ? 'text-primary-400 bg-primary-400/20'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                      ? 'text-white bg-white/20'
+                      : 'text-white/90 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   <div className="flex items-center space-x-2">
@@ -138,7 +137,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
               ))}
               
               {/* Social Links */}
-              <div className="pt-3 mt-3 border-t border-gray-700">
+              <div className="pt-3 mt-3 border-t border-white/20">
                 <div className="flex justify-center space-x-3">
                   {socialLinks.map((social) => (
                     <a
@@ -146,7 +145,7 @@ export default function Navigation({ activeSection }: NavigationProps) {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`p-4 rounded-lg text-gray-400 transition-all duration-200 ${social.color} hover:bg-gray-800`}
+                      className={`p-4 rounded-lg text-white/80 transition-all duration-200 ${social.color} hover:bg-white/10`}
                       title={social.name}
                     >
                       {social.name === 'Discord' ? (

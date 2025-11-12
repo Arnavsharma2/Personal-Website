@@ -10,17 +10,22 @@
   margin: 0;
 }
 
+html {
+  background: #000000;
+}
+
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  background: #000000;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   color: #2d1b0e;
-  background: #f5f1eb;
+  background: #000000;
 }
 
 a {

@@ -7,7 +7,7 @@ import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
-import ChatResume from '@/components/ChatResume'
+import ChatResumeSidebar from '@/components/ChatResumeSidebar'
 import { useVisitTracker } from '@/hooks/useVisitTracker'
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'projects', 'chat-resume']
+      const sections = ['home', 'about', 'experience', 'projects']
       const scrollPosition = window.scrollY + 100
 
       for (let i = 0; i < sections.length; i++) {
@@ -48,20 +48,23 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="bg-black">
       <Navigation activeSection={activeSection} />
       
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
+        className="bg-black"
       >
         <Hero />
         <About />
         <Experience />
         <Projects />
-        <ChatResume />
       </motion.div>
+      
+      {/* Resume Chatbot Sidebar */}
+      <ChatResumeSidebar />
       
     </main>
   )

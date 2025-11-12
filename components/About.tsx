@@ -36,41 +36,83 @@ export default function About() {
   }
 
   return (
-    <section id="about" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-200">
-      <div className="max-w-7xl mx-auto">
+    <section id="about" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 relative min-h-screen flex items-center overflow-hidden">
+      {/* Background Image with parallax effect */}
+      <motion.div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(https://static.frieze.com/files/inline-images/jeffreys-main.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+        animate={{
+          scale: [1, 1.05, 1],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      
+      {/* Cool overlay effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/80 via-primary-800/70 to-accent-900/75" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+      
+      {/* Animated overlay for depth */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+        animate={{
+          x: ['-100%', '100%'],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
+      
+      {/* Subtle noise texture overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-6 order-2 lg:order-1"
+            className="space-y-6 order-2 lg:order-1 relative"
           >
+            {/* Subtle backdrop blur for text readability */}
+            <div className="absolute inset-0 -z-10 bg-black/20 backdrop-blur-sm rounded-2xl -m-4" />
+            
             <div className="mb-8">
-              <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
+              <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
                 01.
               </h2>
-              <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
+              <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4 drop-shadow-lg">
                 About Me
               </h3>
-              <div className="w-full h-1 bg-accent-500"></div>
+              <div className="w-full h-1 bg-accent-400"></div>
             </div>
-            <p className="text-lg text-primary-800 leading-relaxed">
-              Hey! I&apos;m Arnav Sharma, and I&apos;m currently pursuing a Bachelor&apos;s Degree of Science in Computer Science at Penn State University, 
-              with a minor in Artificial Intelligence. I absolutely love AI and the possibilities it has opened up for software development in the world today, 
-              which is why you will probably see that a lot of my projects utilize the Gemini or OpenAI APIs.
+            <p className="text-lg text-white/90 leading-relaxed drop-shadow-md">
+              Hey! I&apos;m Arnav Sharma, and I&apos;m currently pursuing a Bachelor&apos;s Degree of Science in Computer Science at The Pennsylvania State University.
+              I love making projects where I apply Machine Learning or Artificial Intelligence concepts to create cool or useful features for full-stack applications. 
             </p>
             
-            <p className="text-lg text-primary-800 leading-relaxed">
-              Another thing I love about programming is AI&apos;s predictive ability, made possible by its ability to be trained on data. 
-              A lot of my time is usually spent making small tools to automate tedious things in my life. My goal is to slowly learn to gain the ability to
-              create big programs that actually matter to people. Right now I am focused on completely understanding the process behind neural networks.
+            <p className="text-lg text-white/90 leading-relaxed drop-shadow-md">
+            I am constantly fascinated by the vast and evolving processes behind Machine Learning and Artificial Intelligence, and I am dedicated to lifelong learning in the field.
             </p>
             
-            <p className="text-lg text-primary-800 leading-relaxed">
-              When I&apos;m not coding, you can usually find me trying new recipes, unwinding with a good TV show, or hiking up a mountain or trail. 
-              I love eating food and at the moment I really want to try KBBQ and Poke Bowls.
-              I&apos;m also a big fan of staying active and have been hitting the gym regularly for almost two years now. I would always be down to hit the gym with anyone, anytime!
+            <p className="text-lg text-white/90 leading-relaxed drop-shadow-md">
+              When I&apos;m not coding, you can usually find me trying to cook up some new recipes, unwinding with a good TV show, or hiking a trail. 
+              I&apos;m also a big fan of staying active by hitting the gym or playing sports like soccer and pickleball. 
             </p>
           </motion.div>
 
@@ -82,10 +124,10 @@ export default function About() {
             className="flex justify-center"
           >
             <div className="relative">
-              {/* Clean accent border */}
-              <div className="w-64 h-80 sm:w-80 sm:h-96 lg:w-[28rem] lg:h-[36rem] bg-accent-200 rounded-2xl p-1">
+              {/* Clean accent border with glass effect */}
+              <div className="w-64 h-80 sm:w-80 sm:h-96 lg:w-[28rem] lg:h-[36rem] bg-white/20 backdrop-blur-md rounded-2xl p-1 border border-white/30 shadow-2xl">
                 {/* Inner rounded rectangle with main background */}
-                <div className="w-full h-full bg-white rounded-2xl flex items-center justify-center relative overflow-hidden">
+                <div className="w-full h-full bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center relative overflow-hidden">
                   {/* Profile Image */}
                   <Image 
                     src={profilePhoto.src}
@@ -101,8 +143,8 @@ export default function About() {
                   
                   {/* Loading Spinner */}
                   {imageLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-2xl">
-                      <div className="w-8 h-8 border-4 border-accent-200 border-t-accent-500 rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl">
+                      <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
                     </div>
                   )}
                   {/* Fallback initials */}
@@ -118,10 +160,10 @@ export default function About() {
                 </div>
               </div>
               
-              {/* Clean minimal dots */}
-              <div className="absolute -top-2 -right-2 w-3 h-3 sm:w-4 sm:h-4 bg-accent-400 rounded-full"></div>
-              <div className="absolute -bottom-1 -left-1 w-2 h-2 sm:w-3 sm:h-3 bg-secondary-400 rounded-full"></div>
-              <div className="absolute top-1/2 -right-3 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-accent-300 rounded-full"></div>
+              {/* Clean minimal dots with glow */}
+              <div className="absolute -top-2 -right-2 w-3 h-3 sm:w-4 sm:h-4 bg-white/60 rounded-full shadow-lg shadow-white/50"></div>
+              <div className="absolute -bottom-1 -left-1 w-2 h-2 sm:w-3 sm:h-3 bg-white/50 rounded-full shadow-lg shadow-white/40"></div>
+              <div className="absolute top-1/2 -right-3 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/40 rounded-full shadow-md shadow-white/30"></div>
             </div>
           </motion.div>
         </div>
@@ -131,9 +173,12 @@ export default function About() {
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-12"
+          className="mt-12 relative"
         >
-          <h4 className="text-2xl font-semibold text-primary-900 mb-8 text-center">
+          {/* Subtle backdrop blur for technologies section */}
+          <div className="absolute inset-0 -z-10 bg-black/20 backdrop-blur-sm rounded-2xl -m-4" />
+          
+          <h4 className="text-2xl font-semibold text-white mb-8 text-center drop-shadow-lg">
             Some technologies I like to work with
           </h4>
           <div className="flex flex-wrap gap-x-4 gap-y-4 justify-center max-w-4xl mx-auto">
@@ -145,7 +190,7 @@ export default function About() {
                 transition={{ duration: 0.3, delay: 0.8 + index * 0.05 }}
                 className="relative group"
               >
-                <div className="w-16 h-16 bg-white backdrop-blur-sm rounded-full hover:bg-accent-50 transition-all duration-200 flex items-center justify-center hover:scale-105 hover:shadow-md hover:shadow-accent-200/20 border border-accent-200">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full hover:bg-white/30 transition-all duration-200 flex items-center justify-center hover:scale-105 hover:shadow-lg hover:shadow-white/20 border border-white/30">
                   <div className="w-10 h-10 group-hover:scale-110 transition-transform duration-200 flex items-center justify-center relative">
                   <Image 
                     src={tech.logo} 
@@ -159,10 +204,10 @@ export default function About() {
                 </div>
                 
                 {/* Custom Tooltip */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-white/20 backdrop-blur-md text-white text-sm font-medium rounded-lg shadow-lg border border-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
                   {tech.name}
                   {/* Tooltip arrow */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white/20"></div>
                 </div>
               </motion.div>
             ))}

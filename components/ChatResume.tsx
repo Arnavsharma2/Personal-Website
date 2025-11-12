@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
-import { Send, Bot, User, Loader2, MessageCircle, Sparkles, Trash2 } from 'lucide-react'
+import { Send, Bot, User, Loader2, MessageCircle, Sparkles, Trash2, X } from 'lucide-react'
 
 interface Message {
   id: string
@@ -26,7 +26,12 @@ const conversationStarters = [
   "Describe your internship experience"
 ]
 
-export default function ChatResume() {
+interface ChatResumeProps {
+  isSidebar?: boolean
+  onClose?: () => void
+}
+
+export default function ChatResume({ isSidebar = false, onClose }: ChatResumeProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [messages, setMessages] = useState<Message[]>([])
@@ -208,68 +213,112 @@ export default function ChatResume() {
   }
 
   return (
-    <section id="chat-resume" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
-            05.
-          </h2>
-          <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
-            Chat with my Resume
-          </h3>
-          <div className="w-24 h-1 bg-accent-500 mx-auto mb-6"></div>
-          <p className="text-lg text-primary-700 max-w-3xl mx-auto">
-            Ask me anything about Arnav&apos;s experience, skills, projects, career goals, or even hobbies. 
-            I&apos;m powered by AI and have access to Arnav&apos;s information.
-          </p>
-        </motion.div>
+    <div ref={ref} className={isSidebar ? "h-full flex flex-col" : "py-20 px-4 sm:px-6 lg:px-8 bg-primary-50"}>
+      {!isSidebar && (
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
+              05.
+            </h2>
+            <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
+              Resume Chatbot
+            </h3>
+            <div className="w-24 h-1 bg-accent-500 mx-auto mb-6"></div>
+            <p className="text-lg text-primary-700 max-w-3xl mx-auto">
+              Ask me anything about Arnav&apos;s experience, skills, projects, career goals, or even hobbies. 
+              I&apos;m powered by AI and have access to Arnav&apos;s information.
+            </p>
+          </motion.div>
+        </div>
+      )}
 
+      <div className={isSidebar ? "flex-1 flex flex-col overflow-hidden" : "max-w-4xl mx-auto"}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+          animate={isInView || isSidebar ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          transition={{ duration: 0.8, delay: isSidebar ? 0 : 0.2 }}
+          className={isSidebar ? "flex-1 flex flex-col h-full" : ""}
         >
           {/* Chat Interface */}
-          <div className="bg-white rounded-2xl border border-primary-200 overflow-hidden shadow-2xl">
+          <div className={`${isSidebar ? "flex-1 flex flex-col h-full" : "bg-white rounded-2xl border border-primary-200 overflow-hidden shadow-2xl"}`}>
             {/* Chat Header */}
-            <div className="bg-accent-100 border-b border-accent-200 p-6">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-accent-500 rounded-full flex items-center justify-center">
-                  <Bot className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-primary-900">Arnav&apos;s Resume Assistant</h4>
-                  <p className="text-sm text-primary-700">Ask me anything about my background</p>
-                </div>
-                <div className="ml-auto flex items-center space-x-4">
-                  <div className={`text-sm ${messageCount.remaining <= 5 ? 'text-red-500' : messageCount.remaining <= 10 ? 'text-yellow-500' : 'text-primary-600'}`}>
-                    Messages: {messageCount.remaining}/{messageCount.limit}
-                    {messageCount.remaining <= 5 && messageCount.remaining > 0 && (
-                      <span className="ml-1 text-xs">⚠️</span>
-                    )}
-                    {messageCount.remaining === 0 && (
-                      <span className="ml-1 text-xs">🚫</span>
-                    )}
+            {!isSidebar && (
+              <div className="bg-accent-100 border-b border-accent-200 p-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-accent-500 rounded-full flex items-center justify-center">
+                    <Bot className="w-6 h-6 text-white" />
                   </div>
-                  <button
-                    onClick={resetConversation}
-                    className="p-2 text-primary-600 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                    title="Clear conversation"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <div>
+                    <h4 className="text-lg font-semibold text-primary-900">Arnav&apos;s Resume Assistant</h4>
+                    <p className="text-sm text-primary-700">Ask me anything about my background</p>
+                  </div>
+                  <div className="ml-auto flex items-center space-x-4">
+                    <div className={`text-sm ${messageCount.remaining <= 5 ? 'text-red-500' : messageCount.remaining <= 10 ? 'text-yellow-500' : 'text-primary-600'}`}>
+                      Messages: {messageCount.remaining}/{messageCount.limit}
+                      {messageCount.remaining <= 5 && messageCount.remaining > 0 && (
+                        <span className="ml-1 text-xs">⚠️</span>
+                      )}
+                      {messageCount.remaining === 0 && (
+                        <span className="ml-1 text-xs">🚫</span>
+                      )}
+                    </div>
+                    <button
+                      onClick={resetConversation}
+                      className="p-2 text-primary-600 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                      title="Clear conversation"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+            
+            {/* Sidebar Header Content */}
+            {isSidebar && (
+              <div className="bg-accent-500 border-b border-accent-600 p-4 flex-shrink-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                      <Bot className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-semibold text-white">Resume Chatbot</h4>
+                      <p className="text-xs text-white/80">Ask me anything</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className={`text-xs px-2 py-1 rounded ${messageCount.remaining <= 5 ? 'bg-red-500/20 text-red-100' : messageCount.remaining <= 10 ? 'bg-yellow-500/20 text-yellow-100' : 'bg-white/20 text-white'}`}>
+                      {messageCount.remaining}/{messageCount.limit}
+                    </div>
+                    <button
+                      onClick={resetConversation}
+                      className="p-1.5 text-white hover:bg-white/20 rounded-lg transition-colors duration-200"
+                      title="Clear conversation"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    {onClose && (
+                      <button
+                        onClick={onClose}
+                        className="p-1.5 text-white hover:bg-white/20 rounded-lg transition-colors duration-200"
+                        title="Close"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Messages Container */}
-            <div className="h-[500px] overflow-y-auto p-6 space-y-4 scrollbar-hide">
+            <div className={`${isSidebar ? "flex-1 overflow-y-auto" : "h-[500px] overflow-y-auto"} p-6 space-y-4 scrollbar-hide`}>
               {messages.length === 0 ? (
                 <div className="text-center py-12">
                   <MessageCircle className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -277,7 +326,7 @@ export default function ChatResume() {
                   <p className="text-primary-700 mb-6">Choose a topic below or type your own question</p>
                   
                   {/* Conversation Starters */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                  <div className={`grid ${isSidebar ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-3 ${isSidebar ? '' : 'max-w-2xl mx-auto'}`}>
                     {conversationStarters.map((starter, index) => (
                       <motion.button
                         key={index}
@@ -354,7 +403,7 @@ export default function ChatResume() {
             </div>
 
             {/* Input Area */}
-            <div className="border-t border-primary-200 p-4">
+            <div className={`border-t border-primary-200 p-4 ${isSidebar ? 'flex-shrink-0' : ''}`}>
               <form onSubmit={handleSubmit} className="flex items-center space-x-3">
                 <div className="flex-1 relative">
                   <input
@@ -389,9 +438,9 @@ export default function ChatResume() {
               </form>
             </div>
           </div>
-
         </motion.div>
       </div>
-    </section>
+      {!isSidebar && <div className="max-w-7xl mx-auto"></div>}
+    </div>
   )
 }

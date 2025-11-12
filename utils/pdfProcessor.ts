@@ -83,58 +83,80 @@ EDUCATION:
 - Currently pursuing degree with focus on AI/ML and software development
 
 CURRENT POSITION:
-- Software Engineering Intern at Wefire (January 2025 - Present)
+- Software Engineering Intern at Wefire (January 2025 - November 2025)
 - Location: Hayward, CA
 - Focus: Reddit data analysis and monitoring solutions for financial sentiment tracking
 
 PROFESSIONAL EXPERIENCE:
 
-1. Wefire - Software Engineering Intern (January 2025 - Present)
-   - Developed comprehensive Reddit data analysis and monitoring solutions
-   - Built AI-powered Reddit post analyzer using Python and Google Gemini API
-   - Created automated bot for real-time Reddit monitoring with PRAW library
-   - Implemented keyword-matching system and SMTP notification pipeline
+1. Wefire - Software Engineering Intern (January 2025 - November 2025)
+   - Developed and deployed advanced Python-based programs that transformed 5,000+ Reddit posts into actionable financial insights
+   - Built AI-powered Reddit post analyzer using Python and Google Gemini API for sentiment analysis
+   - Created high-performance real-time monitoring infrastructure using PRAW tracking brand mentions and sales keywords
+   - Implemented automated SMTP notification pipeline generating 500+ instant alerts during 24-hour testing periods
    - Technologies: Python, Google Gemini API, PRAW, Pandas, SMTP, NLP, Data Processing
+   - Impact: Resulted in 40% faster customer response times and enhanced brand reputation management
 
 TECHNICAL SKILLS:
-Programming Languages: Python, JavaScript, Java, C++
-Web Technologies: React.js, Node.js, Express.js, Flask, HTML, CSS
-Machine Learning: TensorFlow, Keras, Scikit-learn, Pandas, NumPy, XGBoost
-AI/ML Tools: LangChain, OpenAI API, PRAW, PyCaret
+Programming Languages: Python, JavaScript, TypeScript, Java, C++
+Web Technologies: Next.js, React.js, Node.js, Express.js, Flask, HTML, CSS, Tailwind CSS
+Machine Learning: PyTorch, TensorFlow, Keras, Scikit-learn, Pandas, NumPy, XGBoost, ONNX Runtime
+AI/ML Tools: LangChain, OpenAI API, Google Gemini API, PRAW, PyCaret, MediaPipe
 Data Processing: Pandas, NumPy, Matplotlib, Plotly
-Other: Git, Docker, Web Scraping, NLP, LSTM, RAG
+Databases: Supabase, PostgreSQL, ChromaDB, FAISS
+Other: Git, Docker, Web Scraping, NLP, LSTM, RAG, Vector Databases, FastAPI
 
 PROJECTS:
 
-1. Stock Return Forecaster with Deep Learning
-   - Architected and trained LSTM neural network for stock return prediction
-   - Implemented data processing workflow for time-series data
-   - Used Keras with multiple LSTM and Dropout layers
-   - Technologies: Python, TensorFlow, Keras, Scikit-learn, Pandas
+1. Real-Time ASL Learning Platform
+   - Built real-time ASL learning platform with 98.98% accuracy PyTorch neural network
+   - Converted model to ONNX format for <50ms client-side browser inference with WebGL GPU acceleration
+   - Implemented real-time hand tracking using MediaPipe processing 21 hand landmarks (63 features) from webcam
+   - Achieved 60 FPS sign recognition for all 26 alphabet signs
+   - Developed FastAPI backend with Supabase (PostgreSQL) database
+   - Features: User authentication, lesson modules, interactive quiz system, and progress tracking dashboard
+   - Technologies: Next.js, React, Python, PyTorch, FastAPI, TypeScript, ONNX Runtime, MediaPipe, Supabase, PostgreSQL
 
-2. Customer Churn Predictor
-   - Built classification model for telecommunications customer churn prediction
-   - Leveraged PyCaret AutoML for end-to-end ML workflow
-   - Analyzed key features using Plotly for actionable insights
-   - Technologies: Python, Scikit-learn, Pandas, Plotly, PyCaret
+2. Resume Chatbot
+   - Intelligent resume chatbot using Retrieval-Augmented Generation (RAG) technology
+   - Natural conversations about professional background and experience
+   - AI-powered interface with context understanding using LangChain and OpenAI API
+   - Technologies: Python, LangChain, OpenAI API, ChromaDB, FAISS, Flask, RAG
 
-3. House Price Prediction Model
-   - Developed predictive model for house sale prices with 80% accuracy
-   - Engineered data preprocessing pipeline for 1,400+ properties
-   - Trained multiple regression algorithms (Linear, Ridge, Lasso, XGBoost)
-   - Technologies: Python, Scikit-learn, Pandas, XGBoost, Matplotlib
+3. Predictive Modeling Projects (Portfolio)
+   - Comprehensive portfolio of machine learning projects demonstrating predictive modeling expertise
+   - House Price Prediction: Regression models analyzing 1,400+ properties with 80+ features, achieving 80% accuracy
+   - Customer Churn Prediction: Classification algorithms for telecommunications customer retention
+   - Stock Return Forecasting: LSTM neural networks and time series analysis processing 1000+ stocks
+   - Blackjack Strategy Analysis: Ensemble methods trained on 500k samples with multiple algorithms
+   - Each project features data loading, feature engineering, model training, evaluation metrics, and trained outputs
+   - Technologies: Python, Scikit-learn, TensorFlow, Keras, XGBoost, Pandas, NumPy, Matplotlib, Jupyter Notebook
 
-4. PSU Menu Analyzer Website
+4. AI Movie Recommendation Engine
+   - Movie recommendation platform powered by Google Gemini AI
+   - Provides personalized movie suggestions through interactive questionnaire
+   - Features watch history tracking, OMDB API integration for movie metadata
+   - Responsive UI built with Next.js and Tailwind CSS
+   - Technologies: Next.js, TypeScript, React, Tailwind CSS, Google Gemini API, OMDB API, Node.js
+
+5. PSU Menu Analyzer Website
    - Full-stack web application for Penn State dining menu analysis
    - Features AI-powered nutritional analysis using Google Gemini API
    - Real-time menu scraping and dietary preference filtering
-   - Technologies: Python, Flask, HTML, CSS, JavaScript, Google Gemini API
+   - CSV export functionality
+   - Technologies: Python, Flask, HTML, CSS, JavaScript, Google Gemini API, BeautifulSoup
 
-5. Chat With My Resume
-   - Intelligent resume chatbot using RAG technology
-   - Natural conversations about professional background and skills
-   - AI-powered interface with context understanding
-   - Technologies: Python, LangChain, OpenAI API, ChromaDB, FAISS, Flask
+6. AI-Powered Reddit Post Analyzer
+   - Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits
+   - Tracks market sentiment using Google Gemini API for NLP classification and summary generation
+   - Data processing and structuring insights with Pandas
+   - Technologies: Python, Google Gemini API, PRAW, Pandas, NLP
+
+7. SubReddit Monitor & Notification Tool
+   - Automated monitoring bot that streams Reddit posts in real-time using PRAW library
+   - Identifies relevant financial discussions and sends instant email notifications via SMTP
+   - Enables real-time market sentiment tracking with keyword matching
+   - Technologies: Python, PRAW, SMTP
 
 PERSONAL INTERESTS:
 - Machine Learning and AI applications
