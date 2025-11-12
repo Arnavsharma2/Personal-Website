@@ -12,8 +12,8 @@ const projects = [
     description: 'A real-time ASL learning platform with 98.98% accuracy PyTorch neural network converted to ONNX for <50ms browser inference. Features MediaPipe hand tracking for 60 FPS sign recognition of all 26 alphabet signs, FastAPI backend with Supabase database, user authentication, lesson modules, interactive quizzes, and progress tracking.',
     technologies: ['Next.js', 'React', 'Python', 'PyTorch', 'FastAPI', 'TypeScript', 'ONNX Runtime', 'MediaPipe', 'Supabase', 'PostgreSQL'],
     image: '/image copy.png',
-    github: '#',
-    live: '#',
+    github: 'https://github.com/Arnavsharma2/ASL-Learning-Platform',
+    live: 'https://asl-learning-platform-psi.vercel.app/',
     showLive: true,
     category: 'web-app'
   },

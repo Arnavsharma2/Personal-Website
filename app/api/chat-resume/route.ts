@@ -79,12 +79,42 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Initialize Gemini AI
+    // Initialize Gemini AI with fallback models
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" })
-
-    // Generate final response using the RAG-enhanced prompt
-    const response = await generateGeminiResponse(message, ragResponse.response, model, conversationHistory)
+    
+    // Try models in order of preference (with fallbacks)
+    const modelsToTry = [
+      "gemini-2.5-flash"
+    ]
+    
+    let response: string | null = null
+    let lastError: any = null
+    
+    for (const modelName of modelsToTry) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName })
+        response = await generateGeminiResponse(message, ragResponse.response, model, conversationHistory)
+        break // Success, exit loop
+      } catch (error: any) {
+        lastError = error
+        // If it's a rate limit error, try next model
+        if (error?.status === 429 || error?.message?.includes('429') || error?.message?.includes('quota')) {
+          console.warn(`Rate limit hit for ${modelName}, trying next model...`)
+          continue
+        }
+        // For other errors, break and handle below
+        break
+      }
+    }
+    
+    // If all models failed, handle the error
+    if (!response) {
+      if (lastError) {
+        throw lastError
+      } else {
+        throw new Error('Failed to generate response from any model')
+      }
+    }
 
     // Save user message to conversation
     const userMessage = {
@@ -123,10 +153,35 @@ export async function POST(request: NextRequest) {
       }
     })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in chat-resume API:', error)
+    
+    // Check if it's a rate limit error
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const statusCode = error?.status || error?.statusCode
+    
+    if (statusCode === 429 || 
+        errorMessage.includes('429') || 
+        errorMessage.includes('quota') || 
+        errorMessage.includes('limit')) {
+      
+      // Return a user-friendly rate limit message
+      return NextResponse.json(
+        { 
+          error: 'API rate limit exceeded. Please try again in a few minutes.',
+          rateLimited: true,
+          retryAfter: 60 // Suggest retrying after 60 seconds
+        },
+        { status: 429 }
+      )
+    }
+    
+    // For other errors, return generic error
     return NextResponse.json(
-      { error: 'Failed to process message' },
+      { 
+        error: 'Failed to process message. Please try again later.',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
       { status: 500 }
     )
   }
@@ -158,29 +213,50 @@ async function generateGeminiResponse(
     const text = response.text()
     
     return text.trim()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating Gemini response:', error)
     
     // Check for specific Gemini API errors
     const errorMessage = error instanceof Error ? error.message : String(error)
+    const statusCode = error?.status || error?.statusCode
     
-    // Handle quota/credit limit errors
-    if (errorMessage.includes('quota') || 
+    // Handle 429 rate limit errors specifically
+    if (statusCode === 429 || 
+        errorMessage.includes('429') || 
+        errorMessage.includes('Too Many Requests') ||
+        errorMessage.includes('quota') || 
         errorMessage.includes('limit') || 
-        errorMessage.includes('exceeded') ||
-        errorMessage.includes('billing') ||
-        errorMessage.includes('credit')) {
-      return "I apologize, but I've reached my daily API usage limit. Please try again tomorrow, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+        errorMessage.includes('exceeded')) {
+      
+      // Try to extract retry delay from error
+      let retryMessage = ''
+      if (error?.errorDetails) {
+        const retryInfo = error.errorDetails.find((detail: any) => detail['@type']?.includes('RetryInfo'))
+        if (retryInfo?.retryDelay) {
+          const delaySeconds = parseInt(retryInfo.retryDelay.replace('s', '')) || 0
+          const delayMinutes = Math.ceil(delaySeconds / 60)
+          retryMessage = ` Please try again in about ${delayMinutes} minute${delayMinutes !== 1 ? 's' : ''}.`
+        }
+      }
+      
+      return `I apologize, but I've temporarily reached my API usage limit.${retryMessage} In the meantime, feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?`
     }
     
     // Handle authentication errors
-    if (errorMessage.includes('API_KEY') || 
+    if (statusCode === 401 || 
+        statusCode === 403 ||
+        errorMessage.includes('API_KEY') || 
         errorMessage.includes('authentication') ||
         errorMessage.includes('unauthorized')) {
-      return "I apologize, but there's a temporary issue with my AI service. Please try again later, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+      return "I apologize, but there's a temporary issue with my AI service authentication. Please try again later, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+    }
+    
+    // Handle billing/credit errors
+    if (errorMessage.includes('billing') || errorMessage.includes('credit')) {
+      return "I apologize, but there's a temporary billing issue with my AI service. Please try again later, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
     }
     
     // Generic fallback response
-    return "I apologize, but I'm having trouble processing your request right now. I'd be happy to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+    return "I apologize, but I'm having trouble processing your request right now. Please try again in a moment, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
   }
 }

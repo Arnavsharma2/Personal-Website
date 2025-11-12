@@ -135,6 +135,8 @@ Other: Git, Docker, Web Scraping, NLP, LSTM, RAG, Vector Databases, FastAPI`,
    - Developed FastAPI backend with Supabase (PostgreSQL) database
    - Features: User authentication, lesson modules, interactive quiz system, and progress tracking dashboard
    - Technologies: Next.js, React, Python, PyTorch, FastAPI, TypeScript, ONNX Runtime, MediaPipe, Supabase, PostgreSQL
+   - GitHub: https://github.com/Arnavsharma2/ASL-Learning-Platform
+   - Website: https://asl-learning-platform-psi.vercel.app/
 
 2. Resume Chatbot
    - Intelligent resume chatbot using Retrieval-Augmented Generation (RAG) technology
