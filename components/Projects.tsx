@@ -8,6 +8,16 @@ import Image from 'next/image'
 
 const projects = [
   {
+    title: 'Automated Predictive Modeling Platform',
+    description: 'Full-stack ML platform with FastAPI/Next.js serving non-blocking real-time inference APIs via Celery/Redis distributed compute. Features AutoPreprocessor reducing feature engineering time by 80%, Bayesian hyperparameter optimization (Optuna) for XGBoost/Random Forest/CatBoost/LightGBM, SHAP/LIME explainability, and MLOps workflows with Prefect orchestration and PostgreSQL/S3 version control.',
+    technologies: ['Python', 'FastAPI', 'Next.js', 'React', 'TypeScript', 'PostgreSQL', 'Redis', 'SHAP', 'LIME', 'Optuna', 'Docker', 'AWS S3', 'Azure Blob'],
+    image: '/automatedModeling.png',
+    github: 'https://github.com/Arnavsharma2/Predictive-Modeling-Automation',
+    live: 'https://automated-predictive-modeling.vercel.app/',
+    showLive: true,
+    category: 'ml-ai'
+  },
+  {
     title: 'Real-Time ASL Learning Platform',
     description: 'A real-time ASL learning platform with 98.98% accuracy PyTorch neural network converted to ONNX for <50ms browser inference. Features MediaPipe hand tracking for 60 FPS sign recognition of all 26 alphabet signs, FastAPI backend with Supabase database, user authentication, lesson modules, interactive quizzes, and progress tracking.',
     technologies: ['Next.js', 'React', 'Python', 'PyTorch', 'FastAPI', 'TypeScript', 'ONNX Runtime', 'MediaPipe', 'Supabase', 'PostgreSQL'],
@@ -26,16 +36,6 @@ const projects = [
     live: '#',
     showLive: false,
     category: 'web-app'
-  },
-  {
-    title: 'Predictive Modeling Projects',
-    description: 'A comprehensive portfolio of machine learning projects demonstrating expertise in predictive modeling techniques. Includes House Price Prediction using regression models, Customer Churn Prediction with classification algorithms, Stock Return Forecasting using LSTM neural networks and time series analysis, and Blackjack Strategy Analysis with ensemble methods. Each project features data loading, feature engineering, model training with scikit-learn/XGBoost/TensorFlow, evaluation metrics, and trained model outputs.',
-    technologies: ['Python', 'Scikit-learn', 'TensorFlow', 'Keras', 'XGBoost', 'Pandas', 'NumPy', 'Matplotlib', 'Jupyter Notebook'],
-    image: '/Predictive-Modeling-Implementations.png',
-    github: 'https://github.com/Arnavsharma2/Predictive-Modeling-Projects',
-    live: '#',
-    showLive: false,
-    category: 'ml-ai'
   },
   {
     title: 'AI Movie Recommendation Engine',
