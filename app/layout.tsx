@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
+import { Sora } from 'next/font/google'
 import './globals.css'
-import MemoryManager from '@/components/MemoryManager'
+
+const sora = Sora({ subsets: ['latin'], variable: '--font-sora' })
 
 export const metadata: Metadata = {
   title: 'Arnav Sharma',
-  description: 'Personal website showcasing my experience, projects, and skills',
+  description: 'Software engineer specializing in machine learning and full-stack development',
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -21,10 +25,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${sora.variable}`}>
+      <body className="bg-background text-foreground font-sans">
         {children}
-        <MemoryManager />
       </body>
     </html>
   )

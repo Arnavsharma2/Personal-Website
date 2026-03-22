@@ -1,9 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
-import { Send, Bot, User, Loader2, MessageCircle, Sparkles, Trash2, X } from 'lucide-react'
+import { Send, Bot, User, Loader2, MessageCircle, Trash2 } from 'lucide-react'
 
 interface Message {
   id: string
@@ -33,7 +32,6 @@ interface ChatResumeProps {
 
 export default function ChatResume({ isSidebar = false, onClose }: ChatResumeProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -54,11 +52,9 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
     scrollToBottom()
   }, [messages])
 
-  // Load conversation history and message count on component mount
   useEffect(() => {
     const loadConversationData = async () => {
       try {
-        // Load conversation history
         const historyResponse = await fetch('/api/chat-history')
         if (historyResponse.ok) {
           const historyData = await historyResponse.json()
@@ -72,7 +68,6 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
           }
         }
 
-        // Load message count
         const countResponse = await fetch('/api/message-count')
         if (countResponse.ok) {
           const countData = await countResponse.json()
@@ -94,11 +89,10 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
   const sendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return
 
-    // Check if user has remaining messages
     if (messageCount.remaining <= 0) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        content: `🚫 Daily message limit exceeded. You have used ${messageCount.limit}/${messageCount.limit} messages today. Please try again tomorrow.`,
+        content: `Daily message limit exceeded. You have used ${messageCount.limit}/${messageCount.limit} messages today. Please try again tomorrow.`,
         role: 'assistant',
         timestamp: new Date()
       }
@@ -121,37 +115,31 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
     try {
       const response = await fetch('/api/chat-resume', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: content.trim() }),
       })
 
       if (!response.ok) {
         const errorData = await response.json()
-        
-        // Handle rate limit exceeded
         if (response.status === 429 && errorData.limitExceeded) {
           const errorMessage: Message = {
             id: (Date.now() + 1).toString(),
-            content: `🚫 ${errorData.error}`,
+            content: errorData.error,
             role: 'assistant',
             timestamp: new Date()
           }
           setMessages(prev => [...prev, errorMessage])
           return
         }
-        
         throw new Error(errorData.error || 'Failed to get response')
       }
 
       const data = await response.json()
-      
-      // Update message count if provided
+
       if (data.remaining !== undefined && data.limit !== undefined) {
         setMessageCount({ remaining: data.remaining, limit: data.limit })
       }
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: data.response,
@@ -177,19 +165,13 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
   }
 
   const resetConversation = async () => {
-    if (window.confirm('Are you sure you want to clear the conversation? This action cannot be undone.')) {
+    if (window.confirm('Clear the conversation? This cannot be undone.')) {
       try {
-        // Clear local messages
         setMessages([])
-        
-        // Clear conversation history only (not message count)
         const response = await fetch('/api/clear-conversation', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
         })
-
         if (!response.ok) {
           console.error('Failed to clear conversation history')
         }
@@ -204,136 +186,55 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
     sendMessage(inputValue)
   }
 
-  const handleStarterClick = (starter: string) => {
-    sendMessage(starter)
-  }
-
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
   return (
-    <div ref={ref} className={isSidebar ? "h-full flex flex-col" : "py-20 px-4 sm:px-6 lg:px-8 bg-primary-50"}>
-      {!isSidebar && (
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl sm:text-5xl font-bold text-accent-600 mb-4">
-              05.
-            </h2>
-            <h3 className="text-2xl sm:text-3xl font-semibold text-primary-900 mb-4">
-              Resume Chatbot
-            </h3>
-            <div className="w-24 h-1 bg-accent-500 mx-auto mb-6"></div>
-            <p className="text-lg text-primary-700 max-w-3xl mx-auto">
-              Ask me anything about Arnav&apos;s experience, skills, projects, career goals, or even hobbies. 
-              I&apos;m powered by AI and have access to Arnav&apos;s information.
-            </p>
-          </motion.div>
-        </div>
-      )}
-
+    <div ref={ref} className={isSidebar ? "h-full flex flex-col bg-surface" : "py-20 px-4 sm:px-6 lg:px-8 bg-background"}>
       <div className={isSidebar ? "flex-1 flex flex-col overflow-hidden" : "max-w-4xl mx-auto"}>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView || isSidebar ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, delay: isSidebar ? 0 : 0.2 }}
-          className={isSidebar ? "flex-1 flex flex-col h-full" : ""}
-        >
-          {/* Chat Interface */}
-          <div className={`${isSidebar ? "flex-1 flex flex-col h-full" : "bg-white rounded-2xl border border-primary-200 overflow-hidden shadow-2xl"}`}>
-            {/* Chat Header */}
-            {!isSidebar && (
-              <div className="bg-accent-100 border-b border-accent-200 p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-accent-500 rounded-full flex items-center justify-center">
-                    <Bot className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-semibold text-primary-900">Arnav&apos;s Resume Assistant</h4>
-                    <p className="text-sm text-primary-700">Ask me anything about my background</p>
-                  </div>
-                  <div className="ml-auto flex items-center space-x-4">
-                    <div className={`text-sm ${messageCount.remaining <= 5 ? 'text-red-500' : messageCount.remaining <= 10 ? 'text-yellow-500' : 'text-primary-600'}`}>
-                      Messages: {messageCount.remaining}/{messageCount.limit}
-                      {messageCount.remaining <= 5 && messageCount.remaining > 0 && (
-                        <span className="ml-1 text-xs">⚠️</span>
-                      )}
-                      {messageCount.remaining === 0 && (
-                        <span className="ml-1 text-xs">🚫</span>
-                      )}
-                    </div>
-                    <button
-                      onClick={resetConversation}
-                      className="p-2 text-primary-600 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                      title="Clear conversation"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {/* Sidebar Header Content */}
+        <div className={isSidebar ? "flex-1 flex flex-col h-full" : ""}>
+          <div className={isSidebar ? "flex-1 flex flex-col h-full" : "bg-surface rounded-2xl border border-surface-border overflow-hidden"}>
+
+            {/* Compact header for modal mode */}
             {isSidebar && (
-              <div className="bg-accent-500 border-b border-accent-600 p-4 flex-shrink-0">
+              <div className="bg-surface border-b border-surface-border px-4 py-2.5 flex-shrink-0">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h4 className="text-base font-semibold text-white">Resume Chatbot</h4>
-                      <p className="text-xs text-white/80">Ask me anything</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className={`text-xs px-2 py-1 rounded ${messageCount.remaining <= 5 ? 'bg-red-500/20 text-red-100' : messageCount.remaining <= 10 ? 'bg-yellow-500/20 text-yellow-100' : 'bg-white/20 text-white'}`}>
+                  <p className="text-xs text-foreground-subtle font-mono">
+                    Ask me about Arnav&apos;s experience, skills, or projects
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-mono ${messageCount.remaining <= 5 ? 'text-red-400' : 'text-foreground-subtle'}`}>
                       {messageCount.remaining}/{messageCount.limit}
-                    </div>
+                    </span>
                     <button
                       onClick={resetConversation}
-                      className="p-1.5 text-white hover:bg-white/20 rounded-lg transition-colors duration-200"
+                      className="p-1 text-foreground-subtle hover:text-foreground transition-colors"
                       title="Clear conversation"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
-                    {onClose && (
-                      <button
-                        onClick={onClose}
-                        className="p-1.5 text-white hover:bg-white/20 rounded-lg transition-colors duration-200"
-                        title="Close"
-                      >
-                        <X className="w-5 h-5" />
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
             )}
 
             {/* Messages Container */}
-            <div className={`${isSidebar ? "flex-1 overflow-y-auto" : "h-[500px] overflow-y-auto"} p-6 space-y-4 scrollbar-hide`}>
+            <div className={`${isSidebar ? "flex-1 overflow-y-auto" : "h-[500px] overflow-y-auto"} p-4 space-y-4`}>
               {messages.length === 0 ? (
-                <div className="text-center py-12">
-                  <MessageCircle className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                  <h4 className="text-xl font-semibold text-primary-900 mb-2">Start a conversation</h4>
-                  <p className="text-primary-700 mb-6">Choose a topic below or type your own question</p>
-                  
-                  {/* Conversation Starters */}
-                  <div className={`grid ${isSidebar ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-3 ${isSidebar ? '' : 'max-w-2xl mx-auto'}`}>
+                <div className="text-center py-8">
+                  <MessageCircle className="w-12 h-12 text-foreground-subtle mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold text-foreground mb-2">Start a conversation</h4>
+                  <p className="text-foreground-muted text-sm mb-6">Choose a topic or type your own question</p>
+
+                  <div className={`grid ${isSidebar ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-2 ${isSidebar ? '' : 'max-w-2xl mx-auto'}`}>
                     {conversationStarters.map((starter, index) => (
                       <motion.button
                         key={index}
-                        onClick={() => handleStarterClick(starter)}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="p-3 text-left bg-primary-100 hover:bg-primary-200 border border-primary-300 rounded-lg text-primary-700 hover:text-primary-900 transition-all duration-200 text-sm"
+                        onClick={() => sendMessage(starter)}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        className="p-3 text-left bg-surface-elevated hover:bg-surface-border/50 border border-surface-border rounded-lg text-foreground-muted hover:text-foreground transition-all duration-200 text-sm"
                       >
                         {starter}
                       </motion.button>
@@ -345,31 +246,31 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
                   {messages.map((message) => (
                     <motion.div
                       key={message.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.2 }}
                       className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div className={`flex items-start space-x-3 max-w-[80%] ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          message.role === 'user' 
-                            ? 'bg-accent-500' 
-                            : 'bg-primary-300'
+                      <div className={`flex items-start space-x-2.5 max-w-[85%] ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          message.role === 'user'
+                            ? 'bg-accent'
+                            : 'bg-surface-elevated border border-surface-border'
                         }`}>
                           {message.role === 'user' ? (
-                            <User className="w-4 h-4 text-white" />
+                            <User className="w-3.5 h-3.5 text-white" />
                           ) : (
-                            <Bot className="w-4 h-4 text-white" />
+                            <Bot className="w-3.5 h-3.5 text-foreground-muted" />
                           )}
                         </div>
-                        <div className={`rounded-2xl px-4 py-3 ${
+                        <div className={`rounded-2xl px-4 py-2.5 ${
                           message.role === 'user'
-                            ? 'bg-accent-500 text-white'
-                            : 'bg-primary-100 text-primary-900 border border-primary-200'
+                            ? 'bg-accent text-white'
+                            : 'bg-surface-elevated text-foreground border border-surface-border'
                         }`}>
                           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                          <p className={`text-xs mt-2 ${
-                            message.role === 'user' ? 'text-accent-100' : 'text-primary-600'
+                          <p className={`text-xs mt-1.5 ${
+                            message.role === 'user' ? 'text-white/60' : 'text-foreground-subtle'
                           }`}>
                             {formatTime(message.timestamp)}
                           </p>
@@ -377,21 +278,21 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
                       </div>
                     </motion.div>
                   ))}
-                  
+
                   {isTyping && (
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="flex justify-start"
                     >
-                      <div className="flex items-start space-x-3">
-                        <div className="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center">
-                          <Bot className="w-4 h-4 text-white" />
+                      <div className="flex items-start space-x-2.5">
+                        <div className="w-7 h-7 rounded-full bg-surface-elevated border border-surface-border flex items-center justify-center">
+                          <Bot className="w-3.5 h-3.5 text-foreground-muted" />
                         </div>
-                        <div className="bg-primary-100 border border-primary-200 rounded-2xl px-4 py-3">
-                          <div className="flex items-center space-x-1">
-                            <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
-                            <span className="text-sm text-primary-700">Arnav is typing...</span>
+                        <div className="bg-surface-elevated border border-surface-border rounded-2xl px-4 py-2.5">
+                          <div className="flex items-center space-x-2">
+                            <Loader2 className="w-3.5 h-3.5 text-foreground-subtle animate-spin" />
+                            <span className="text-sm text-foreground-muted">Thinking...</span>
                           </div>
                         </div>
                       </div>
@@ -403,44 +304,36 @@ export default function ChatResume({ isSidebar = false, onClose }: ChatResumePro
             </div>
 
             {/* Input Area */}
-            <div className={`border-t border-primary-200 p-4 ${isSidebar ? 'flex-shrink-0' : ''}`}>
-              <form onSubmit={handleSubmit} className="flex items-center space-x-3">
-                <div className="flex-1 relative">
+            <div className={`border-t border-surface-border p-3 ${isSidebar ? 'flex-shrink-0' : ''}`}>
+              <form onSubmit={handleSubmit} className="flex items-center space-x-2">
+                <div className="flex-1">
                   <input
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Ask me anything about my experience, skills, or projects..."
-                    className="w-full px-4 py-3 bg-white border border-primary-300 rounded-xl text-primary-900 placeholder-primary-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
+                    placeholder="Ask a question..."
+                    className="w-full px-4 py-2.5 bg-surface-elevated border border-surface-border rounded-lg text-foreground text-sm placeholder-foreground-subtle focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition-colors"
                     disabled={isLoading}
                   />
                 </div>
                 <motion.button
                   type="submit"
                   disabled={!inputValue.trim() || isLoading || messageCount.remaining <= 0}
-                  whileHover={{ scale: messageCount.remaining > 0 ? 1.05 : 1 }}
-                  whileTap={{ scale: messageCount.remaining > 0 ? 0.95 : 1 }}
-                  className={`px-6 py-3 font-semibold rounded-xl transition-all duration-200 flex items-center space-x-2 ${
-                    messageCount.remaining <= 0
-                      ? 'bg-primary-300 text-primary-600 cursor-not-allowed'
-                      : 'bg-accent-500 hover:bg-accent-600 disabled:bg-primary-300 disabled:text-primary-600 text-white disabled:cursor-not-allowed'
-                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2.5 bg-accent hover:bg-accent-dark disabled:bg-surface-border disabled:text-foreground-subtle text-white rounded-lg transition-all duration-200 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      <span>Send</span>
-                    </>
+                    <Send className="w-4 h-4" />
                   )}
                 </motion.button>
               </form>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
-      {!isSidebar && <div className="max-w-7xl mx-auto"></div>}
     </div>
   )
 }

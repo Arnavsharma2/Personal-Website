@@ -1,237 +1,200 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { ExternalLink, Github } from 'lucide-react'
 import Image from 'next/image'
+import { ExternalLink, Github } from 'lucide-react'
 
 const projects = [
   {
     title: 'Automated Predictive Modeling Platform',
-    description: 'Full-stack ML platform with FastAPI/Next.js serving non-blocking real-time inference APIs via Celery/Redis distributed compute. Features AutoPreprocessor reducing feature engineering time by 80%, Bayesian hyperparameter optimization (Optuna) for XGBoost/Random Forest/CatBoost/LightGBM, SHAP/LIME explainability, and MLOps workflows with Prefect orchestration and PostgreSQL/S3 version control.',
-    technologies: ['Python', 'FastAPI', 'Next.js', 'React', 'TypeScript', 'PostgreSQL', 'Redis', 'SHAP', 'LIME', 'Optuna', 'Docker', 'AWS S3', 'Azure Blob'],
+    description: 'Full-stack ML platform with FastAPI/Next.js serving real-time inference. AutoPreprocessor, Bayesian optimization, SHAP/LIME explainability, and MLOps workflows.',
+    technologies: ['Python', 'FastAPI', 'Next.js', 'PostgreSQL', 'Redis', 'Docker'],
     image: '/automatedModeling.png',
     github: 'https://github.com/Arnavsharma2/Predictive-Modeling-Automation',
     live: 'https://automated-predictive-modeling.vercel.app/',
-    showLive: true,
-    category: 'ml-ai'
   },
   {
     title: 'Real-Time ASL Learning Platform',
-    description: 'A real-time ASL learning platform with 98.98% accuracy PyTorch neural network converted to ONNX for <50ms browser inference. Features MediaPipe hand tracking for 60 FPS sign recognition of all 26 alphabet signs, FastAPI backend with Supabase database, user authentication, lesson modules, interactive quizzes, and progress tracking.',
-    technologies: ['Next.js', 'React', 'Python', 'PyTorch', 'FastAPI', 'TypeScript', 'ONNX Runtime', 'MediaPipe', 'Supabase', 'PostgreSQL'],
+    description: '98.98% accuracy PyTorch model converted to ONNX for <50ms browser inference. MediaPipe hand tracking at 60 FPS with interactive lessons and progress tracking.',
+    technologies: ['PyTorch', 'ONNX', 'MediaPipe', 'Next.js', 'FastAPI', 'Supabase'],
     image: '/image copy.png',
     github: 'https://github.com/Arnavsharma2/ASL-Learning-Platform',
     live: 'https://asl-learning-platform-psi.vercel.app/',
-    showLive: true,
-    category: 'web-app'
   },
   {
     title: 'Resume Chatbot',
-    description: 'An intelligent resume chatbot that allows natural conversations about professional background and experience. Built with Retrieval-Augmented Generation (RAG) technology using LangChain and OpenAI API for responses.',
-    technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'FAISS', 'Flask', 'RAG'],
+    description: 'RAG-powered chatbot using LangChain and OpenAI API for natural conversations about professional background with vector similarity search.',
+    technologies: ['Python', 'LangChain', 'OpenAI API', 'ChromaDB', 'Flask'],
     image: '/chatwresume.png',
     github: 'https://github.com/Arnavsharma2/Chat-With-my-Resume',
-    live: '#',
-    showLive: false,
-    category: 'web-app'
   },
   {
     title: 'AI Movie Recommendation Engine',
-    description: 'A movie recommendation platform powered by Google Gemini AI that provides personalized movie suggestions through an interactive questionnaire. Features watch history tracking, OMDB API integration for movie metadata, and a responsive UI built with Next.js and Tailwind CSS.',
-    technologies: ['Next.js', 'TypeScript', 'React', 'Tailwind CSS', 'Google Gemini API', 'OMDB API', 'Node.js', 'localStorage'],
+    description: 'Personalized movie suggestions powered by Google Gemini AI with interactive questionnaire, watch history tracking, and OMDB API integration.',
+    technologies: ['Next.js', 'TypeScript', 'Gemini API', 'OMDB API'],
     image: '/image.png',
     github: 'https://github.com/Arnavsharma2/Movie-Suggestion',
     live: 'https://movie-suggestion-8ty3.onrender.com/',
-    showLive: true,
-    category: 'web-app'
   },
   {
-    title: 'PSU Menu Analyzer Website',
-    description: 'A full-stack web application that scrapes Penn State dining menus and provides AI-powered nutritional analysis. Features real-time menu updates, dietary filtering, and CSV export using Google Gemini API.',
-    technologies: ['Python', 'Flask', 'HTML', 'CSS', 'JavaScript', 'Google Gemini API', 'BeautifulSoup'],
+    title: 'PSU Menu Analyzer',
+    description: 'Scrapes Penn State dining menus and provides AI-powered nutritional analysis with dietary filtering and CSV export.',
+    technologies: ['Python', 'Flask', 'Gemini API', 'BeautifulSoup'],
     image: '/psu-menu-analyzer.png',
     github: 'https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite',
     live: 'https://psumenu.com',
-    category: 'web-app'
   },
   {
-    title: 'AI-Powered Reddit Post Analyzer',
-    description: 'A Python tool that scrapes and analyzes up to 5,000 Reddit posts from financial subreddits to track market sentiment. Uses Google Gemini API for NLP classification and summary generation, with Pandas for data processing and structuring insights.',
-    technologies: ['Python', 'Google Gemini API', 'PRAW', 'Pandas', 'NLP'],
+    title: 'AI Reddit Post Analyzer',
+    description: 'Analyzes up to 5,000 Reddit posts from financial subreddits for market sentiment using NLP classification and summary generation.',
+    technologies: ['Python', 'Gemini API', 'PRAW', 'Pandas'],
     image: '/analyse.png',
     github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis',
-    live: '#',
-    showLive: false,
-    category: 'web-scraping'
   },
   {
-    title: 'SubReddit Monitor & Notification Tool',
-    description: 'An automated monitoring bot that streams Reddit posts in real-time using PRAW library and identifies relevant financial discussions. Sends instant email notifications via SMTP when keyword matches are found, enabling real-time market sentiment tracking.',
+    title: 'SubReddit Monitor',
+    description: 'Real-time Reddit streaming bot with instant email notifications for keyword matches, enabling automated market sentiment tracking.',
     technologies: ['Python', 'PRAW', 'SMTP'],
     image: '/monitor.png',
     github: 'https://github.com/Arnavsharma2/SubReddit-Monitor',
-    live: '#',
-    showLive: false,
-    category: 'web-scraping'
-  }
+  },
 ]
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+}
 
 export default function Projects() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
 
   return (
-    <section id="projects" ref={ref} className="py-20 px-4 sm:px-6 lg:px-8 relative min-h-screen flex items-center overflow-hidden pb-32">
-      {/* Background Image with parallax effect */}
-      <motion.div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: 'url(https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/calvin-hobbes-snow-white-calvin-hobbes-snow-white.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center bottom',
-        }}
-        animate={{
-          scale: [1, 1.05, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-      
-      {/* Cool overlay effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-900/80 via-primary-800/70 to-accent-900/75" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-      
-      {/* Animated overlay for depth */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-        animate={{
-          x: ['-100%', '100%'],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-      />
-      
-      {/* Subtle noise texture overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
+    <section id="projects" ref={ref} className="min-h-screen bg-black relative py-20 px-6">
+      <div className="max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16 relative"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
         >
-          {/* Subtle backdrop blur for header */}
-          <div className="absolute inset-0 -z-10 bg-black/20 backdrop-blur-sm rounded-2xl -m-4" />
-          
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-            03.
-          </h2>
-          <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-4 drop-shadow-lg">
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight"
+          >
             Projects
-          </h3>
-          <div className="w-24 h-1 bg-accent-400 mx-auto"></div>
-        </motion.div>
+          </motion.h2>
+          <motion.p
+            variants={itemVariants}
+            className="text-white/40 text-lg mb-16 max-w-xl"
+          >
+            Selected work in machine learning, full-stack development, and AI applications.
+          </motion.p>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="group bg-white/20 backdrop-blur-md rounded-xl overflow-hidden border border-white/30 hover:bg-white/30 hover:shadow-lg hover:shadow-white/20 transition-all duration-300"
-            >
-              {/* Project Image */}
-              <div className="relative h-48 bg-gradient-to-br from-primary-100 to-primary-50 overflow-hidden group-hover:from-primary-200 group-hover:to-primary-100 transition-all duration-300">
-                {project.image && project.image !== '/api/placeholder/400/300' ? (
-                  <Image 
-                    src={project.image} 
+          {/* Project grid */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            {projects.map((project) => (
+              <motion.div
+                key={project.title}
+                variants={itemVariants}
+                className="group relative bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden hover:bg-white/[0.06] hover:border-white/[0.1] transition-all duration-300"
+              >
+                {/* Project image */}
+                <div className="relative h-44 overflow-hidden">
+                  <Image
+                    src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    loading="lazy"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    onError={(e) => {
-                      // Fallback to letter if image fails to load
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
-                ) : null}
-                <div 
-                  className={`absolute inset-0 bg-gray-200/20 flex items-center justify-center ${
-                    project.image && project.image !== '/api/placeholder/400/300' ? 'hidden' : ''
-                  }`}
-                >
-                  <span className="text-4xl font-bold text-white/80">
-                    {project.title.charAt(0)}
-                  </span>
-                </div>
-                
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
-                  <a
-                    href={project.github}
-                    className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="w-6 h-6 text-white" />
-                  </a>
-                  {project.showLive !== false && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                  {/* Links overlay */}
+                  <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <a
-                      href={project.live}
-                      className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200"
+                      href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="p-2 bg-black/60 backdrop-blur-sm rounded-full text-white/70 hover:text-white transition-colors"
+                      aria-label="GitHub"
                     >
-                      <ExternalLink className="w-6 h-6 text-white" />
+                      <Github size={14} />
                     </a>
-                  )}
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 bg-black/60 backdrop-blur-sm rounded-full text-white/70 hover:text-white transition-colors"
+                        aria-label="Live demo"
+                      >
+                        <ExternalLink size={14} />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Project Content */}
-              <div className="p-6">
-                <h4 className="text-xl font-semibold text-white mb-3 group-hover:text-accent-300 transition-colors duration-200 drop-shadow-md">
-                  {project.title}
-                </h4>
-                
-                <p className="text-white/90 leading-relaxed mb-4 drop-shadow-md">
-                  {project.description}
-                </p>
-
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium hover:bg-white/30 border border-white/30 transition-colors duration-200"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                {/* Content */}
+                <div className="p-5">
+                  <h3 className="text-base font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-white/40 text-sm leading-relaxed mb-4">
+                    {project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="text-[11px] font-mono text-white/25 px-2 py-0.5 rounded-full border border-white/[0.06]"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Bottom contact */}
+          <motion.div
+            variants={itemVariants}
+            className="mt-20 pt-12 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-6"
+          >
+            <p className="text-white/30 text-sm">
+              Built by Arnav Sharma
+            </p>
+            <div className="flex items-center gap-6">
+              <a
+                href="mailto:aqs7726@psu.edu"
+                className="text-white/30 hover:text-white text-sm transition-colors"
+              >
+                aqs7726@psu.edu
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/30 hover:text-white text-sm font-mono transition-colors"
+              >
+                Resume
+              </a>
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )

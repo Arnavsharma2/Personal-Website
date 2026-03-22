@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cleanupApiMemory, logMemoryUsage } from '@/utils/memoryManager'
 
 // In-memory storage for Vercel compatibility
 const visits: VisitData[] = []
@@ -189,9 +188,6 @@ function getVisitStats() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Log memory usage at start
-    logMemoryUsage('log-visit POST')
-    
     const ip = getClientIP(request)
     
     // Check rate limit
@@ -238,9 +234,6 @@ export async function POST(request: NextRequest) {
     
     // Get current stats
     const stats = getVisitStats()
-    
-    // Cleanup memory after processing
-    cleanupApiMemory()
     
     return NextResponse.json({
       success: true,
