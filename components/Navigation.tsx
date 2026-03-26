@@ -33,7 +33,7 @@ export default function Navigation() {
 
         <div className="flex items-center gap-5">
           <a
-            href="mailto:aqs7726@psu.edu"
+            href="mailto:arnav.sh2264@gmail.com"
             className="text-white/30 hover:text-white transition-colors"
             aria-label="Email"
           >

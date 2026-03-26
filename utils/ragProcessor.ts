@@ -219,7 +219,7 @@ Career Goals:
   },
   {
     page_content: `CONTACT INFORMATION:
-- Email: aqs7726@psu.edu
+- Email: arnav.sh2264@gmail.com
 - GitHub: https://github.com/Arnavsharma2
 - LinkedIn: https://linkedin.com/in/arnav-sharma2
 - Resume: Available via Google Drive link
@@ -323,7 +323,7 @@ Response:`
   } catch (error) {
     console.error('Error in RAG response generation:', error)
     return {
-      response: "I apologize, but I'm having trouble accessing my resume information right now. Please try again later, or feel free to reach out to me directly at aqs7726@psu.edu.",
+      response: "I apologize, but I'm having trouble accessing my resume information right now. Please try again later, or feel free to reach out to me directly at arnav.sh2264@gmail.com.",
       sources: [],
       confidence: 0.1
     }

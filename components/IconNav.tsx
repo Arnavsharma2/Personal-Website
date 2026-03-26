@@ -8,7 +8,7 @@ const navItems = [
   { icon: Home, label: 'Home', href: '#home' },
   { icon: Briefcase, label: 'Experience', href: '#experience' },
   { icon: FolderOpen, label: 'Projects', href: '#projects' },
-  { icon: Mail, label: 'Contact', href: '#contact' },
+  { icon: Mail, label: 'Contact', href: 'mailto:arnav.sh2264@gmail.com', external: true },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/arnav-sharma2/', external: true },
   { icon: Github, label: 'GitHub', href: 'https://github.com/Arnavsharma2', external: true },
 ]

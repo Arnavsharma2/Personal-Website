@@ -239,7 +239,7 @@ async function generateGeminiResponse(
         }
       }
       
-      return `I apologize, but I've temporarily reached my API usage limit.${retryMessage} In the meantime, feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?`
+      return `I apologize, but I've temporarily reached my API usage limit.${retryMessage} In the meantime, feel free to reach out to me directly at arnav.sh2264@gmail.com to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?`
     }
     
     // Handle authentication errors
@@ -248,15 +248,15 @@ async function generateGeminiResponse(
         errorMessage.includes('API_KEY') || 
         errorMessage.includes('authentication') ||
         errorMessage.includes('unauthorized')) {
-      return "I apologize, but there's a temporary issue with my AI service authentication. Please try again later, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+      return "I apologize, but there's a temporary issue with my AI service authentication. Please try again later, or feel free to reach out to me directly at arnav.sh2264@gmail.com to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
     }
     
     // Handle billing/credit errors
     if (errorMessage.includes('billing') || errorMessage.includes('credit')) {
-      return "I apologize, but there's a temporary billing issue with my AI service. Please try again later, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+      return "I apologize, but there's a temporary billing issue with my AI service. Please try again later, or feel free to reach out to me directly at arnav.sh2264@gmail.com to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
     }
     
     // Generic fallback response
-    return "I apologize, but I'm having trouble processing your request right now. Please try again in a moment, or feel free to reach out to me directly at aqs7726@psu.edu to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
+    return "I apologize, but I'm having trouble processing your request right now. Please try again in a moment, or feel free to reach out to me directly at arnav.sh2264@gmail.com to discuss my experience with machine learning, software development, or my current internship at Wefire. What would you like to know about my background?"
   }
 }

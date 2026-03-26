@@ -179,10 +179,10 @@ export default function Projects() {
             </p>
             <div className="flex items-center gap-6">
               <a
-                href="mailto:aqs7726@psu.edu"
+                href="mailto:arnav.sh2264@gmail.com"
                 className="text-white/30 hover:text-white text-sm transition-colors"
               >
-                aqs7726@psu.edu
+                arnav.sh2264@gmail.com
               </a>
               <a
                 href="https://drive.google.com/file/d/1A5zfUUEOFgZhPxz9mkOv06x54-4syNir/view?usp=sharing"

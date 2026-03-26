@@ -178,7 +178,7 @@ CAREER GOALS:
 - Contribute to meaningful projects in AI and software development
 
 CONTACT INFORMATION:
-- Email: aqs7726@psu.edu
+- Email: arnav.sh2264@gmail.com
 - GitHub: https://github.com/Arnavsharma2
 - LinkedIn: https://linkedin.com/in/arnav-sharma2
 - Resume: Available via Google Drive link`
