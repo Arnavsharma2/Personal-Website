@@ -18,6 +18,18 @@ interface ExperienceItem {
 
 const experiences: ExperienceItem[] = [
   {
+    company: 'Doximity',
+    role: 'Data Engineering and Analytics Intern',
+    date: '05/2026 - 08/2026',
+    location: 'San Francisco, California',
+    color: '#0d3c61',
+    initials: 'DX',
+    logo: '/doximity-logo.jpg',
+    description: [
+      'Building data engineering and analytics solutions',
+    ],
+  },
+  {
     company: 'WeFIRE',
     role: 'Data Science Intern',
     date: '01/2025 - 11/2025',
