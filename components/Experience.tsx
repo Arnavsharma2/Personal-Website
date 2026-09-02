@@ -13,6 +13,7 @@ interface ExperienceItem {
   color: string
   initials: string
   logo?: string
+  logoVariant?: 'ibm'
   description?: string[]
 }
 
@@ -22,8 +23,10 @@ const experiences: ExperienceItem[] = [
     role: 'Intern',
     date: '08/2026 - Present',
     location: 'Chicago, Illinois',
-    color: '#052FAD',
+    color: '#0f62fe',
     initials: 'IBM',
+    logo: '/ibm-logo.svg',
+    logoVariant: 'ibm',
     description: [
       'AI engineering focused on LLM inference, model serving, and evaluation for IBM Granite using Python, PyTorch, vLLM, TensorRT-LLM, OpenShift, and Kubernetes.',
       'Working on inference performance, tool use, groundedness, safety, and production ML reliability.',
@@ -110,16 +113,16 @@ function ExperienceCard({ item, index }: { item: ExperienceItem; index: number }
       >
         <div className="experience-left">
           <div
-            className="experience-logo"
+            className={`experience-logo${item.logoVariant ? ` experience-logo-${item.logoVariant}` : ''}`}
             style={{ backgroundColor: item.color }}
           >
             {item.logo ? (
               <Image 
                 src={item.logo} 
-                alt={item.company} 
+                alt=""
                 width={32} 
                 height={32} 
-                className="experience-logo-img"
+                className={`experience-logo-img${item.logoVariant ? ` experience-logo-img-${item.logoVariant}` : ''}`}
               />
             ) : (
               <span className="experience-logo-text">{item.initials}</span>
