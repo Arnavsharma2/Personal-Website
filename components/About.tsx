@@ -25,9 +25,13 @@ export default function About() {
           transition={{ duration: 0.5, delay: 0.15 }}
           className="about-content"
         >
-          <p>I like coding and nature</p>
+          <p>
+            I work on AI engineering, LLM inference, model serving, evaluation,
+            and reliable data systems.
+          </p>
           <p className="about-secondary">
-            You&apos;ll find me hiking, cooking, or trying new foods in the meantime
+            I&apos;m a Computer Science student at Penn State. Outside of work, you&apos;ll
+            find me hiking, cooking, or trying new foods.
           </p>
         </motion.div>
       </div>

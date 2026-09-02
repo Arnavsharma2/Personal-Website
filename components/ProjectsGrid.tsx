@@ -5,7 +5,42 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import { ExternalLink, Github } from 'lucide-react'
 
-const projects = [
+interface ProjectItem {
+  title: string
+  description: string
+  technologies: string[]
+  github: string
+  image?: string
+  placeholder?: string
+  gradient?: string
+  live?: string
+}
+
+const projects: ProjectItem[] = [
+  {
+    title: 'CacheForge',
+    description: '2-bit KV-cache quantization for LLM inference with custom CUDA kernels; 2.6x lower peak memory and up to 3.47x higher throughput.',
+    technologies: ['python', 'pytorch', 'cuda', 'c++', 'flashattention'],
+    placeholder: 'CF',
+    gradient: 'linear-gradient(135deg, #171A2B 0%, #4355DB 100%)',
+    github: 'https://github.com/Arnavsharma2/CacheForge',
+  },
+  {
+    title: 'Benchseed',
+    description: 'Parallel, constant-memory TPC-H data generation in Rust with Arrow and Parquet; byte-for-byte parity in CI and 14.4x faster than DuckDB at 100 GB.',
+    technologies: ['rust', 'arrow', 'parquet', 'python', 'cli'],
+    placeholder: 'BS',
+    gradient: 'linear-gradient(135deg, #132A24 0%, #2F855A 100%)',
+    github: 'https://github.com/Arnavsharma2/benchseed',
+  },
+  {
+    title: 'Threadwave',
+    description: 'Pure-Go real-time collaboration with Yjs-compatible CRDTs, WebSockets, SQLite, and NATS/JetStream, verified across 158 cross-language fixtures.',
+    technologies: ['go', 'crdts', 'websockets', 'sqlite', 'nats'],
+    placeholder: 'TW',
+    gradient: 'linear-gradient(135deg, #2D1B33 0%, #9F5FBD 100%)',
+    github: 'https://github.com/Arnavsharma2/threadwave',
+  },
   {
     title: 'Automated Predictive Modeling',
     description: 'full-stack ML platform with real-time inference and explainability',
@@ -40,14 +75,14 @@ const projects = [
   },
   {
     title: 'Reddit Post Analyzer',
-    description: 'NLP sentiment analysis on financial subreddits',
-    technologies: ['python', 'gemini api', 'praw'],
+    description: 'AI classification and summarization for financial subreddit posts',
+    technologies: ['python', 'gemini api', 'httpx'],
     image: '/analyse.png',
     github: 'https://github.com/Arnavsharma2/Reddit-Scraper-and-AI-Analysis',
   },
 ]
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -57,13 +92,23 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
     >
       {/* Project image */}
       <div className="project-card-image">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover"
-          sizes="220px"
-        />
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover"
+            sizes="220px"
+          />
+        ) : (
+          <div
+            className="project-card-placeholder"
+            style={{ background: project.gradient }}
+            aria-hidden="true"
+          >
+            <span>{project.placeholder}</span>
+          </div>
+        )}
         {/* Link icons overlay */}
         <div className="project-card-links">
           <a

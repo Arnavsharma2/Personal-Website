@@ -18,27 +18,53 @@ interface ExperienceItem {
 
 const experiences: ExperienceItem[] = [
   {
+    company: 'IBM',
+    role: 'Intern',
+    date: '08/2026 - Present',
+    location: 'Chicago, Illinois',
+    color: '#052FAD',
+    initials: 'IBM',
+    description: [
+      'AI engineering focused on LLM inference, model serving, and evaluation for IBM Granite using Python, PyTorch, vLLM, TensorRT-LLM, OpenShift, and Kubernetes.',
+      'Working on inference performance, tool use, groundedness, safety, and production ML reliability.',
+    ],
+  },
+  {
     company: 'Doximity',
-    role: 'Data Engineering and Analytics Intern',
+    role: 'Intern',
     date: '05/2026 - 08/2026',
     location: 'San Francisco, California',
     color: '#0d3c61',
     initials: 'DX',
     logo: '/doximity-logo.jpg',
     description: [
-      'Building data engineering and analytics solutions',
+      'Worked on clinical LLM evaluation and data infrastructure using Python, Kafka, Snowflake, Airflow, PySpark, and Great Expectations.',
+      'Built model-quality checks and production data pipelines with clinicians, product managers, and engineers.',
+    ],
+  },
+  {
+    company: 'Students for Society SFORS',
+    role: 'Activity Coordinator',
+    date: '01/2022 - 01/2026',
+    location: '',
+    color: '#2F855A',
+    initials: 'SF',
+    description: [
+      'Led planning and execution for five environmental events involving 200 volunteers and reaching 2,000+ participants.',
+      'Managed scheduling, logistics, outreach, and external partnerships.',
     ],
   },
   {
     company: 'WeFIRE',
-    role: 'Data Science Intern',
+    role: 'Intern',
     date: '01/2025 - 11/2025',
     location: 'Hayward, California',
     color: '#FF6F00',
     initials: 'WF',
     logo: '/wefirelogo.jpeg',
     description: [
-      'Led 0-1 development of automated market intelligence software',
+      'Built backend and full-stack systems using Python, TypeScript, React, FastAPI, PostgreSQL, Docker, and AWS.',
+      'Integrated Plaid and Stripe and worked on APIs, financial data workflows, and reliability.',
     ],
   },
 ]

@@ -26,7 +26,7 @@ export default function Contact() {
           className="contact-content"
         >
           <p>
-            &lt;<a href="mailto:arnav.sh2264@gmail.com" className="contact-link">arnav.sh2264@gmail.com</a>&gt;
+            &lt;<a href="mailto:aqs7726@psu.edu" className="contact-link">aqs7726@psu.edu</a>&gt;
           </p>
           <p className="contact-secondary">
             or say hi on{' '}

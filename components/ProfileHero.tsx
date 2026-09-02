@@ -17,8 +17,9 @@ export default function ProfileHero() {
           <div className="avatar-circle">
             <Image
               src="/profile.jpg"
-              alt="Profile"
+              alt="Arnav Sharma"
               fill
+              sizes="120px"
               className="object-cover"
               priority
             />
@@ -43,7 +44,7 @@ export default function ProfileHero() {
           className="profile-tagline"
         >
           <p>
-            CS @ Penn State University
+            CS @ Penn State | Intern @ IBM
           </p>
         </motion.div>
       </div>

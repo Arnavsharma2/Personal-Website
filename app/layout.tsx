@@ -7,8 +7,18 @@ import './globals.css'
 const sora = Sora({ subsets: ['latin'], variable: '--font-sora' })
 
 export const metadata: Metadata = {
-  title: 'Arnav Sharma',
-  description: 'Software engineer specializing in machine learning and full-stack development',
+  metadataBase: new URL('https://arnav-sharma2.com'),
+  title: 'Arnav Sharma | CS @ Penn State & IBM Intern',
+  description: 'Computer Science student at Penn State working on AI engineering, LLM inference, model serving, evaluation, and reliable data systems.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Arnav Sharma | CS @ Penn State & IBM Intern',
+    description: 'Computer Science student at Penn State working on AI engineering, LLM inference, model serving, evaluation, and reliable data systems.',
+    url: '/',
+    type: 'website',
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
