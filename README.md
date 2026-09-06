@@ -1,30 +1,34 @@
-# Personal Website
+# Arnav Sharma — Portfolio
 
-Next.js portfolio website featuring a profile hero, about, experience, project showcase, and contact sections, with lightweight visit tracking.
+My personal portfolio for software engineering, ML systems, and research work.
 
-## What It Does
+**[Visit the portfolio](https://arnav-sharma2.com)** · [GitHub profile](https://github.com/Arnavsharma2) · [LinkedIn](https://www.linkedin.com/in/arnav-sharma2/)
 
-- Displays a personal profile, experience timeline, and project showcase with descriptions and images
-- Smooth section animations and icon-based navigation
-- Silent visit tracking with rate limiting and IP geolocation
+## Built with
 
-## How It Works
+Next.js 14, React, TypeScript, Tailwind CSS, and Framer Motion. The site presents a profile, experience timeline, selected projects, and contact links.
 
-1. **Frontend**: Next.js 14 (App Router) with React and TypeScript
-2. **Sections**: `ProfileHero`, `About`, `Experience`, `ProjectsGrid`, and `Contact` rendered from `app/page.tsx`
-3. **API Routes**: `/api/log-visit` records visits in memory with rate limiting and optional IP geolocation
+## Run locally
 
-## Dependencies
+```bash
+git clone https://github.com/Arnavsharma2/Personal-Website.git
+cd Personal-Website
+npm install
+npm run dev
+```
 
-- `next` - React framework
-- `framer-motion` - Animations
-- `lucide-react` - Icons
-- `geist` - Font
-- `tailwindcss` - Styling
-- `typescript` - Type safety
+Open [localhost:3000](http://localhost:3000). To create a production build:
 
-## Technical Details
+```bash
+npm run build
+npm start
+```
 
-- Framework: Next.js 14 (App Router)
-- Deployment: Vercel or similar platform
-- Features: portfolio sections, animated UI, visit tracking
+## Project structure
+
+- [`app/page.tsx`](app/page.tsx) assembles the portfolio sections.
+- [`components/`](components/) contains the profile, experience, projects, and contact components.
+- [`public/`](public/) contains images and other static assets.
+- [`app/api/log-visit/route.ts`](app/api/log-visit/route.ts) implements the existing in-memory visit log with rate limiting and optional IP geolocation.
+
+Deployment uses Vercel. The public portfolio is available at [arnav-sharma2.com](https://arnav-sharma2.com).
