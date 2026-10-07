@@ -1,151 +1,141 @@
-type Point = { x: number; y: number };
-type Segment = [string, string];
+'use client'
 
-const STEP = 20;
-const COLUMNS = 89;
-const ROWS = 59;
-const OFFSET = -80;
+import { useEffect, useRef } from 'react'
 
-// Contours of a gently warped surface create a continuous, nonrepeating field.
-// Everything is deterministic and rendered as SVG on the server.
-function surface(x: number, y: number) {
-  const u = x + 110 * Math.sin(y / 350) + 55 * Math.cos(x / 560 + y / 420);
-  const v = y + 70 * Math.sin(x / 460) - 35 * Math.cos(y / 240);
-  const hill = Math.exp(-(((u - 1240) / 510) ** 2) - ((v - 110) / 440) ** 2);
-  const valley = Math.exp(-(((u - 330) / 390) ** 2) - ((v - 710) / 350) ** 2);
+type Particle = { x: number; y: number; age: number; lifetime: number }
 
-  return (
-    0.38 * Math.sin(u / 390) +
-    0.3 * Math.cos(v / 270) +
-    0.2 * Math.sin((u + v) / 530) +
-    0.18 * Math.cos((u - v) / 300) +
-    0.95 * hill -
-    0.78 * valley
-  );
-}
-
-const samples = Array.from({ length: ROWS }, (_, row) =>
-  Array.from({ length: COLUMNS }, (_, column) =>
-    surface(OFFSET + column * STEP, OFFSET + row * STEP),
-  ),
-);
-
-function smoothPath(points: Point[], closed: boolean) {
-  if (points.length < 4) return "";
-
-  const coordinates = (point: Point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
-  const midpoint = (a: Point, b: Point): Point => ({
-    x: (a.x + b.x) / 2,
-    y: (a.y + b.y) / 2,
-  });
-  const first = points[0];
-  const last = points[points.length - 1];
-  const start = closed ? midpoint(last, first) : first;
-  let path = `M${coordinates(start)}Q${coordinates(first)} ${coordinates(midpoint(first, points[1]))}`;
-
-  // Midpoint quadratics give smooth curves without long lists of control points.
-  for (let index = 1; index < points.length - 1; index += 1) {
-    path += `T${coordinates(midpoint(points[index], points[index + 1]))}`;
-  }
-
-  return path + `T${coordinates(closed ? start : last)}${closed ? "Z" : ""}`;
-}
-
-function contour(level: number) {
-  const vertices = new Map<string, Point>();
-  const neighbors = new Map<string, string[]>();
-
-  function connect([a, b]: Segment) {
-    neighbors.set(a, [...(neighbors.get(a) ?? []), b]);
-    neighbors.set(b, [...(neighbors.get(b) ?? []), a]);
-  }
-
-  for (let row = 0; row < ROWS - 1; row += 1) {
-    for (let column = 0; column < COLUMNS - 1; column += 1) {
-      const values = [
-        samples[row][column],
-        samples[row][column + 1],
-        samples[row + 1][column + 1],
-        samples[row + 1][column],
-      ];
-      const corners: Point[] = [
-        { x: OFFSET + column * STEP, y: OFFSET + row * STEP },
-        { x: OFFSET + (column + 1) * STEP, y: OFFSET + row * STEP },
-        { x: OFFSET + (column + 1) * STEP, y: OFFSET + (row + 1) * STEP },
-        { x: OFFSET + column * STEP, y: OFFSET + (row + 1) * STEP },
-      ];
-      const ids = [
-        `h${row}:${column}`,
-        `v${row}:${column + 1}`,
-        `h${row + 1}:${column}`,
-        `v${row}:${column}`,
-      ];
-      const crossings: string[] = [];
-
-      for (let edge = 0; edge < 4; edge += 1) {
-        const next = (edge + 1) % 4;
-        if ((values[edge] > level) === (values[next] > level)) continue;
-
-        const fraction = (level - values[edge]) / (values[next] - values[edge]);
-        vertices.set(ids[edge], {
-          x: corners[edge].x + fraction * (corners[next].x - corners[edge].x),
-          y: corners[edge].y + fraction * (corners[next].y - corners[edge].y),
-        });
-        crossings.push(ids[edge]);
-      }
-
-      if (crossings.length === 2) {
-        connect([crossings[0], crossings[1]]);
-      } else if (crossings.length === 4) {
-        const centerAbove = values.reduce((sum, value) => sum + value, 0) / 4 > level;
-        const pairs = centerAbove === (values[0] > level) ? [[0, 1], [2, 3]] : [[0, 3], [1, 2]];
-        for (const [a, b] of pairs) connect([crossings[a], crossings[b]]);
-      }
-    }
-  }
-
-  const visited = new Set<string>();
-  const paths: string[] = [];
-  // Trace boundary-to-boundary curves first, then the remaining closed contours.
-  const starts = [...neighbors.keys()].sort(
-    (a, b) => neighbors.get(a)!.length - neighbors.get(b)!.length,
-  );
-
-  for (const start of starts) {
-    if (visited.has(start)) continue;
-    const points: Point[] = [];
-    let current: string | undefined = start;
-
-    while (current !== undefined && !visited.has(current)) {
-      visited.add(current);
-      points.push(vertices.get(current)!);
-      current = neighbors.get(current)!.find((neighbor) => !visited.has(neighbor));
-    }
-
-    const path = smoothPath(points, neighbors.get(start)!.length === 2);
-    if (path) paths.push(path);
-  }
-
-  return paths.join("");
-}
-
-const contours = Array.from({ length: 94 }, (_, index) => contour(-1.3 + index * 0.03)).filter(Boolean);
-
+/** An original, slowly changing current field, traced by drifting particles. */
 export default function FlowField() {
-  return (
-    <svg
-      className="flow-field"
-      viewBox="0 0 1600 1000"
-      preserveAspectRatio="xMidYMid slice"
-      aria-hidden="true"
-      focusable="false"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g fill="none" stroke="#a1a687" strokeOpacity="0.19" strokeWidth="0.65">
-        {contours.map((path, index) => (
-          <path key={index} d={path} vectorEffect="non-scaling-stroke" />
-        ))}
-      </g>
-    </svg>
-  );
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const context = canvas?.getContext('2d', { alpha: false })
+    if (!canvas || !context) return
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let width = 0
+    let height = 0
+    let particles: Particle[] = []
+    let frame = 0
+    let lastTime = 0
+    let elapsed = 0
+    let seed = 72841
+    let disposed = false
+    const frameInterval = 1000 / 30
+
+    // A repeatable starting field avoids a different visual on each route visit.
+    const random = () => {
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0
+      return seed / 4294967296
+    }
+
+    const resetParticle = (particle: Particle) => {
+      particle.x = random() * width
+      particle.y = random() * height
+      particle.age = 0
+      particle.lifetime = 150 + random() * 260
+    }
+
+    const paint = (delta: number, time: number) => {
+      // Translucent erasure leaves fine, fading traces instead of fixed contours.
+      context.fillStyle = 'rgba(17, 18, 15, 0.045)'
+      context.fillRect(0, 0, width, height)
+      context.lineWidth = 0.7
+      context.strokeStyle = 'rgba(166, 182, 165, 0.21)'
+      context.beginPath()
+
+      const unit = Math.max(width, height)
+      const firstX = width * (0.28 + Math.sin(time * 0.13) * 0.1)
+      const firstY = height * (0.32 + Math.cos(time * 0.11) * 0.12)
+      const secondX = width * (0.74 + Math.cos(time * 0.09) * 0.1)
+      const secondY = height * (0.72 + Math.sin(time * 0.12) * 0.1)
+      const distance = delta * Math.min(unit / 950, 1.3) * 0.055
+
+      for (const particle of particles) {
+        if (particle.age > particle.lifetime || particle.x < -2 || particle.x > width + 2 || particle.y < -2 || particle.y > height + 2) {
+          resetParticle(particle)
+        }
+
+        const x = particle.x / unit
+        const y = particle.y / unit
+        const dx1 = (particle.x - firstX) / unit
+        const dy1 = (particle.y - firstY) / unit
+        const dx2 = (particle.x - secondX) / unit
+        const dy2 = (particle.y - secondY) / unit
+        const spin1 = 0.16 / (dx1 * dx1 + dy1 * dy1 + 0.035)
+        const spin2 = -0.13 / (dx2 * dx2 + dy2 * dy2 + 0.04)
+        const wave = Math.sin(x * 5.2 + y * 3.1 + time * 0.22)
+        const vx = 0.42 + wave * 0.35 - dy1 * spin1 - dy2 * spin2
+        const vy = Math.cos(x * 3.8 - y * 4.5 - time * 0.17) * 0.48 + dx1 * spin1 + dx2 * spin2
+        const speed = Math.max(Math.hypot(vx, vy), 0.25)
+
+        context.moveTo(particle.x, particle.y)
+        particle.x += (vx / speed) * distance
+        particle.y += (vy / speed) * distance
+        particle.age += delta / frameInterval
+        context.lineTo(particle.x, particle.y)
+      }
+      context.stroke()
+    }
+
+    const resize = () => {
+      const nextWidth = window.innerWidth
+      const nextHeight = window.innerHeight
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5)
+      if (width === nextWidth && height === nextHeight && canvas.width === Math.round(nextWidth * ratio)) return
+      width = nextWidth
+      height = nextHeight
+      canvas.width = Math.round(width * ratio)
+      canvas.height = Math.round(height * ratio)
+      context.setTransform(ratio, 0, 0, ratio, 0, 0)
+      context.fillStyle = '#11120f'
+      context.fillRect(0, 0, width, height)
+      seed = 72841
+      particles = Array.from({ length: Math.min(1700, Math.max(480, Math.round(width * height / 650))) }, () => {
+        const particle = { x: 0, y: 0, age: 0, lifetime: 0 }
+        resetParticle(particle)
+        particle.age = random() * particle.lifetime
+        return particle
+      })
+      // Pre-draw enough history for a composed first frame and reduced-motion view.
+      for (let step = 0; step < 80; step += 1) paint(frameInterval, elapsed)
+    }
+
+    const tick = (now: number) => {
+      frame = 0
+      if (disposed || document.hidden || reducedMotion.matches) return
+      const delta = now - lastTime
+      if (delta >= frameInterval - 0.5) {
+        const boundedDelta = Math.min(delta, 60)
+        elapsed += boundedDelta / 1000
+        paint(boundedDelta, elapsed)
+        lastTime = now
+      }
+      frame = window.requestAnimationFrame(tick)
+    }
+
+    const syncPlayback = () => {
+      window.cancelAnimationFrame(frame)
+      frame = 0
+      if (disposed || document.hidden || reducedMotion.matches) return
+      lastTime = performance.now()
+      frame = window.requestAnimationFrame(tick)
+    }
+
+    resize()
+    syncPlayback()
+    window.addEventListener('resize', resize)
+    document.addEventListener('visibilitychange', syncPlayback)
+    reducedMotion.addEventListener('change', syncPlayback)
+    return () => {
+      disposed = true
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', syncPlayback)
+      reducedMotion.removeEventListener('change', syncPlayback)
+    }
+  }, [])
+
+  return <canvas ref={canvasRef} className="flow-field" aria-hidden="true" />
 }

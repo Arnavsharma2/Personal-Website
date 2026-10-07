@@ -6,7 +6,7 @@ My personal portfolio for software engineering, ML systems, and research work.
 
 ## Built with
 
-Next.js 14, React, TypeScript, and Tailwind CSS. A minimal serif index sits over an original, server-rendered SVG contour field. Dedicated pages cover my background, experience, and Dynamo Diff, the site's sole featured project. The design is inspired by [Alexander Skula's portfolio](https://skula.me/).
+Next.js 14, React, TypeScript, and Tailwind CSS. A minimal serif index sits over an original animated canvas flow field with drifting particle trails. Dedicated pages cover my background, experience, and Dynamo Diff, the site's sole featured project. The design is inspired by [Alexander Skula's portfolio](https://skula.me/).
 
 ## Run locally
 
@@ -28,7 +28,7 @@ npm start
 
 - [`app/page.tsx`](app/page.tsx) contains the homepage index and contact links.
 - [`app/about/`](app/about/), [`app/experience/`](app/experience/), and [`app/projects/`](app/projects/) contain the detail pages.
-- [`components/`](components/) contains the shared page shell, content, contour background, and visit tracker.
+- [`components/`](components/) contains the shared page shell, content, animated flow background, and visit tracker.
 - [`public/`](public/) contains images and other static assets.
 - [`app/api/log-visit/route.ts`](app/api/log-visit/route.ts) implements the existing in-memory visit log with rate limiting and optional IP geolocation.
 
