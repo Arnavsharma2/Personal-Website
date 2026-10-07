@@ -1,40 +1,14 @@
-'use client'
-
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-
 export default function About() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
-
   return (
-    <section id="about" ref={ref} className="about-section">
-      <div className="section-container">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="section-title"
-        >
-          ~/about
-        </motion.h2>
-
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="about-content"
-        >
-          <p>
-            I work on AI engineering, LLM inference, model serving, evaluation,
-            and reliable data systems.
-          </p>
-          <p className="about-secondary">
-            I&apos;m a Computer Science student at Penn State. Outside of work, you&apos;ll
-            find me hiking, cooking, or trying new foods.
-          </p>
-        </motion.div>
-      </div>
+    <section id="about" aria-label="About me" className="prose">
+      <p>
+        I work on AI engineering, LLM inference, model serving, evaluation,
+        and reliable data systems.
+      </p>
+      <p>
+        I&apos;m a Computer Science student at Penn State. Outside of work, you&apos;ll
+        find me hiking, cooking, or trying new foods.
+      </p>
     </section>
   )
 }

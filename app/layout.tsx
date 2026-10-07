@@ -1,10 +1,15 @@
 import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
-import { Sora } from 'next/font/google'
+import { Literata } from 'next/font/google'
+import FlowField from '@/components/FlowField'
 import './globals.css'
 
-const sora = Sora({ subsets: ['latin'], variable: '--font-sora' })
+const literata = Literata({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-literata',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://arnav-sharma2.com'),
@@ -35,8 +40,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${sora.variable}`}>
-      <body className="bg-background text-foreground font-sans">
+    <html lang="en" className={literata.variable}>
+      <body>
+        <a className="skip-link" href="#main">skip to content</a>
+        <FlowField />
         {children}
       </body>
     </html>
