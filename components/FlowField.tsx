@@ -124,7 +124,7 @@ export default function FlowField() {
       // Finite histories fully disappear, avoiding ghost trails from alpha rounding.
       context.fillStyle = '#11120f'
       context.fillRect(0, 0, width, height)
-      context.lineWidth = 0.7
+      context.lineWidth = 1.2
       const bandLength = TRAIL_LENGTH / 3
       for (let band = 0; band < 3; band += 1) {
         context.strokeStyle = `rgba(166, 182, 165, ${[0.2, 0.1, 0.035][band]})`
