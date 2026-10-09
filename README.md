@@ -2,7 +2,7 @@
 
 My personal portfolio for software engineering, ML systems, and research work.
 
-**[Visit the portfolio](https://arnav-sharma2.com)** · [GitHub profile](https://github.com/Arnavsharma2) · [LinkedIn](https://www.linkedin.com/in/arnav-sharma2/)
+**[Visit the portfolio](https://personal-website-puce-ten-11.vercel.app)** · [GitHub profile](https://github.com/Arnavsharma2) · [LinkedIn](https://www.linkedin.com/in/arnav-sharma2/)
 
 ## Built with
 
@@ -32,4 +32,4 @@ npm start
 - [`public/`](public/) contains images and other static assets.
 - [`app/api/log-visit/route.ts`](app/api/log-visit/route.ts) implements the existing in-memory visit log with rate limiting and optional IP geolocation.
 
-Deployment uses Vercel. The public portfolio is available at [arnav-sharma2.com](https://arnav-sharma2.com).
+Deployment uses Vercel. The public portfolio is available at [personal-website-puce-ten-11.vercel.app](https://personal-website-puce-ten-11.vercel.app).

@@ -12,7 +12,7 @@ const literata = Literata({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://arnav-sharma2.com'),
+  metadataBase: new URL('https://personal-website-puce-ten-11.vercel.app'),
   title: 'Arnav Sharma | CS @ Penn State & IBM Intern',
   description: 'Computer Science student at Penn State working on AI engineering, LLM inference, model serving, evaluation, and reliable data systems.',
   alternates: {
