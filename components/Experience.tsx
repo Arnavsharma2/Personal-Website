@@ -1,90 +1,71 @@
 interface ExperienceItem {
+  id: string
   company: string
   role: string
   date: string
-  location: string
-  color: string
-  initials: string
-  logo?: string
-  logoVariant?: 'ibm'
-  description?: string[]
+  impact: string
+  contribution: string
+  technologies: string[]
 }
 
 const experiences: ExperienceItem[] = [
   {
+    id: 'ibm',
     company: 'IBM',
-    role: 'Intern',
-    date: '08/2026 - Present',
-    location: 'Chicago, Illinois',
-    color: '#0f62fe',
-    initials: 'IBM',
-    logo: '/ibm-logo.svg',
-    logoVariant: 'ibm',
-    description: [
-      'AI engineering focused on LLM inference, model serving, and evaluation for IBM Granite using Python, PyTorch, vLLM, TensorRT-LLM, OpenShift, and Kubernetes.',
-      'Working on inference performance, tool use, groundedness, safety, and production ML reliability.',
-    ],
+    role: 'Software Development Engineer Intern · Cloud & AI Platform',
+    date: 'Aug 2026 – Present',
+    impact: 'Reached 4,800 requests per second with 11 ms p99 routing overhead in load tests.',
+    contribution: 'Built a Go/gRPC inference gateway that controls incoming traffic for each tenant. Automated checks with copied production traffic and rollbacks for new model releases, cutting validation from 90 to 14 minutes. Reworked usage tracking to reduce CPU utilization by 27%.',
+    technologies: ['Go', 'gRPC', 'Model serving', 'Performance evaluation'],
   },
   {
+    id: 'doximity',
     company: 'Doximity',
-    role: 'Intern',
-    date: '05/2026 - 08/2026',
-    location: 'San Francisco, California',
-    color: '#0d3c61',
-    initials: 'DX',
-    logo: '/doximity-logo.jpg',
-    description: [
-      'Worked on clinical LLM evaluation and data infrastructure using Python, Kafka, Snowflake, Airflow, PySpark, and Great Expectations.',
-      'Built model-quality checks and production data pipelines with clinicians, product managers, and engineers.',
-    ],
+    role: 'Data Engineering and Analytics Intern',
+    date: 'May 2026 – Aug 2026',
+    impact: 'Cut engagement-data refresh time from 74 to 12 minutes.',
+    contribution: 'Rebuilt Snowflake/dbt datasets to process only new or changed records. Standardized how duplicate events and user sessions were handled, reducing dashboard discrepancies from 11% to under 1%. Built experiment-analysis checks and reports that cut turnaround from two days to three hours.',
+    technologies: ['SQL', 'Snowflake', 'dbt', 'Experimentation'],
   },
   {
-    company: 'Students for Society SFORS',
-    role: 'Activity Coordinator',
-    date: '01/2022 - 01/2026',
-    location: '',
-    color: '#2F855A',
-    initials: 'SF',
-    description: [
-      'Led planning and execution for five environmental events involving 200 volunteers and reaching 2,000+ participants.',
-      'Managed scheduling, logistics, outreach, and external partnerships.',
-    ],
+    id: 'lockheed-martin',
+    company: 'Lockheed Martin',
+    role: 'Machine Learning Engineer · Contract',
+    date: 'Dec 2025 – Apr 2026',
+    impact: 'Reduced vision-pipeline p95 latency from 61 to 37 ms.',
+    contribution: 'Reused GPU buffers and overlapped data transfers in a C++/OpenCV pipeline. Reduced Jetson Orin p95 inference latency from 24 to 14 ms with INT8 quantization, with a 0.7-point mAP loss. Separately, fine-tuned a PyTorch defect detector to improve held-out mAP from 71.8 to 79.4.',
+    technologies: ['C++', 'CUDA', 'PyTorch', 'TensorRT', 'Jetson Orin'],
   },
   {
-    company: 'WeFIRE',
-    role: 'Intern',
-    date: '01/2025 - 11/2025',
-    location: 'Hayward, California',
-    color: '#FF6F00',
-    initials: 'WF',
-    logo: '/wefirelogo.jpeg',
-    description: [
-      'Built backend and full-stack systems using Python, TypeScript, React, FastAPI, PostgreSQL, Docker, and AWS.',
-      'Integrated Plaid and Stripe and worked on APIs, financial data workflows, and reliability.',
-    ],
+    id: 'wefire',
+    company: 'WeFire',
+    role: 'Machine Learning Engineer Intern',
+    date: 'Jan 2025 – Nov 2025',
+    impact: 'Improved transaction-classification macro-F1 from 0.73 to 0.89 on unseen merchants.',
+    contribution: 'Built a LightGBM classifier and routed uncertain predictions for review, automating 76% of decisions at 97% precision on held-out data. Added batching and cached merchant features to ONNX serving, cutting p95 latency from 210 to 64 ms at 100 requests per second.',
+    technologies: ['Python', 'LightGBM', 'ONNX Runtime', 'Model evaluation'],
   },
 ]
 
 
 export default function Experience() {
   return (
-    <section id="experience" aria-label="Experience" className="experience-list">
+    <section id="experience" aria-label="Engineering experience" className="experience-list">
       {experiences.map((item) => (
-        <details key={item.company} className="experience-item">
+        <details key={item.id} id={item.id} className="experience-item">
           <summary className="experience-summary">
             <span>
               <span className="experience-company">{item.company}</span>
               <span className="experience-role">{item.role}</span>
             </span>
-            <span className="experience-meta">
-              <span>{item.date}</span>
-              {item.location && <span>{item.location}</span>}
-            </span>
+            <span className="experience-meta">{item.date}</span>
           </summary>
           <div className="experience-description">
-            {item.description?.map((description) => (
-              <p key={description}>{description}</p>
-            ))}
+            <p><strong>{item.impact}</strong></p>
+            <p>{item.contribution}</p>
+            <ul className="project-technologies" aria-label={`${item.company} technologies`}>
+              {item.technologies.map((technology) => <li key={technology}>{technology}</li>)}
+            </ul>
           </div>
         </details>
       ))}

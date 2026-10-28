@@ -4,11 +4,11 @@ import InteriorPage from '@/components/InteriorPage'
 
 export const metadata: Metadata = {
   title: 'Experience | Arnav Sharma',
-  description: 'Experience in AI engineering, data infrastructure, and full-stack software development.',
+  description: 'Engineering work at IBM, Doximity, Lockheed Martin, and WeFire: model serving, reliable data pipelines, and applied machine learning.',
   alternates: { canonical: '/experience' },
   openGraph: {
     title: 'Experience | Arnav Sharma',
-    description: 'Experience in AI engineering, data infrastructure, and full-stack software development.',
+    description: 'Engineering work at IBM, Doximity, Lockheed Martin, and WeFire: model serving, reliable data pipelines, and applied machine learning.',
     url: '/experience',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function ExperiencePage() {
   return (
-    <InteriorPage title="Experience" subtitle="What I’ve done. Select an entry to read more.">
+    <InteriorPage title="Experience" subtitle="Model serving, reliable data pipelines, and applied ML. Select an entry to read more.">
       <Experience />
     </InteriorPage>
   )

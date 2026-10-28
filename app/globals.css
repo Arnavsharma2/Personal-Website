@@ -213,3 +213,15 @@ a:focus-visible, summary:focus-visible {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Details live within their categories; keep the original index layout. */
+.about-section { margin-top: 38px; }
+.section-heading { margin: 0 0 16px; font-size: 24px; font-weight: 400; line-height: 1.4; letter-spacing: -0.02em; }
+.about-section, .project-entry, .experience-item { scroll-margin-top: 28px; }
+.project-entry:target { border-top-color: rgba(237, 234, 226, 0.6); }
+.project-jump-links { display: flex; flex-wrap: wrap; gap: 12px 22px; margin-bottom: 32px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.contribution-status { display: block; margin: 0 0 12px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+.research-draft { border: 1px dashed var(--rule); padding: 20px; margin: 28px 0; background: rgba(17, 18, 15, 0.62); }
+.research-draft h3 { color: var(--paper); margin: 0 0 12px; font-size: 16px; font-weight: 500; }
+.research-draft p { font-size: 16px; line-height: 1.8; margin-bottom: 14px; color: var(--muted); }
+.research-draft p:last-child { margin-bottom: 0; }

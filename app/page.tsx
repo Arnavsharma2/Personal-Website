@@ -5,7 +5,8 @@ const groups = [
   {
     label: 'work',
     links: [
-      { label: 'dynamo diff', href: '/projects' },
+      { label: 'projects', href: '/projects' },
+      { label: 'open source', href: '/open-source' },
     ],
   },
   {
@@ -18,7 +19,7 @@ const groups = [
   {
     label: 'elsewhere',
     links: [
-      { label: 'email', href: 'mailto:aqs7726@psu.edu' },
+      { label: 'email', href: 'mailto:arnav.sh2264@gmail.com' },
       { label: 'github', href: 'https://github.com/Arnavsharma2' },
       { label: 'linkedin', href: 'https://www.linkedin.com/in/arnav-sharma2/' },
     ],
@@ -31,7 +32,7 @@ export default function Home() {
       <VisitTracker />
       <h1 className="landing-intro">
         <span>Hi, I’m <em>Arnav</em>,</span>
-        <span>I build AI and data systems.</span>
+        <span>I build backend and ML systems.</span>
       </h1>
       <nav className="index-nav" aria-label="Portfolio">
         {groups.map((group) => (
