@@ -46,11 +46,6 @@ export default function About() {
       <section className="about-section" aria-labelledby="toolbox-heading">
         <h2 id="toolbox-heading" className="section-heading">How I work</h2>
         <p>
-          Python is my strongest language, followed by C++. I also use Go, SQL,
-          TypeScript, and Java. My work spans PyTorch and model serving, backend
-          APIs, and Snowflake/dbt data pipelines. I reached USACO Gold.
-        </p>
-        <p>
           Outside of work, you&apos;ll find me hiking, cooking, or trying new foods.
         </p>
       </section>
