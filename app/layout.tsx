@@ -14,14 +14,14 @@ const literata = Literata({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://personal-website-puce-ten-11.vercel.app'),
-  title: 'Arnav Sharma | Backend & ML Systems',
-  description: 'Penn State computer science student building backend and ML systems. Explore Dynamo Diff, PSUMenu, and engineering work at IBM, Doximity, Lockheed Martin and WeFire.',
+  title: 'Arnav Sharma | ML Infrastructure & Backend Systems',
+  description: 'Penn State computer science student building ML infrastructure, backend systems, and developer tools, with research in language-model evaluation and agent security.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Arnav Sharma | Backend & ML Systems',
-    description: 'Backend systems, ML developer tools and applied AI. Explore Dynamo Diff, PSUMenu, and Arnav’s engineering experience.',
+    title: 'Arnav Sharma | ML Infrastructure & Backend Systems',
+    description: 'ML infrastructure, agent evaluation, and backend systems. Explore Dynamo Diff, PSUMenu, and Arnav’s engineering experience.',
     url: '/',
     type: 'website',
   },

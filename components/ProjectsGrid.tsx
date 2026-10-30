@@ -3,17 +3,17 @@ export default function ProjectsGrid() {
     <section id="projects" aria-label="Selected projects" className="project-list">
       <nav className="project-jump-links" aria-label="Jump to a project">
         <a className="text-link" href="#dynamo-diff">Dynamo Diff</a>
+        <a className="text-link" href="#psumenu">PSUMenu</a>
         <a className="text-link" href="#llm-serving-engine">LLM Serving Engine</a>
         <a className="text-link" href="#gatekeeper">GateKeeper</a>
         <a className="text-link" href="#streaming-lakehouse">Streaming Lakehouse</a>
-        <a className="text-link" href="#psumenu">PSUMenu</a>
       </nav>
       <article id="dynamo-diff" className="project-entry" aria-labelledby="dynamo-diff-heading">
         <h2 id="dynamo-diff-heading" className="project-title">Dynamo Diff</h2>
         <p className="project-description">
-          A published developer tool for comparing recorded PyTorch compiler runs
-          and seeing what changed. Built with a Python analyzer, a command-line
-          interface, tools for AI agents, and a TypeScript VS Code extension.
+          A published Python tool and TypeScript VS Code extension for diagnosing
+          PyTorch recompilation. Command-line and AI-agent interfaces connect
+          compiler events to source code and saved debugging evidence.
         </p>
         <p className="project-description">
           Recompilation reports can be difficult to connect to a code edit. I
@@ -22,8 +22,8 @@ export default function ProjectsGrid() {
           visible. Saved captures can be inspected without PyTorch or a GPU.
         </p>
         <p className="project-description">
-          <strong>Validated with 96 core tests and 12 recorded compiler scenarios,</strong>
-          {' '}plus a Transformers generation case study.
+          <strong>Validated 12 compiler scenarios and a language-model workload</strong>
+          {' '}with 96 tests and automated checks on macOS and Linux.
         </p>
         <ul className="project-technologies" aria-label="Dynamo Diff technologies">
           <li>Python</li><li>TypeScript</li><li>PyTorch Dynamo</li><li>VS Code</li><li>MCP</li>
@@ -52,6 +52,30 @@ export default function ProjectsGrid() {
             className="text-link"
           >
             Install for VS Code ↗
+          </a>
+        </div>
+      </article>
+      <article id="psumenu" className="project-entry" aria-labelledby="psumenu-heading">
+        <h2 id="psumenu-heading" className="project-title">PSUMenu</h2>
+        <p className="project-description">
+          A Python dining app deployed on GCP Cloud Run for <strong>1,500 monthly
+          active Penn State students.</strong> It helps students find meals that
+          fit their preferences using campus menus and Gemini recommendations.
+        </p>
+        <p className="project-description">
+          I fetched menus concurrently, cached the results, and checked Gemini
+          recommendations against available meals. I also trained a meal-ranking
+          model from ratings and dietary preferences.
+        </p>
+        <p className="project-description">
+          <strong>Recommendation acceptance rose from 46% to 65% in an A/B test.</strong>
+        </p>
+        <ul className="project-technologies" aria-label="PSUMenu technologies">
+          <li>Python</li><li>GCP Cloud Run</li><li>Gemini</li><li>Recommendation systems</li><li>A/B testing</li>
+        </ul>
+        <div className="project-links">
+          <a href="https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite" target="_blank" rel="noopener noreferrer" className="text-link">
+            Source &amp; documentation ↗
           </a>
         </div>
       </article>
@@ -113,27 +137,6 @@ export default function ProjectsGrid() {
         </ul>
         <div className="project-links">
           <a href="https://github.com/Arnavsharma2/streaming-lakehouse-pipeline" target="_blank" rel="noopener noreferrer" className="text-link">
-            Source &amp; documentation ↗
-          </a>
-        </div>
-      </article>
-      <article id="psumenu" className="project-entry" aria-labelledby="psumenu-heading">
-        <h2 id="psumenu-heading" className="project-title">PSUMenu</h2>
-        <p className="project-description">
-          A campus dining app used by <strong>1,500 monthly active Penn State
-          students.</strong> It helps students find meals that fit their preferences
-          using official dining menus and Gemini-powered recommendations.
-        </p>
-        <p className="project-description">
-          I built a Python/Flask backend that gathers menus concurrently and
-          caches results in SQLite. Recommendations are checked against the
-          available menu, with a fallback when Gemini is unavailable.
-        </p>
-        <ul className="project-technologies" aria-label="PSUMenu technologies">
-          <li>Python</li><li>Flask</li><li>Gemini</li><li>SQLite</li><li>Recommendations</li>
-        </ul>
-        <div className="project-links">
-          <a href="https://github.com/Arnavsharma2/PSUMenuAnalyzerWebsite" target="_blank" rel="noopener noreferrer" className="text-link">
             Source &amp; documentation ↗
           </a>
         </div>

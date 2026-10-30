@@ -32,7 +32,7 @@ export default function Home() {
       <VisitTracker />
       <h1 className="landing-intro">
         <span>Hi, I’m <em>Arnav</em>,</span>
-        <span>I build backend and ML systems.</span>
+        <span>I build ML infrastructure and backend systems.</span>
       </h1>
       <nav className="index-nav" aria-label="Portfolio">
         {groups.map((group) => (

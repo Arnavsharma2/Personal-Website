@@ -4,11 +4,11 @@ import InteriorPage from '@/components/InteriorPage'
 
 export const metadata: Metadata = {
   title: 'Projects | Arnav Sharma',
-  description: 'Projects in ML developer tools, model serving, backend systems, data pipelines and applied AI.',
+  description: 'Dynamo Diff and PSUMenu: PyTorch debugging tools, cloud applications, and recommendation systems, alongside model-serving, backend, and data projects.',
   alternates: { canonical: '/projects' },
   openGraph: {
     title: 'Projects | Arnav Sharma',
-    description: 'Projects in ML developer tools, model serving, backend systems, data pipelines and applied AI.',
+    description: 'Dynamo Diff and PSUMenu: PyTorch debugging tools, cloud applications, and recommendation systems, alongside model-serving, backend, and data projects.',
     url: '/projects',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <InteriorPage title="Projects" subtitle="ML tools, backend systems, and products people use.">
+    <InteriorPage title="Projects" subtitle="Tools for understanding model behavior, infrastructure for serving it, and applications people use.">
       <ProjectsGrid />
     </InteriorPage>
   )
