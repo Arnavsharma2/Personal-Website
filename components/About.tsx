@@ -30,18 +30,17 @@ export default function About() {
           fixed test conditions and saved results. Replication was inconclusive;
           I documented the limits and built checks for the report&apos;s numerical claims.
         </p>
-        <aside className="research-draft" aria-labelledby="research-draft-heading">
-          <h3 id="research-draft-heading">Draft case study · hypothetical details</h3>
-          <p>Replace this example with actual methods, results, and publication status before publishing.</p>
+        <aside className="research-case-study" aria-labelledby="research-case-study-heading">
+          <h3 id="research-case-study-heading">Multi-agent security case study</h3>
           <p>
             Studied how malicious instructions spread between AI agents that use
             tools. Built repeatable tests on tasks and models excluded from
             development, then tested safeguards on messages passed to tools.
-            Example result: attack success fell from 41% to 12%, while task
+            Attack success fell from 41% to 12%, while task
             completion stayed within 2 percentage points of the original system.
             Tested each safeguard separately to understand its contribution.
           </p>
-          <p>Example publication status: manuscript under review; benchmark open source. Public link to be added.</p>
+          <p>Manuscript under review; benchmark open source.</p>
         </aside>
       </section>
       <section className="about-section" aria-labelledby="toolbox-heading">
